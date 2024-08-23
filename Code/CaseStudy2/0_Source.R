@@ -211,7 +211,7 @@ calculate_household <- function(act_dat,
   
   # Getting number of population 
   Npop <- length(unique(act_dat$pop_id))
-  
+   
   # Empty column 
   act_dat[,outvar] <- NA
   

@@ -5,10 +5,10 @@
 rm(list = ls())
 
 # Setting working directory
-setwd('~/Dropbox/Github/SPFFinalReport/')
+setwd('C:/Users/mcassag/Data/personal_exposure_model')
 
 # Loading source code
-source('~/Dropbox/Github/SPFFinalReport/Code/CaseStudy2/0_Source.R')
+source('C:/Users/mcassag/Code/Personal_Exposure_Model/SPFFinalReport/Code/CaseStudy2/0_Source.R')
 
 # Read population data
 load("Data/Processed/Population/pop_dat.RData")

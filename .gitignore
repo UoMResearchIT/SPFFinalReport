@@ -4,3 +4,4 @@ Output/
 .Rhistory
 .RData
 .Rproj.user
+renv/

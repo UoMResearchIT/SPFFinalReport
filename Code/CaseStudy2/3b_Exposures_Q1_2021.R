@@ -4,16 +4,18 @@
 # Clearing Workspace
 rm(list = ls())
 
+
 # Setting working directory
-setwd('~/Dropbox/Github/SPFFinalReport/')
+setwd('C:/Users/mcassag/Data/personal_exposure_model')
 
 # Loading source code
-source('~/Dropbox/Github/SPFFinalReport/Code/CaseStudy2/0_Source.R')
+source('C:/Users/mcassag/Code/Personal_Exposure_Model/SPFFinalReport/Code/CaseStudy2/0_Source.R')
 
 # Read population data
-load("Data/Processed/Population/pop_dat.RData")
-load("Data/Processed/PM25/pm25_emep.RData")
-load("Data/Processed/PM25/pm25_cams.RData")
+load("anns_run/Processed/Population/pop_dat.RData")
+load("anns_run/Processed/PM25/CAMS/pm25_cams.RData")
+load("anns_run/Processed/PM25/EMEP/pm25_emep.RData")
+
 
 # Suppress summarise info
 options(dplyr.summarise.inform = FALSE)
