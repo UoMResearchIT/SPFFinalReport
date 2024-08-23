@@ -5,14 +5,14 @@
 rm(list = ls())
 
 # Setting working directory
-setwd('~/Dropbox/Github/SPFFinalReport/')
+setwd('C:/Users/mcassag/Data/personal_exposure_model')
 
 # Loading source code
-source('~/Dropbox/Github/SPFFinalReport/Code/CaseStudy2/0_Source.R')
+source('C:/Users/mcassag/Code/Personal_Exposure_Model/SPFFinalReport/Code/CaseStudy2/0_Source.R')
 
 # Read population data
-load("Data/Processed/Population/pop_dat.RData")
-load("Data/Processed/TimeUseSurvey/tus_dat.RData")
+load("original/Processed/Population/pop_dat.RData")
+load("original/Processed/TimeUseSurvey/tus_dat.RData")
 
 # Suppress summarise info
 options(dplyr.summarise.inform = FALSE)
@@ -86,7 +86,7 @@ tus_dat <- tus_dat %>%
   # Removing uncessary columns 
   dplyr::select(-c(tmp))%>%
   # Merging on location labels
-  left_join(read_csv("Data/Raw/TimeUseSurvey/uktus_metadata_location.csv") %>%
+  left_join(read_csv("original/Raw/TimeUseSurvey/uktus_metadata_location.csv") %>%
               dplyr::select(location_popular = location, 
                             location_popular_label = location_label),
             by = 'location_popular')
@@ -154,7 +154,7 @@ for (k in unique(pop_dat$area_id)){
     dplyr::select(-c(minutes, sample))
   
   # Saving datasets 
-  save(activities_complete, file = paste('Output/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
+  save(activities_complete, file = paste('original/Processed/Activities/activities_', k, '.RData', sep = ''))
   
   # Printing index
   print(k)
