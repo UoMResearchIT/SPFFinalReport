@@ -94,6 +94,11 @@ tus_dat <- tus_dat %>%
 ########################################################################
 ### Sampling activity sequences (Method 1) - Complete sequences only ###
 ########################################################################
+
+# Merging to skeleton dataset
+activities_all <- NULL
+
+
 # Loop for each MSOA
 for (k in unique(pop_dat$area_id)){
   # Sampling activities 
@@ -154,11 +159,16 @@ for (k in unique(pop_dat$area_id)){
     dplyr::select(-c(minutes, sample))
   
   # Saving datasets 
-  save(activities_complete, file = paste('original/Processed/Activities/activities_', k, '.RData', sep = ''))
+  #save(activities_complete, file = paste('original/Processed/Activities/activities_', k, '.RData', sep = ''))
+  
+  # Appending together
+  activities_all <- rbind(activities_all, activities_complete)
   
   # Printing index
   print(k)
 }
+
+save(activities_all, file = paste('original/Processed/Activities/activities_all_areas.RData', sep = ''))
 
 # Clearing Workspace
 rm(list = ls())
