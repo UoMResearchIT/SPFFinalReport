@@ -108,8 +108,8 @@ for (k in unique(pop_dat$area_id)){
                                            weights = "weights_diary",
                                            pop_strata = c('area_id'),
                                            tus_strata = c('sex', 'agegr4', 'nssec5', 'daytype'),
-                                           start_date = '2020-11-30',
-                                           end_date = '2021-12-31',
+                                           start_date = '2021-01-01',
+                                           end_date = '2021-03-31',
                                            keep = c('activity', 'activity_label', 'location', 'location_label'))
 
   # Activity sequences run from 04:00-03:59 so need to "shift"
@@ -159,7 +159,7 @@ for (k in unique(pop_dat$area_id)){
     dplyr::select(-c(minutes, sample))
   
   # Saving datasets 
-  #save(activities_complete, file = paste('original/Processed/Activities/activities_', k, '.RData', sep = ''))
+  save(activities_complete, file = paste('original/Processed/Activities/activities_', k, '.RData', sep = ''))
   
   # Appending together
   activities_all <- rbind(activities_all, activities_complete)
