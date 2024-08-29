@@ -105,9 +105,15 @@ sample_population <- function(pop_dat,
   ##########################################
   # Sampling population to find exposures for
   pop_dat2 <- pop_dat %>%
-    group_by_at(.vars = pop_strata) %>%
-    sample_n(size = nsample, 
-             replace = FALSE)
+    group_by_at(.vars = pop_strata)
+  pop_dat2 <- sample_n_acts(
+    df=pop_dat2,
+    size = nsample,
+    prob = NULL,
+    replace = FALSE,
+    fixed_seed = TRUE)
+    #sample_n(size = nsample, 
+    #         replace = FALSE)
   # Preparing shell dataset for sampling 
   activities <- expand.grid(pop_id = pop_dat2$pop_id,
                             date = seq(as.Date(start_date), as.Date(end_date), by = 1)) %>%
@@ -144,10 +150,12 @@ sample_population <- function(pop_dat,
   for (i in unique(activities$strata)){
     # Sampling within each strata
     activities$act_id[which(activities$strata == i)] <- 
-      sample(x = tus_act_id$act_id[which(tus_act_id$strata == i)], 
-             size = length(activities$pop_id[which(activities$strata == i)]),
-             prob = tus_act_id$weights[which(tus_act_id$strata == i)],
-             replace = TRUE)
+      sample_acts(x = tus_act_id$act_id[which(tus_act_id$strata == i)], 
+                  size = length(activities$pop_id[which(activities$strata == i)]), 
+                  prob = tus_act_id$weights[which(tus_act_id$strata == i)], 
+                  replace = TRUE, 
+                  fixed_seed = TRUE)
+       
   }
   # Merging on the activity data 
   activities <- merge(activities, 
@@ -313,5 +321,67 @@ calculate_transport <- function(dat, ambient, outvar) {
   dat[,outvar] <- rtruncnorm(n = 1, a = 0, mean = a + b * dat[,ambient, drop = TRUE], sd = 12)
   # Returning dataset
   return(dat)
+}
+
+sample_acts <- function(x, size, prob, replace, fixed_seed){
+  u = NULL
+  
+  if(fixed_seed == TRUE){
+    # New way: so that we can get regression tests to work.
+    # Note: There is no implementation of prob for this, so it's not used
+    if(replace == TRUE){
+      # Sample values with replacement
+      for (k in 1:size) {
+        idx <- s$randi() %% length(x) + 1
+        u <- (c(u, x[idx]))
+      }
+    }
+    else{
+      # Do NOT Replace:
+      u <- s$shuffle(x)[1:size]
+    }
+  }
+  else{
+    # Original way - random with NO fixed seed
+      u <- sample(
+         x = x, 
+         size = size,
+         prob = prob,
+         replace = replace)
+  }
+  
+  return(u)
+}
+
+sample_n_acts <- function(df, size, prob, replace, fixed_seed){
+  len = length(df)
+  u = c()
+  if(fixed_seed == TRUE){
+    # New way: so that we can get regression tests to work.
+    # Note: There is no implementation of prob for this, so it's not used
+    if(replace == TRUE){
+      # Sample values with replacement
+      for (k in 1:size) {
+        idx <- s$randi() %% length(df) + 1
+        u <- (c(u, idx))
+      }
+    }
+    else{
+      # Do NOT Replace:
+      u <- s$shuffle(seq(from = 1, to = len))[1:size]
+    }
+  }
+  else{
+    # Original way - random with NO fixed seed
+    u <- sample_n(
+      tbl = df, 
+      size = size,
+      prob = prob,
+      replace = replace)
+  }
+  
+  res <- df[u,]
+  
+  return(res)
 }
 

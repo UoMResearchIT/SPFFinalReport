@@ -17,8 +17,10 @@ load("original/Processed/TimeUseSurvey/tus_dat.RData")
 # Suppress summarise info
 options(dplyr.summarise.inform = FALSE)
 
+library(SyncRNG)
 # Setting seed
-set.seed(1409)
+#set.seed(1409)
+s <- SyncRNG(seed=1409)
 
 ##############################################
 ### Filling in missings in the TUS dataset ###
@@ -151,8 +153,11 @@ for (k in unique(pop_dat$area_id)){
     dplyr::mutate(minutes = ((time - 1) %% 6) + 1) %>%
     # Grouping by population, date and hour to reduce
     dplyr::group_by(pop_id, date, hour) %>%
+    
     # Sample prop to the environments
-    dplyr::mutate(sample = sample(1:6, size = 1)) %>%
+    # NEW WAY: SAMPLE WITHOUT REPLACEMENT
+    dplyr::mutate(sample = sample_acts(x=c(1,2,3,4,5,6), size=1, replace = FALSE, fixed_seed = TRUE)) %>%
+
     # Only keep sampled time point
     dplyr::filter(minutes == sample) %>%
     # Removing unecesary columns
