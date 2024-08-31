@@ -362,7 +362,7 @@ sample_n_acts <- function(df, size, prob, replace, fixed_seed){
     if(replace == TRUE){
       # Sample values with replacement
       for (k in 1:size) {
-        idx <- s$randi() %% length(df) + 1
+        idx <- s$randi() %% len + 1
         u <- (c(u, idx))
       }
     }
