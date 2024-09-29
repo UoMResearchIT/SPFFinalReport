@@ -12,9 +12,9 @@ setwd('C:/Users/mcassag/Data/personal_exposure_model')
 source('C:/Users/mcassag/Code/Personal_Exposure_Model/SPFFinalReport/Code/CaseStudy2/0_Source.R')
 
 # Read population data
-load("anns_run/Processed/Population/pop_dat.RData")
-load("anns_run/Processed/PM25/CAMS/pm25_cams.RData")
-load("anns_run/Processed/PM25/EMEP/pm25_emep.RData")
+load("original/Processed/Population/pop_dat.RData")
+load("original/Processed/PM25/CAMS-Europe/pm25_cams.RData")
+load("original/Processed/PM25/EMEP/pm25_emep.RData")
 
 
 # Suppress summarise info
@@ -25,11 +25,13 @@ set.seed(1409)
 
 # Merging pm2.5 data together
 pm25_ctm <- pm25_cams %>%
-  dplyr::select(area_id, date, hour, pm25_cams_agg)%>%
+  dplyr::select(area_id, date, hour, pm25_cams_agg) %>%
   left_join(pm25_emep %>%
-              dplyr::select(area_id, date, hour, pm25_emep_agg = pm25_cams_agg),
+              # NOTE: = pm25_cams_agg commented out as it wouldn't run with that, as it doesn't exist
+              #         Also, it doesn't make sense to match on float measurement values.
+              dplyr::select(area_id, date, hour, pm25_emep_agg), #= pm25_cams_agg),
             by = c("area_id", "date", "hour")) %>%
-  filter(as.Date(date) >= as.Date("2020-12-20") & 
+  filter(as.Date(date) >= as.Date("2021-01-01") & 
            as.Date(date) <= as.Date("2021-03-31")) %>%
   mutate(pm25_emep_agg = ifelse(is.na(pm25_emep_agg), pm25_cams_agg, pm25_emep_agg),
          pm25_five = 5,
@@ -42,10 +44,10 @@ rm(pm25_cams, pm25_emep)
 ### Estimating exposures ###
 ############################
 # Loop for each MSOA
-for (k in unique(pop_dat$area_id)[1:7]){
+for (k in unique(pop_dat$area_id)){  #[1:7]){
   t1 <- Sys.time()
   # Saving datasets 
-  load(paste('Output/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
+  load(paste('original/Processed/Activities/activities_', k, '.RData', sep = ''))
   
   # Parparing data for exposure modelling
   activities_complete <- activities_complete %>%
@@ -80,7 +82,7 @@ for (k in unique(pop_dat$area_id)[1:7]){
   activities_complete <- calculate_household(act_dat = activities_complete, pop_dat = pop_dat, 
                                              ambient = "pm25_five", outvar = "pm25_five_hhd")
   # Saving datasets 
-  save(activities_complete, file = paste('Output/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.RData', sep = ''))
+  save(activities_complete, file = paste('original/Processed/Exposures/exposures_', k, '.RData', sep = ''))
   
   t2 <- Sys.time()
   # Printing index

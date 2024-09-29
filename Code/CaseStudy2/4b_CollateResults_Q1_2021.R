@@ -4,14 +4,14 @@
 # Clearing Workspace
 rm(list = ls())
 
-# Setting working directory
-setwd('~/Dropbox/Github/SPFFinalReport/')
-
 # Loading source code
-source('~/Dropbox/Github/SPFFinalReport/Code/CaseStudy2/0_Source.R')
+source('C:/Users/mcassag/Code/Personal_Exposure_Model/SPFFinalReport/Code/CaseStudy2/0_Source.R')
+
+# Setting working directory
+setwd('C:/Users/mcassag/Data/personal_exposure_model')
 
 # Read population data
-load("Data/Processed/Population/pop_dat.RData")
+load("original/Processed/Population/pop_dat.RData")
 
 ############################
 ### Estimating exposures ###
@@ -23,7 +23,7 @@ out_q12021 <- NULL
 for (k in unique(pop_dat$area_id)[1:173]){
   t1 <- Sys.time()
   # Saving datasets
-  load(paste('Output/CaseStudy2/Exposures/exposures_', k, '_Q1_2021.RData', sep = ''))
+  load(paste('original/Processed/Exposures/exposures_', k, '.RData', sep = ''))
   # Preparing case study 2
   activities_complete <- activities_complete %>%
     # Only keeping Q1 2021
@@ -60,6 +60,6 @@ for (k in unique(pop_dat$area_id)[1:173]){
 }
 
 # Saving outputs
-save(out_q12021, file = 'Output/CaseStudy2/Analysis/DailyAverage_Q1_2021.RData')
+save(out_q12021, file = 'original/Processed/Exposures/DailyAverage_Q1_2021.RData')
 
 

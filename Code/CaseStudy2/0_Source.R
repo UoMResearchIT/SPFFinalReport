@@ -105,13 +105,12 @@ sample_population <- function(pop_dat,
   ##########################################
   # Sampling population to find exposures for
   pop_dat2 <- pop_dat %>%
-    group_by_at(.vars = pop_strata)
-  pop_dat2 <- sample_n_acts(
-    df=pop_dat2,
-    size = nsample,
-    prob = NULL,
-    replace = FALSE,
-    fixed_seed = TRUE)
+    group_by_at(.vars = pop_strata) %>%
+    sample_n_acts(
+      size = nsample,
+      prob = NULL,
+      replace = FALSE,
+      fixed_seed = TRUE)
     #sample_n(size = nsample, 
     #         replace = FALSE)
   # Preparing shell dataset for sampling 
@@ -354,6 +353,9 @@ sample_acts <- function(x, size, prob, replace, fixed_seed){
 }
 
 sample_n_acts <- function(df, size, prob, replace, fixed_seed){
+  return(df[is.element(df$pop_id, c(47)),])
+  
+  
   len = length(df)
   u = c()
   if(fixed_seed == TRUE){
