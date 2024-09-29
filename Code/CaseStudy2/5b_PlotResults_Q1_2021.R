@@ -5,16 +5,16 @@
 rm(list = ls())
 
 # Setting working directory
-setwd('~/Dropbox/DIMEX')
+setwd('C:/Users/mcassag/Data/personal_exposure_model')
 
 # Loading source code
-source('~/Dropbox/Github/dimex/Code/0_Source.R')
+source('C:/Users/mcassag/Code/Personal_Exposure_Model/SPFFinalReport/Code/CaseStudy2/0_Source.R')
 
 # Read population data
-load("Data/Processed/Population/pop_dat.RData")
+load("original/Processed/Population/pop_dat.RData")
 
-# Read population data
-load("Data/Processed/Shapefiles/shapefiles.RData")
+# Read shapefile data
+load("original/Processed/Shapefiles/shapefiles.RData")
 
 # Subsetting Greater Manchester shapefiles
 mcr_msoa <- subset(ew_msoa, parent_area_name %in% c('Bolton', 'Bury', 'Manchester', 'Oldham', 'Rochdale',
@@ -23,7 +23,7 @@ mcr_msoa_region <- subset(ew_msoa_region, parent_area_name %in% c('Bolton', 'Bur
                                                                   'Salford', 'Stockport', 'Tameside', 'Trafford', 'Wigan'))
 
 # Loading exposures
-load('Output/CaseStudy2/Analysis/DailyAverage_Q1_2021.RData')
+load('original/Processed/Exposures/DailyAverage_Q1_2021.RData')
 
 # Relabelling exposures 
 out_q12021$nssec5[which(out_q12021$nssec5 == -1)] <- 0
@@ -380,7 +380,7 @@ dev.off()
 
 pdf('Fig5b_AgeGr_Sex.pdf', width = 10)
 ggplot(out_q12021,
-       aes(x = exposure_five - exposure_emep)) +
+       aes(x = exposure_five - exposure_emep)) + 
   geom_density(alpha = 0.5,
                fill = 'skyblue') +
   facet_grid(sex_label ~ agegr4_label) +

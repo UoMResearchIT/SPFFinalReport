@@ -106,13 +106,16 @@ sample_population <- function(pop_dat,
   # Sampling population to find exposures for
   pop_dat2 <- pop_dat %>%
     group_by_at(.vars = pop_strata) %>%
-    sample_n_acts(
-      size = nsample,
-      prob = NULL,
-      replace = FALSE,
-      fixed_seed = TRUE)
-    #sample_n(size = nsample, 
-    #         replace = FALSE)
+    # NEW WAY
+    #sample_n_acts(
+    #  size = nsample,
+    #  prob = NULL,
+    #  replace = FALSE,
+    #  fixed_seed = TRUE)
+    
+    # OLD WAY
+    sample_n(size = nsample, 
+             replace = FALSE)
   # Preparing shell dataset for sampling 
   activities <- expand.grid(pop_id = pop_dat2$pop_id,
                             date = seq(as.Date(start_date), as.Date(end_date), by = 1)) %>%
@@ -149,11 +152,10 @@ sample_population <- function(pop_dat,
   for (i in unique(activities$strata)){
     # Sampling within each strata
     activities$act_id[which(activities$strata == i)] <- 
-      sample_acts(x = tus_act_id$act_id[which(tus_act_id$strata == i)], 
-                  size = length(activities$pop_id[which(activities$strata == i)]), 
-                  prob = tus_act_id$weights[which(tus_act_id$strata == i)], 
-                  replace = TRUE, 
-                  fixed_seed = TRUE)
+      sample(x = tus_act_id$act_id[which(tus_act_id$strata == i)], 
+             size = length(activities$pop_id[which(activities$strata == i)]), 
+             prob = tus_act_id$weights[which(tus_act_id$strata == i)], 
+             replace = TRUE)
        
   }
   # Merging on the activity data 

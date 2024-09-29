@@ -20,7 +20,7 @@ load("original/Processed/Population/pop_dat.RData")
 out_q12021 <- NULL
 
 # Loop for each MSOA
-for (k in unique(pop_dat$area_id)[1:173]){
+for (k in unique(pop_dat$area_id)){
   t1 <- Sys.time()
   # Saving datasets
   load(paste('original/Processed/Exposures/exposures_', k, '.RData', sep = ''))

@@ -17,10 +17,12 @@ load("original/Processed/TimeUseSurvey/tus_dat.RData")
 # Suppress summarise info
 options(dplyr.summarise.inform = FALSE)
 
-library(SyncRNG)
+#library(SyncRNG)
+#s <- SyncRNG(seed=1409)
+
 # Setting seed
-#set.seed(1409)
-s <- SyncRNG(seed=1409)
+set.seed(1409)
+
 
 ##############################################
 ### Filling in missings in the TUS dataset ###
@@ -104,155 +106,6 @@ activities_all <- NULL
 ############ TEMP for debug ###########
 #######################################
 
-pop_dat_tmp = subset(pop_dat, area_id == 'E02000984')
-tus_dat_tmp = subset(tus_dat, percmissing == 0)
-nsample = 1
-weights = "weights_diary"
-pop_strata = c('area_id')
-tus_strata = c('sex', 'agegr4', 'nssec5', 'daytype')
-start_date = '2021-01-01'
-end_date = '2021-03-31'
-keep = c('activity', 'activity_label', 'location', 'location_label')
-pop_id_debug = c(47)
-
-
-
-################
-### Preamble ###
-################
-
-# If no weights are provided for sampling then use equal weighting 
-if (is.null(weights) == TRUE){
-  tus_dat_tmp$weights <- 1
-}else{
-  # Else use the weights specified
-  tus_dat_tmp$weights <- tus_dat_tmp[,weights]
-}
-
-
-########################
-### Getting metadata ###
-########################
-# Getting a list of strata for activities 
-lst_strata <- tus_dat_tmp %>% 
-  # Grouping by stratification variables
-  group_by_at(.vars = tus_strata)%>% 
-  # Summarising 
-  dplyr::summarise(n = dplyr::n()) %>%
-  ungroup() %>%
-  # Adding label to each strata
-  dplyr::mutate(strata = 1:dplyr::n()) %>%
-  dplyr::select(-c(n))
-
-# Getting activities ID and 
-tus_act_id <- tus_dat_tmp %>%
-  # Merging on stratification labels
-  left_join(lst_strata,
-            by = tus_strata) 
-# Normalising the weights within each strata
-tus_act_id <- tus_act_id %>%
-  # Merging on summary of weights in each strata
-  left_join(tus_act_id%>%
-              dplyr::group_by(strata) %>%
-              dplyr::summarise(sums = sum(weights)),
-            by = 'strata') %>%
-  # Normalising weights
-  mutate(weights = weights/sums) %>%
-  # Removing unnecessary columns 
-  dplyr::select(-c(sums))
-
-##########################################
-### Preparing population time profiles ###
-##########################################
-# Sampling population to find exposures for
-pop_dat2 <- pop_dat_tmp %>%
-  group_by_at(.vars = pop_strata) %>%
-  sample_n_acts(size = nsample,
-                prob = NULL,
-                replace = FALSE,
-                fixed_seed = TRUE)
-#sample_n(size = nsample, 
-#         replace = FALSE)
-
-# Preparing shell dataset for sampling 
-activities <- expand.grid(pop_id = pop_dat2$pop_id,
-                          date = seq(as.Date(start_date), as.Date(end_date), by = 1)) %>%
-  # Adding on day information
-  mutate(day_label = weekdays(date),
-         day = as.numeric(factor(weekdays(date), levels = c('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'))), 
-         daytype = case_when(day %in% c(1,7) ~ 1,
-                             day %in% 2:6 ~ 2),
-         daytype_label = case_when(day %in% c(1,7) ~ 'Weekend',
-                                   day %in% 2:6 ~ 'Weekday'),
-         season = case_when(month(date) %in% c(12, 1, 2) ~ 1,
-                            month(date) %in% c(3:5) ~ 2,
-                            month(date) %in% c(6:8) ~ 3,
-                            month(date) %in% c(9:11) ~ 4),
-         season_label = case_when(month(date) %in% c(12, 1, 2) ~ 'Winter',
-                                  month(date) %in% c(3:5) ~ 'Spring',
-                                  month(date) %in% c(6:8) ~ 'Summer',
-                                  month(date) %in% c(9:11) ~ 'Autumn')) %>%
-  # Merging on population data
-  left_join(pop_dat_tmp %>%
-              select_at(c('pop_id', 'sex', 'agegr4', 'nssec5')),
-            by = 'pop_id') %>%
-  # Merging on stratification labels
-  left_join(lst_strata,
-            by = tus_strata)
-# Removing unecessary datasets
-rm(pop_dat2, lst_strata)
-
-###################################
-### Sampling activity sequences ###
-###################################
-# Empty dataset 
-activities$act_id <- as.numeric(NA)
-# Loop for each strata
-for (i in unique(activities$strata)){
-  # Sampling within each strata
-  
-  # ATTEMPT AT HARD CODING RESULT
-  activities$act_id[which(activities$strata == i)] <- 
-  #  c(5363.0, 12052.0, 15865.0, 16023.0,7702.0, 15560.0,15343.0,4325.0, 5791.0,
-  #    13345.0, 16023.0, 15024.0,8144.0, 5285.0, 8828.0, 12949.0,11262.0,14496.0,
-  #    1403.0, 98.0, 12053.0,6555.0, 13537.0,13401.0, 9697.0, 15006.0, 98.0,
-  #    4325.0, 11841.0, 13401.0, 7703.0, 15311.0,7119.0, 12053.0,14496.0,11261.0,
-  #    97.0, 10735.0,13400.0,10123.0,9226.0, 12931.0,5106.0, 15005.0, 4334.0,
-  #    8277.0, 15024.0, 959.0, 12416.0,14981.0,8145.0, 8145.0, 15311.0,4325.0,
-  #    15006.0,424.0,15712.0,8827.0, 8145.0, 15712.0,12931.0,2375.0, 1403.0,
-  #    13400.0,12696.0,12949.0,9773.0, 12736.0,8526.0, 13614.0,8828.0, 12504.0,
-  #    12504.0,12697.0,15006.0,12200.0,16129.0,2375.0, 1402.0, 3767.0, 11217.0,
-  #    12697.0,8234.0, 4068.0, 12697.0,8525.0, 2376.0, 16023.0,12144.0,9226.0)
-  
-  # ATTEMPT AT USING SyncRNG LIB.
-    #sample_acts(x = tus_act_id$act_id[which(tus_act_id$strata == i)], 
-    #            size = length(activities$pop_id[which(activities$strata == i)]), 
-    #            prob = tus_act_id$weights[which(tus_act_id$strata == i)], 
-    #            replace = TRUE, 
-    #            fixed_seed = TRUE)
-  
-  # ORIGINAL CODE
-  sample(x = tus_act_id$act_id[which(tus_act_id$strata == i)], 
-              size = length(activities$pop_id[which(activities$strata == i)]), 
-              prob = tus_act_id$weights[which(tus_act_id$strata == i)], 
-              replace = TRUE)
-}
-
-tus_dat_tmp <- tus_dat_tmp[, c('act_id', 'time', 'time_label', keep)]
-
-save(activities, 
-     file = paste('anns_run/Processed/Activities/debug_activities_for_merging_R.RData', sep = ''))
-save(tus_dat_tmp, 
-     file = paste('anns_run/Processed/Activities/debug_tus_dat_for_merging_R.RData', sep = ''))
-
-# Merging on the activity data 
-activities_merged <- merge(activities, 
-                    tus_dat_tmp[, c('act_id', 'time', 'time_label', keep)],
-                    by = 'act_id') %>%
-  arrange(pop_id, date, time) %>%
-  dplyr::select(-c(sex, agegr4, nssec5, strata))
-# Returning activity samples 
-
 
 #######################################
 ####### END TEMP for debug ############
@@ -262,6 +115,7 @@ activities_merged <- merge(activities,
 # Loop for each MSOA
 for (k in unique(pop_dat$area_id)){
   # Sampling activities 
+
   activities_complete <- sample_population(subset(pop_dat, area_id == k), 
                                            subset(tus_dat, percmissing == 0), 
                                            nsample = 1,
@@ -296,7 +150,7 @@ for (k in unique(pop_dat$area_id)){
                                     month(date) %in% c(6:8) ~ 'Summer',
                                     month(date) %in% c(9:11) ~ 'Autumn')) %>%
     # Removing first day
-    dplyr::filter(date >= as.Date('2020-12-01') & date <= as.Date('2021-12-31'))
+    dplyr::filter(date >= as.Date('2021-01-01') & date <= as.Date('2021-03-31'))
   
   # Adding micro-environments to the dataset 
   activities_complete <- activities_complete %>%
@@ -313,8 +167,11 @@ for (k in unique(pop_dat$area_id)){
     dplyr::group_by(pop_id, date, hour) %>%
     
     # Sample prop to the environments
+    # OLD WAY: 
+    dplyr::mutate(sample = sample(1:6, size = 1)) %>%
+    
     # NEW WAY: SAMPLE WITHOUT REPLACEMENT
-    dplyr::mutate(sample = sample_acts(x=c(1,2,3,4,5,6), size=1, replace = FALSE, fixed_seed = TRUE)) %>%
+    #dplyr::mutate(sample = sample_acts(x=c(1,2,3,4,5,6), size=1, replace = FALSE, fixed_seed = TRUE)) %>%
 
     # Only keep sampled time point
     dplyr::filter(minutes == sample) %>%
