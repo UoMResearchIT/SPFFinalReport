@@ -31,7 +31,7 @@ pm25_ctm <- pm25_cams %>%
               #         Also, it doesn't make sense to match on float measurement values.
               dplyr::select(area_id, date, hour, pm25_emep_agg), #= pm25_cams_agg),
             by = c("area_id", "date", "hour")) %>%
-  filter(as.Date(date) >= as.Date("2021-01-01") & 
+  filter(as.Date(date) >= as.Date("2020-12-31") & 
            as.Date(date) <= as.Date("2021-03-31")) %>%
   mutate(pm25_emep_agg = ifelse(is.na(pm25_emep_agg), pm25_cams_agg, pm25_emep_agg),
          pm25_five = 5,
@@ -52,8 +52,8 @@ for (k in unique(pop_dat$area_id)){  #[1:7]){
   # Parparing data for exposure modelling
   activities_complete <- activities_complete %>%
     # Only keeping specific period
-    filter(as.numeric(date) >= 18616 & 
-             as.numeric(date) <= 18717) %>%
+    filter(as.numeric(date) >= as.Date("2020-12-31") & 
+             as.numeric(date) <= as.Date("2021-03-31")) %>%
     # Adding on demographic variables
     left_join(pop_dat %>%
                 dplyr::select(pop_id, area_id, sex, sex_label, agegr4, agegr4_label, nssec5, nssec5_label),

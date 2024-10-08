@@ -102,10 +102,10 @@ tus_dat <- tus_dat %>%
 # Merging to skeleton dataset
 activities_all <- NULL
 
+
 #######################################
 ############ TEMP for debug ###########
 #######################################
-
 
 #######################################
 ####### END TEMP for debug ############
@@ -122,7 +122,7 @@ for (k in unique(pop_dat$area_id)){
                                            weights = "weights_diary",
                                            pop_strata = c('area_id'),
                                            tus_strata = c('sex', 'agegr4', 'nssec5', 'daytype'),
-                                           start_date = '2021-01-01',
+                                           start_date = '2020-12-31',
                                            end_date = '2021-03-31',
                                            keep = c('activity', 'activity_label', 'location', 'location_label'))
 

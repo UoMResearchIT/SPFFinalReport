@@ -19,7 +19,7 @@ load("original/Processed/Shapefiles/shapefiles.RData")
 # Subsetting Greater Manchester shapefiles
 mcr_msoa <- subset(ew_msoa, parent_area_name %in% c('Bolton', 'Bury', 'Manchester', 'Oldham', 'Rochdale',
                                                     'Salford', 'Stockport', 'Tameside', 'Trafford', 'Wigan'))
-mcr_msoa_region <- subset(ew_msoa_region, parent_area_name %in% c('Bolton', 'Bury', 'Manchester', 'Oldham', 'Rochdale',
+mcr_msoa_region <- subset(ew_msoa_region, area_name %in% c('Bolton', 'Bury', 'Manchester', 'Oldham', 'Rochdale',
                                                                   'Salford', 'Stockport', 'Tameside', 'Trafford', 'Wigan'))
 
 # Loading exposures
@@ -90,7 +90,7 @@ for (i in 1:nrow(coeffs_q12021)){
 }
 
 # Plot with linear models
-pdf('Fig1b.pdf', height = 7, width = 14)
+pdf('original/Processed/Plots/Fig1b.pdf', height = 7, width = 14)
 ggplot(QuarterAverage_q12021,
        aes(x = outdoor,
            y = mean)) +
@@ -121,7 +121,7 @@ ggplot(QuarterAverage_q12021,
 dev.off()
 
 # Saving coefficients
-write_csv(coeffs_q12021, file = 'Coeffs_q12021.csv')
+write_csv(coeffs_q12021, file = 'original/Processed/Plots/Coeffs_q12021.csv')
 
 ########################################
 ### Figure 2 - Time series line plot ###
@@ -138,7 +138,7 @@ QuarterAverage_q12021 <-
 
 
 # Plotting case study 2
-pdf('Fig2b_diff.pdf', width = 10)
+pdf('original/Processed/Plots/Fig2b_diff.pdf', width = 10)
 ggplot(QuarterAverage_q12021,
        aes(x = date)) +
   geom_line(aes(y = mean),
@@ -289,7 +289,7 @@ p3 <- ggplot(subset(QuarterAverage_q12021, variable == 'diff'),
                                               direction = 'horizontal'))
 
 # Outputting plot
-pdf('Fig3b.pdf', width = 10, height = 4)
+pdf('original/Processed/Plots/Fig3b.pdf', width = 10, height = 4)
 multiplot(p1, p2, p3, cols = 3)
 dev.off()
 
@@ -297,7 +297,7 @@ dev.off()
 ###############################################
 ### Figure 4  - Density plots of exposures ####
 ###############################################
-pdf('Fig4b_nssec5.pdf', width = 10)
+pdf('original/Processed/Plots/Fig4b_nssec5.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_emep)) +
   geom_density(alpha = 0.5,
@@ -310,7 +310,7 @@ ggplot(out_q12021,
   theme(legend.position = 'bottom')
 dev.off()
 
-pdf('Fig4b_AgeGr_Sex.pdf', width = 10)
+pdf('original/Processed/Plots/Fig4b_AgeGr_Sex.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_emep)) +
   geom_density(alpha = 0.5,
@@ -326,7 +326,7 @@ dev.off()
 ####################################################
 ### Figure 5 - Density plots of the differences ####
 ####################################################
-pdf('Fig5b_nssec5.pdf', width = 10)
+pdf('original/Processed/Plots/Fig5b_nssec5.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_five - exposure_emep)) +
   geom_density(alpha = 0.5,
@@ -339,7 +339,7 @@ ggplot(out_q12021,
   theme(legend.position = 'bottom')
 dev.off()
 
-pdf('Fig5b_DayType.pdf', width = 10)
+pdf('original/Processed/Plots/Fig5b_DayType.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_five - exposure_emep)) +
   geom_density(alpha = 0.5,
@@ -352,7 +352,7 @@ ggplot(out_q12021,
   theme(legend.position = 'bottom')
 dev.off()
 
-pdf('Fig5b_AgeGr.pdf', width = 10)
+pdf('original/Processed/Plots/Fig5b_AgeGr.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_five - exposure_emep)) +
   geom_density(alpha = 0.5,
@@ -365,7 +365,7 @@ ggplot(out_q12021,
   theme(legend.position = 'bottom')
 dev.off()
 
-pdf('Fig5b_Sex.pdf', width = 10)
+pdf('original/Processed/Plots/Fig5b_Sex.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_five - exposure_emep)) +
   geom_density(alpha = 0.5,
@@ -378,7 +378,7 @@ ggplot(out_q12021,
   theme(legend.position = 'bottom')
 dev.off()
 
-pdf('Fig5b_AgeGr_Sex.pdf', width = 10)
+pdf('original/Processed/Plots/Fig5b_AgeGr_Sex.pdf', width = 10)
 ggplot(out_q12021,
        aes(x = exposure_five - exposure_emep)) + 
   geom_density(alpha = 0.5,

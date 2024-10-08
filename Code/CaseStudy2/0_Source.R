@@ -32,6 +32,7 @@ library(sf)
 library(tidyverse)
 library(truncnorm)
 library(zoo)
+library(ggplot2)
 
 ####################################################################
 ### sample_population - A function to sample activities sequences###
