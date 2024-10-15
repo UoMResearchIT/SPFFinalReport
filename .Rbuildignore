@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+
+^LICENSE\.md$
+
+^Data_act$
+^Data_ref$
+
+^Output_act$
+^Output_ref$

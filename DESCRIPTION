@@ -1,0 +1,19 @@
+Package: spf
+Type: Package
+Title: Personal Exposure Model for Pollution
+Version: 0.1.0
+Authors@R: c(
+  person("Matthew", "Thomas", email = "matthew.l.thomas@manchester.ac.uk", role = c("aut", "cre")),
+  person("Toni", "Price", email = "toni.price@manchester.ac.uk", role = c("aut")))
+Description: Models personal exposure to pollution. Package derived from the
+  SPFFinalReport Repository (created for the case study and report for the final
+  SPF reporting period).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3
+Imports:
+    cli
+Suggests:
+    testthat (>= 3.0.0),
