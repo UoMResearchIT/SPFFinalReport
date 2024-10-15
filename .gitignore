@@ -1,5 +1,5 @@
-Data/
-Output/
-.DS_Store 
+.DS_Store
+
 .Rhistory
 .RData
+.Rproj.user
