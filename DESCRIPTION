@@ -15,6 +15,24 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Imports:
-    cli
+    DescTools,
+    doParallel,
+    dplyr,
+    EnvStats,
+    ggmap,
+    haven,
+    lhs,
+    lubridate,
+    maptools,
+    openair,
+    parallel,
+    plyr,
+    raster,
+    readxl,
+    reshape2,
+    sf,
+    tidyverse,
+    truncnorm,
+    zoo,
 Suggests:
     testthat (>= 3.0.0),
