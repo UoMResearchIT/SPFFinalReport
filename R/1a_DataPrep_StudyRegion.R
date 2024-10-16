@@ -18,11 +18,11 @@ run_data_prep_study_region <- function() {
   ### Preparing MSOA shapefiles ###
   #################################
   # Reading in whole UK shapefiles
-  uk_full <- st_read(dsn = 'Data/Raw/Shapefiles',
+  uk_full <- st_read(dsn = 'Data_ref/Raw/Shapefiles',
                      layer = 'gadm36_GBR_0')
 
   # import shapefile, converte to longitude/latitude coordinates and organise data
-  ew_msoa <- st_read(dsn = "Data/Raw/Shapefiles",
+  ew_msoa <- st_read(dsn = "Data_ref/Raw/Shapefiles",
                      layer = "Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries")
 
   # Getting MSOA centroids in long lat format
@@ -50,7 +50,7 @@ run_data_prep_study_region <- function() {
     # Merging on parent_information
     left_join(
       # Read in data
-      read_csv('Data/Raw/Shapefiles/area_hierarchy.csv') %>%
+      read_csv('Data_ref/Raw/Shapefiles/area_hierarchy.csv') %>%
         # REmoving output area
         dplyr::select(-c(OA11CD)) %>%
         # Only keeping unique row
@@ -75,7 +75,7 @@ run_data_prep_study_region <- function() {
     # Adding a unique idenitifier code
     left_join(
       # Read in data
-      read_csv('Data/Raw/Shapefiles/area_hierarchy.csv') %>%
+      read_csv('Data_ref/Raw/Shapefiles/area_hierarchy.csv') %>%
         # REmoving output area
         dplyr::select(-c(OA11CD)) %>%
         # Only keeping unique row
@@ -107,7 +107,7 @@ run_data_prep_study_region <- function() {
   ### Saving outputs ###
   ######################
   # Save shapefiles
-  save(uk_full, ew_msoa, ew_msoa_region, file = "Data/Processed/Shapefiles/shapefiles.RData")
+  save(uk_full, ew_msoa, ew_msoa_region, file = "Data_act/Processed/Shapefiles/shapefiles.RData")
 
   invisible(NULL)
 }

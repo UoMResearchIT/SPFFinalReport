@@ -13,7 +13,7 @@
 collate_results_jul_2021 <- function(msoa_lim = NULL) {
 
   # Read population data
-  load("Data/Processed/Population/pop_dat.RData")
+  load("Data_ref/Processed/Population/pop_dat.RData")
 
   # TEMP: Number of loops whilst getting the code working
   msoa_lim <- msoa_lim %||% 2
@@ -31,7 +31,7 @@ collate_results_jul_2021 <- function(msoa_lim = NULL) {
   for (k in unique(pop_dat$area_id)[1:msoa_lim]) {
     t1 <- Sys.time()
     # Saving datasets
-    load(paste('Output/CaseStudy2/Exposures/exposures_', k, '_July_2021.RData', sep = ''))
+    load(paste('Output_act/CaseStudy2/Exposures_July_2021/exposures_', k, '.RData', sep = ''))
     # Preparing case study 2
     activities_complete <- activities_complete %>%
       # Only keepting July
@@ -68,7 +68,7 @@ collate_results_jul_2021 <- function(msoa_lim = NULL) {
   }
 
   # Saving outputs
-  save(out_july2021, file = 'Output/CaseStudy2/Analysis/DailyAverage_July_2021.RData')
+  save(out_july2021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_July_2021.RData')
 
   invisible(NULL)
 }

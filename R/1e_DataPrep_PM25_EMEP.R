@@ -15,15 +15,15 @@
 run_data_prep_pm25_emep <- function() {
 
   # Loading shapefiles
-  load("Data/Processed/Shapefiles/shapefiles.RData")
+  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
 
   #######################################
   ### Initial processing of EMEP from ###
   ### NetCDF to tifs for Manchester   ###
   #######################################
   # file names
-  files <- c("Data/Raw/PM25/EMEP/2021/pm25_janfeb2021_regrid.nc",
-             "Data/Raw/PM25/EMEP/2021/pm25_marapr2021_regrid.nc")
+  files <- c("Data_ref/Raw/PM25/EMEP/2021/pm25_janfeb2021_regrid.nc",
+             "Data_ref/Raw/PM25/EMEP/2021/pm25_marapr2021_regrid.nc")
 
   # files start dates
   start_date <- c(as.Date('2021-01-01'),
@@ -55,7 +55,7 @@ run_data_prep_pm25_emep <- function() {
         ncin <- crop(ncin, extent(-2.755, -1.895, 53.325, 53.695))
         # Saving raster
         writeRaster(ncin,
-                    filename = paste('Data/Processed/PM25/EMEP/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
+                    filename = paste('Data_act/Processed/PM25/EMEP/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
                     overwrite = TRUE)
         # else {keep <- keep + ncin}
         print(paste(date, '-', sprintf("%02d", (k - 1) %% 24), "00", sep = ''))
@@ -121,7 +121,7 @@ run_data_prep_pm25_emep <- function() {
     # Loop for each time
     for (j in 0:23){
       # Reading in PM25 from CAMS
-      r <- raster(paste('Data/Processed/PM25/EMEP/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
+      r <- raster(paste('Data_act/Processed/PM25/EMEP/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
       # Renaming raster
       names(r) <- 'pm25'
       # Creating aggregated estimates of PM25 by MSOA
@@ -161,7 +161,7 @@ run_data_prep_pm25_emep <- function() {
   ### Saving outputs ###
   ######################
   # Save aurn data
-  save(pm25_emep, file = "Data/Processed/PM25/pm25_emep.RData")
+  save(pm25_emep, file = "Data_act/Processed/PM25/pm25_emep.RData")
 
   invisible(NULL)
 }

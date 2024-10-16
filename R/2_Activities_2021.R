@@ -13,8 +13,8 @@
 process_activities <- function(msoa_lim = NULL) {
 
   # Read population data
-  load("Data/Processed/Population/pop_dat.RData")
-  load("Data/Processed/TimeUseSurvey/tus_dat.RData")
+  load("Data_ref/Processed/Population/pop_dat.RData")
+  load("Data_ref/Processed/TimeUseSurvey/tus_dat.RData")
 
   # TEMP: Number of loops whilst getting the code working
   msoa_lim <- msoa_lim %||% 2
@@ -93,7 +93,7 @@ process_activities <- function(msoa_lim = NULL) {
     # Removing uncessary columns
     dplyr::select(-c(tmp))%>%
     # Merging on location labels
-    left_join(read_csv("Data/Raw/TimeUseSurvey/uktus_metadata_location.csv") %>%
+    left_join(read_csv("Data_ref/Raw/TimeUseSurvey/uktus_metadata_location.csv") %>%
                 dplyr::select(location_popular = location,
                               location_popular_label = location_label),
               by = 'location_popular')
@@ -161,7 +161,7 @@ process_activities <- function(msoa_lim = NULL) {
       dplyr::select(-c(minutes, sample))
 
     # Saving datasets
-    save(activities_complete, file = paste('Output/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
+    save(activities_complete, file = paste('Output_act/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
 
     # Printing index
     print(k)

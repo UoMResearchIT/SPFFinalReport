@@ -13,9 +13,9 @@
 process_exposures_q1_2021 <- function(msoa_lim = NULL) {
 
   # Read population data
-  load("Data/Processed/Population/pop_dat.RData")
-  load("Data/Processed/PM25/pm25_emep.RData")
-  load("Data/Processed/PM25/pm25_cams.RData")
+  load("Data_ref/Processed/Population/pop_dat.RData")
+  load("Data_ref/Processed/PM25/pm25_emep.RData")
+  load("Data_ref/Processed/PM25/pm25_cams.RData")
 
   # Suppress summarise info
   options(dplyr.summarise.inform = FALSE)
@@ -50,7 +50,7 @@ process_exposures_q1_2021 <- function(msoa_lim = NULL) {
   for (k in unique(pop_dat$area_id)[1:7]){
     t1 <- Sys.time()
     # Saving datasets
-    load(paste('Output/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
+    load(paste('Output_act/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
 
     # Parparing data for exposure modelling
     activities_complete <- activities_complete %>%
@@ -85,7 +85,7 @@ process_exposures_q1_2021 <- function(msoa_lim = NULL) {
     activities_complete <- calculate_household(act_dat = activities_complete, pop_dat = pop_dat,
                                                ambient = "pm25_five", outvar = "pm25_five_hhd")
     # Saving datasets
-    save(activities_complete, file = paste('Output/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.RData', sep = ''))
+    save(activities_complete, file = paste('Output_act/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.RData', sep = ''))
 
     t2 <- Sys.time()
     # Printing index
