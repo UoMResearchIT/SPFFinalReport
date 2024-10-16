@@ -14,7 +14,7 @@
 run_data_prep_pm25_gm <- function() {
 
   # Loading shapefiles
-  load("Data/Processed/Shapefiles/shapefiles.RData")
+  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
 
   ##############################################
   ### Preparing PM data from ground monitors ###
@@ -28,12 +28,12 @@ run_data_prep_pm25_gm <- function() {
     st_transform(CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
   # Reading in LTN network data
-  tmp1 <- read.csv('Data/Raw/PM25/GroundMonitors/BroomLane_AQ_hourly.csv')
-  tmp2 <- read.csv('Data/Raw/PM25/GroundMonitors/CromwellAQ_hourly.csv')
-  tmp3 <- read.csv('Data/Raw/PM25/GroundMonitors/DelamereRoad_AQ_hourly.csv')
-  tmp4 <- read.csv('Data/Raw/PM25/GroundMonitors/GrangethorpeAQ_2b_hourly.csv')
-  tmp5 <- read.csv('Data/Raw/PM25/GroundMonitors/ManorRad_AQ_hourly.csv')
-  tmp6 <- read.csv('Data/Raw/PM25/GroundMonitors/SladeLane_AQ_hourly.csv')
+  tmp1 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/BroomLane_AQ_hourly.csv')
+  tmp2 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/CromwellAQ_hourly.csv')
+  tmp3 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/DelamereRoad_AQ_hourly.csv')
+  tmp4 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/GrangethorpeAQ_2b_hourly.csv')
+  tmp5 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/ManorRad_AQ_hourly.csv')
+  tmp6 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/SladeLane_AQ_hourly.csv')
 
   # Adding Longitude
   tmp1$latitude <- 53.441161
@@ -289,11 +289,11 @@ run_data_prep_pm25_gm <- function() {
   ### Saving outputs ###
   ######################
   # Save aurn data on monitor level
-  save(gm_dat, file = "Data/Processed/PM25/GroundMonitoring/pm25_aurn.RData")
-  save(stations_gm_dat, file = "Data/Processed/PM25/GroundMonitoring/pm25_aurn_metadata.RData")
+  save(gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn.RData")
+  save(stations_gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn_metadata.RData")
 
   # Save aurn data on MSOA level
-  save(pm25_gm, file = "Data/Processed/PM25/pm25_gm.RData")
+  save(pm25_gm, file = "Data_act/Processed/PM25/pm25_gm.RData")
 
   invisible(NULL)
 }

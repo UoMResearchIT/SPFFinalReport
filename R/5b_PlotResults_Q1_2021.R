@@ -11,10 +11,10 @@
 plot_results_q1_2021 <- function() {
 
   # Read population data
-  load("Data/Processed/Population/pop_dat.RData")
+  load("Data_ref/Processed/Population/pop_dat.RData")
 
   # Read population data
-  load("Data/Processed/Shapefiles/shapefiles.RData")
+  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
 
   # Subsetting Greater Manchester shapefiles
   mcr_msoa <- subset(ew_msoa, parent_area_name %in% c('Bolton', 'Bury', 'Manchester', 'Oldham', 'Rochdale',
@@ -23,7 +23,7 @@ plot_results_q1_2021 <- function() {
                                                                     'Salford', 'Stockport', 'Tameside', 'Trafford', 'Wigan'))
 
   # Loading exposures
-  load('Output/CaseStudy2/Analysis/DailyAverage_Q1_2021.RData')
+  load('Output_act/CaseStudy2/Analysis/DailyAverage_Q1_2021.RData')
 
   # Relabelling exposures
   out_q12021$nssec5[which(out_q12021$nssec5 == -1)] <- 0

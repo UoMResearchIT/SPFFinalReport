@@ -13,6 +13,7 @@ License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+VignetteBuilder: quarto
 Config/testthat/edition: 3
 Imports:
     DescTools,
@@ -35,4 +36,6 @@ Imports:
     truncnorm,
     zoo,
 Suggests:
+    quarto,
+    rmarkdown,
     testthat (>= 3.0.0),

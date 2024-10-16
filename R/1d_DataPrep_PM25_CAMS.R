@@ -15,7 +15,7 @@
 run_data_prep_pm25_cams <- function() {
 
   # Loading shapefiles
-  load("Data/Processed/Shapefiles/shapefiles.RData")
+  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
 
   #########################################
   ### Initial processing from NetCDF UK ###
@@ -44,9 +44,9 @@ run_data_prep_pm25_cams <- function() {
   r[!(r[] %in% a1[[1]])] <- NA
 
   # file names
-  files <- c('Data/Raw/PM25/CAMS-Europe/CAMSEurope_20201201-20210531.nc',
-             'Data/Raw/PM25/CAMS-Europe/CAMSEurope_20210601-20211130.nc',
-             'Data/Raw/PM25/CAMS-Europe/CAMSEurope_20211201-20220430.nc')
+  files <- c('Data_ref/Raw/PM25/CAMS-Europe/CAMSEurope_20201201-20210531.nc',
+             'Data_ref/Raw/PM25/CAMS-Europe/CAMSEurope_20210601-20211130.nc',
+             'Data_ref/Raw/PM25/CAMS-Europe/CAMSEurope_20211201-20220430.nc')
 
   # files start dates
   start_date <- c(as.Date('2020-12-01'),
@@ -82,7 +82,7 @@ run_data_prep_pm25_cams <- function() {
         ncin[is.na(r[])] <- NA
         # Saving raster
         writeRaster(ncin,
-                    filename = paste('Data/Processed/PM25/CAMS-Europe/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
+                    filename = paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
                     overwrite = TRUE)
         # else {keep <- keep + ncin}
         print(paste(date, '-', sprintf("%02d", (k - 1) %% 24), "00", sep = ''))
@@ -148,7 +148,7 @@ run_data_prep_pm25_cams <- function() {
     # Loop for each time
     for (j in 0:23){
       # Reading in PM25 from CAMS
-      r <- raster(paste('Data/Processed/PM25/CAMS-Europe/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
+      r <- raster(paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
       # Renaming raster
       names(r) <- 'pm25'
       # Creating aggregated estimates of PM25 by MSOA
@@ -188,7 +188,7 @@ run_data_prep_pm25_cams <- function() {
   ### Saving outputs ###
   ######################
   # Save cams
-  save(pm25_cams, file = "Data/Processed/PM25/pm25_cams.RData")
+  save(pm25_cams, file = "Data_act/Processed/PM25/pm25_cams.RData")
 
 
   invisible(NULL)

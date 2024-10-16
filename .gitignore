@@ -3,3 +3,13 @@
 .Rhistory
 .RData
 .Rproj.user
+
+inst/doc
+/doc/
+/Meta/
+
+Data_act
+Data_ref
+
+Output_act
+Output_ref
