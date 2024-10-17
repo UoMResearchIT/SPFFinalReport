@@ -1,7 +1,8 @@
 ---
 title: "spf"
 author: "Toni Price"
-date: "2024-10-16"
+date: last-modified
+date-format: "[Last updated:] DD MMMM, YYYY"
 format: 
   html:
     mermaid: 

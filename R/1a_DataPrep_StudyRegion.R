@@ -18,50 +18,45 @@ run_data_prep_study_region <- function() {
   ### Preparing MSOA shapefiles ###
   #################################
   # Reading in whole UK shapefiles
-  uk_full <- st_read(dsn = 'Data_ref/Raw/Shapefiles',
-                     layer = 'gadm36_GBR_0')
+  uk_full <- sf::st_read(dsn = 'Data_ref/Raw/Shapefiles',
+                         layer = 'gadm36_GBR_0')
 
   # import shapefile, converte to longitude/latitude coordinates and organise data
-  ew_msoa <- st_read(dsn = "Data_ref/Raw/Shapefiles",
-                     layer = "Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries")
+  ew_msoa <- sf::st_read(dsn = "Data_ref/Raw/Shapefiles",
+                         layer = "Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries")
 
   # Getting MSOA centroids in long lat format
-  tmp <- ew_msoa %>%
+  tmp_longlat <- ew_msoa %>%
     # Extract
-    st_centroid(byid = TRUE) %>%
+    sf::st_centroid(byid = TRUE) %>%
     # Transform
-    st_transform('+proj=longlat') %>%
+    sf::st_transform('+proj=longlat') %>%
     # Extract coordinates
-    st_coordinates() %>%
+    sf::st_coordinates() %>%
     # Converting to data frame
     as.data.frame() %>%
     # Renaming covariates
     dplyr::rename(long = X, lat = Y)
 
   # Adding on long/lat to original MSOAs
-  ew_msoa <- cbind(ew_msoa, tmp)
+  ew_msoa <- cbind(ew_msoa, tmp_longlat)
 
   # Getting relevant columns
   ew_msoa <- ew_msoa %>%
     dplyr::rename(area_id = msoa11cd, area_name = msoa11nm, cent_long = long, cent_lat = lat)
 
-  # Adding on Local authority
-  ew_msoa <- ew_msoa %>%
-    # Merging on parent_information
-    left_join(
-      # Read in data
-      read_csv('Data_ref/Raw/Shapefiles/area_hierarchy.csv') %>%
-        # REmoving output area
-        dplyr::select(-c(OA11CD)) %>%
-        # Only keeping unique row
-        unique()  %>%
-        # Selecting relevant variables
-        dplyr::select(area_id = MSOA11CD,
-                      parent_area_name = LAD11NM,
-                      parent_area_id = LAD11CD) %>%
-        unique(),
-      by = 'area_id')
+  # Note: 'Data/Raw/Shapefiles/area_hierarchy.csv' for retrieving the parent
+  # area name is not currently available as at 30sep24 - so derive the parent
+  # area name instead; the parent_area_id does not seem to be used anywhere else
+  # TODO: Check that parent_area_id is not needed elsewhere
 
+  # Derive the parent_area_name from the area_name (being all but the last 4
+  # chars)
+  extract_nm <- function(nm_with_id) {
+    stringr::str_trim(stringr::str_sub(nm_with_id, end = -4L))
+  }
+  ew_msoa <- ew_msoa %>%
+    dplyr::mutate(parent_area_name = extract_nm(area_name))
 
   ###############################
   ### Preparing LA shapefiles ###
@@ -72,42 +67,34 @@ run_data_prep_study_region <- function() {
     dplyr::group_by(parent_area_name) %>%
     dplyr::summarise() %>%
     dplyr::ungroup()  %>%
-    # Adding a unique idenitifier code
-    left_join(
-      # Read in data
-      read_csv('Data_ref/Raw/Shapefiles/area_hierarchy.csv') %>%
-        # REmoving output area
-        dplyr::select(-c(OA11CD)) %>%
-        # Only keeping unique row
-        unique()  %>%
-        dplyr::select(parent_area_name = LAD11NM,
-                      area_id = LAD11CD) %>%
-        unique(),
-      by = 'parent_area_name')%>%
     # Renaming column
     dplyr::rename(area_name = parent_area_name)
 
   # Getting LA centroids in long lat format
-  tmp <- ew_msoa_region %>%
+  tmp_longlat <- ew_msoa_region %>%
     # Extract
-    st_centroid(byid = TRUE) %>%
+    sf::st_centroid(byid = TRUE) %>%
     # Transform
-    st_transform('+proj=longlat') %>%
+    sf::st_transform('+proj=longlat') %>%
     # Extract coordinates
-    st_coordinates() %>%
+    sf::st_coordinates() %>%
     # Converting to data frame
     as.data.frame() %>%
     # Renaming covariates
     dplyr::rename(long = X, lat = Y)
 
   # Adding on long/lat to original MSOAs
-  ew_msoa_region <- cbind(ew_msoa_region, tmp)
+  ew_msoa_region <- cbind(ew_msoa_region, tmp_longlat)
 
   ######################
   ### Saving outputs ###
   ######################
   # Save shapefiles
-  save(uk_full, ew_msoa, ew_msoa_region, file = "Data_act/Processed/Shapefiles/shapefiles.RData")
+  # Note: The objects in the reference shapefiles.RData are S4 objects of type
+  # Large SpatialPolygonsDataFrame whilst these are data frames
+  saveRDS(ew_msoa,        "Data_act/Processed/Shapefiles/ew_msoa.rds")
+  saveRDS(ew_msoa_region, "Data_act/Processed/Shapefiles/ew_msoa_region.rds")
+  saveRDS(uk_full,        "Data_act/Processed/Shapefiles/uk_full.rds")
 
   invisible(NULL)
 }
