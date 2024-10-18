@@ -1,6 +1,6 @@
-#' Process the PM25 CAMS data
+#' Process the pm25 cams data
 #'
-#' This function implements a data preparation step to process the PM25 CAMS
+#' This function implements a data preparation step to process the pm25 cams
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
@@ -15,18 +15,19 @@
 run_data_prep_pm25_cams <- function() {
 
   # Loading shapefiles
-  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
+  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
+  uk_full <- readRDS("Data_act/Processed/Shapefiles/uk_full.rds")
 
   #########################################
   ### Initial processing from NetCDF UK ###
   ### wide to tif files for Manchester  ###
   #########################################
   # Empty raster
-  r <- raster(xmn = -10,
-              xmx = 3,
-              ymn = 49,
-              ymx = 62,
-              res = 0.1)
+  r <- raster::raster(xmn = -10,
+                      xmx = 3,
+                      ymn = 49,
+                      ymx = 62,
+                      res = 0.1)
 
   # Adding unique  ID
   r[] <- 1:(dim(r)[1]*dim(r)[2])
@@ -56,12 +57,12 @@ run_data_prep_pm25_cams <- function() {
   # Loop for each file
   for (i in 1:length(files)){
     # Opening raster
-    ncin <- raster(files[i],
-                   band = 1,
-                   verbose = FALSE,
-                   stopIfNotEqualSpaced = FALSE)
+    ncin <- raster::raster(files[i],
+                           band = 1,
+                           verbose = FALSE,
+                           stopIfNotEqualSpaced = FALSE)
     # Getting the number of  days
-    N_days <- floor(nbands(ncin)/24)
+    N_days <- floor(raster::nbands(ncin)/24)
     # Dates
     Dates <- start_date[i] + (1:N_days) - 1
     # Loop for each day in the year
@@ -71,19 +72,19 @@ run_data_prep_pm25_cams <- function() {
       # Looping for each hour in the day
       for (k in (24*(j-1)+1):(24*j)){
         # Opening raster
-        ncin <- raster(files[i],
-                       band = k,
-                       verbose = FALSE,
-                       stopIfNotEqualSpaced = FALSE)
+        ncin <- raster::raster(files[i],
+                               band = k,
+                               verbose = FALSE,
+                               stopIfNotEqualSpaced = FALSE)
         # # Cropping for the UK
-        # ncin <- crop(ncin, extent(-10, 3, 49, 62))
-        extent(ncin) <- c(-10, 3, 49, 62)
+        # ncin <- raster::crop(ncin, raster::extent(-10, 3, 49, 62))
+        raster::extent(ncin) <- c(-10, 3, 49, 62)
         # Setting to missing if not in  UK
         ncin[is.na(r[])] <- NA
         # Saving raster
-        writeRaster(ncin,
-                    filename = paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
-                    overwrite = TRUE)
+        raster::writeRaster(ncin,
+                            filename = paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
+                            overwrite = TRUE)
         # else {keep <- keep + ncin}
         print(paste(date, '-', sprintf("%02d", (k - 1) %% 24), "00", sep = ''))
       }
@@ -94,11 +95,11 @@ run_data_prep_pm25_cams <- function() {
   ### Aggregating to MSOA and bringing together ###
   #################################################
   # Empty raster
-  r0 <- raster(xmn = -2.8,
-               xmx = -1.8,
-               ymn = 53.2,
-               ymx = 53.7,
-               res = 0.1)
+  r0 <- raster::raster(xmn = -2.8,
+                       xmx = -1.8,
+                       ymn = 53.2,
+                       ymx = 53.7,
+                       res = 0.1)
 
   # Adding unique  ID
   r0[] <- 1:(dim(r0)[1]*dim(r0)[2])
@@ -109,7 +110,7 @@ run_data_prep_pm25_cams <- function() {
 
   # Converting to long lat
   mcr_msoa <- mcr_msoa %>%
-    st_transform(CRS("+proj=longlat +datum=WGS84 +no_defs"))
+    sf::st_transform(sp::CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
   # Extracting values
   a1 <- raster::extract(r0, # Grid unique IDs
@@ -148,31 +149,34 @@ run_data_prep_pm25_cams <- function() {
     # Loop for each time
     for (j in 0:23){
       # Reading in PM25 from CAMS
-      r <- raster(paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
+      r <- raster::raster(paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
       # Renaming raster
       names(r) <- 'pm25'
       # Creating aggregated estimates of PM25 by MSOA
       tmp1 <- r %>%
         # Converting raster to dataframe
-        crop(r0) %>%
-        stack(r0) %>%
-        rasterToPoints() %>%
+        raster::crop(r0) %>%
+        raster::stack(r0) %>%
+        raster::rasterToPoints() %>%
         as.data.frame()%>%
         # Renaming columns
         dplyr::select(IDGRID = layer, pm25) %>%
         # Merging on weights to aggregate
-        right_join(Weights_msoa,
-                   by = 'IDGRID') %>%
+        dplyr::right_join(Weights_msoa,
+                          by = 'IDGRID') %>%
         # Aggregating grid to
-        ddply(.(area_id),
-              summarize,
-              pm25_cams_agg = weighted.mean(pm25, weight))
+        # Note: Using the .(area_id) syntax causes a name conflict with dplyr -
+        # so use the formula syntax for the 'group by' var instead, i.e.
+        # '~area_id' rather than '.(area_id)'
+        plyr::ddply(~area_id,
+                    plyr::summarize,
+                    pm25_cams_agg = weighted.mean(pm25, weight))
       # Extracting PM2.5 values at centroids
-      tmp1$pm25_cams_cent <- raster::extract(r, mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry())
+      tmp1$pm25_cams_cent <- raster::extract(r, mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry())
       # Adding on date and hour
       tmp1 <- tmp1 %>%
-        mutate(hour = j,
-               date = i) %>%
+        dplyr::mutate(hour = j,
+                      date = i) %>%
         # Outputting datasets
         dplyr::select(area_id, date, hour, pm25_cams_cent, pm25_cams_agg)
       # Appending together
@@ -188,8 +192,7 @@ run_data_prep_pm25_cams <- function() {
   ### Saving outputs ###
   ######################
   # Save cams
-  save(pm25_cams, file = "Data_act/Processed/PM25/pm25_cams.RData")
-
+  saveRDS(pm25_cams, "Data_act/Processed/PM25/pm25_cams.rds")
 
   invisible(NULL)
 }

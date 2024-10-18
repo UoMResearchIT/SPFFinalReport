@@ -24,9 +24,9 @@ library(spf)
 ```
 ~~~
 
-# Setup
+## Setup
 
-## devtools
+### devtools
 
 1.  For development work, ensure `devtools` is installed. <br>
     From the `R` console:
@@ -39,7 +39,7 @@ library(spf)
     - TODO: Implement renv? (Or add install.packages(c("")) instructions)
     - TODO: Add config instructions
 
-# Some useful dev commands
+### Some useful dev commands
 
 These commands should be executed from the `R` console.
 

@@ -1,4 +1,4 @@
-test_that("shapefile data matches reference data", {
+test_that("study region data matches reference data", {
 
   skip_on_cran()
   skip_on_bioc()
