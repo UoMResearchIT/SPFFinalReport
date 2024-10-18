@@ -36,7 +36,7 @@ flowchart LR
   B --> C("Output")
 ```
 
-1. Initial input is 'raw' data (e.g. '.csv' files, '.nc' files).
+1. Initial input is raw data (e.g. '.csv' files, '.nc' files).
 2. Raw data is then processed by transforming, merging, etc. (which is
 collectively called 'wrangling').
 3. The wrangled data is finally used for producing output.
