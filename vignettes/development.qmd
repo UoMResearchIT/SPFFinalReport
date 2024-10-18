@@ -1,0 +1,82 @@
+---
+title: "Development"
+author: "Toni Price"
+date: last-modified
+date-format: "[Last updated:] DD MMMM, YYYY"
+format: 
+  html
+vignette: >
+  %\VignetteIndexEntry{Development}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+~~~{=comment}
+```{r setup}
+library(spf)
+```
+~~~
+
+# Setup
+
+## devtools
+
+1.  For development work, ensure `devtools` is installed. <br>
+    From the `R` console:
+
+    ```
+    > install.packages("devtools")
+    ```
+
+2.  Set up the environment
+    - TODO: Implement renv? (Or add install.packages(c("")) instructions)
+    - TODO: Add config instructions
+
+# Some useful dev commands
+
+These commands should be executed from the `R` console.
+
+(Note that when `devtools` is installed, the following commands are usually
+bound to keyboard shortcuts in RStudio; these are shown in the comments where
+applicable)
+
+-  Load the development version of the package:
+
+    ```
+    # Ctrl/Cmd + Shift + L
+    > devtools::load_all(".")
+    ```
+
+-  Run the automated test suite:
+
+    ```
+    # Ctrl/Cmd + Shift + T
+    > devtools::test(".")
+    ```
+
+-  Create package documentation:
+
+    ```
+    # Ctrl/Cmd + Shift + D
+    > devtools::document(roclets = c('rd', 'collate', 'namespace'))
+    ```
+
+-  Build the package vignettes:
+
+    ```
+    > devtools::build_vignettes()
+    ```
+
+-  Run a package check:
+
+    ```
+    # Ctrl/Cmd + Shift + E
+    > devtools::check()
+    ```
