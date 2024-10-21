@@ -3,6 +3,7 @@
 .Rhistory
 .RData
 .Rproj.user
+.Renviron
 
 inst/doc
 /doc/

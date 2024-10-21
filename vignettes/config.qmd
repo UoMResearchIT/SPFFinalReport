@@ -1,0 +1,107 @@
+---
+title: "Config"
+author: "Toni Price"
+date: last-modified
+date-format: "[Last updated:] DD MMMM, YYYY"
+format: 
+  html
+vignette: >
+  %\VignetteIndexEntry{Config}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+~~~{=comment}
+```{r setup}
+library(spf)
+```
+~~~
+
+## Background
+
+This vignette describes how to configure the `spf` package. See the
+[introduction to spf](spf.html) vignette for context.
+
+## Configuration via System Environment Variables
+
+### `.Renviron` file
+
+For localised configuration, system environment variables are specified in a
+file called `.Renviron` which, if in the default location, will be loaded
+automatically when you start an R session.
+
+A user-specific `.Renviron` would typically be stored at:
+
+- Windows:
+
+    ````
+    C:\Users\YourUsername\.Renviron
+    ````
+    
+    Ensure the file name is exactly ".Renviron" (without any file extension like
+    .txt)
+
+- Linux/macOS:
+
+    ````
+    ~/.Renviron
+    ````
+
+Create this file if necessary. From within R you can use the `usethis` package
+to do this:
+
+```
+> usethis::edit_r_environ("user")
+```
+
+Entries in a project-level `.Renviron` file, located in the working directory or
+project root, would take precedence over a user-specific file. Note that if such
+project-level file exists then it should be added to `.gitignore` and 
+`.Rbuildignore` as it should *not* be committed to the source code repository or
+included with the package code. (The project `.gitignore` and `.Rbuildignore`
+contain such entries by default.)
+
+The `usethis` package supports creation/editing of a project-level `.Renviron`
+file too:
+
+```
+> usethis::edit_r_environ("project")
+```
+
+**NB**
+Note that you will need to reload your `.Renviron` file for any changes to take
+effect. This can be achieved by doing one of the following:
+
+- Restart your R session
+
+- Reload `.Renviron` in a running R session with, e.g.
+
+    ````
+    > readRenviron("~/.Renviron")
+    ````
+    
+    (where you shoul replace "~/.Renviron" with the appropriate path to your
+    `.Renviron` file if it's not in your home directory)
+
+- A temporary alternative to reloading `.Renviron` is to manually override
+  specific environment variables within the current R session:
+  
+    ```
+    > Sys.setenv(VAR_NAME = "value")
+    ```
+
+    This can be helpful for testing specific changes without modifying the
+    environment file.
+
+### Configuration variables
+
+System environment variables for the `spf` package start with 'SPF_'.
+
+TODO: TBC - Add info about the ref, act and test root paths

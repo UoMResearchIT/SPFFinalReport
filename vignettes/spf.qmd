@@ -26,6 +26,13 @@ library(spf)
 ```
 ~~~
 
+## Introduction
+
+TODO: TBC
+
+See also the [configuration](config.html) and [development](development.html)
+vignettes.
+
 ## Data workflow
 
 ### Data phases
@@ -57,3 +64,11 @@ For each of these data wrangling phases, there are three possible environments:
 - `test`: Test data
   - small enough to use for unit/integration tests
   - can be reliably reproduced
+
+## Configuration
+
+See [configuration](config.html) for configuration information.
+
+## Development
+
+For development work on the `spf` package, see [development](development.html).

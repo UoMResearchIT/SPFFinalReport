@@ -24,20 +24,28 @@ library(spf)
 ```
 ~~~
 
+## About this vignette
+
+This vignette deals with how to use the `spf` package as a developer. See also
+the [introduction to spf](spf.html) and [configuration](config.html) vignettes.
+
 ## Setup
+
+For a development environment:
 
 ### devtools
 
-1.  For development work, ensure `devtools` is installed. <br>
+1.  Ensure `devtools` is installed. <br>
     From the `R` console:
 
     ```
     > install.packages("devtools")
     ```
 
-2.  Set up the environment
-    - TODO: Implement renv? (Or add install.packages(c("")) instructions)
-    - TODO: Add config instructions
+2.  Ensure required packages are installed.
+    - TODO: Implement renv and add setup instructions
+
+3.  See the [configuration](config.html) vignette for configuration information.
 
 ### Some useful dev commands
 
@@ -80,3 +88,54 @@ applicable)
     # Ctrl/Cmd + Shift + E
     > devtools::check()
     ```
+    
+- Test the current file:
+
+    If you are using RStudio, this can be most easily achieved by setting a
+    keyboard shortcut.
+
+    For example, in RStudio <br>
+    - Go to Tools | Modify Keyboard Shortcuts... <br>
+    - In the Filter... bar type 'test'
+    - Locate the 'Run a test' Addin, select its Shortcut and type 'Ctrl + T' (or
+      whatever your preferred key sequence is), then click Apply
+
+    This shortcut will now run `devtools:::test_active_file()`.
+
+## Development configuration
+
+### Variables in `.Renviron`
+
+- You can specify environment variables to control whether to run the
+  'high-level' data tests (that is, the tests which check saved reference data
+  against datasets produced by the running code).
+  
+  These are slow -- many of them take ~10 seconds to run -- so they are skipped
+  by default. To run them you need to set system environment variables in the
+  `.Renviron` file at the root of the package directory:
+
+    ````
+    SPF_RUN_ALL_HLDT=true  # Set to 'true' or 'false' (or do not specify)
+    SPF_RUN_HLDT_1*=true   # Set to 'true' or 'false' (or do not specify)
+    ````
+
+    That is, either set `SPF_RUN_ALL_HLDT=true`, or for each test you wish to
+    run, set the appropriate `SPF_RUN_HLDT_1*=true`, for example:
+    
+    ````
+    SPF_RUN_HLDT_1A=true
+    SPF_RUN_HLDT_1D=true
+    ````
+
+    Note that if any of these environment variables does not exist, or is set to
+    anything other than 'true', the corresponding high level data tests will
+    *not* run.
+
+    In this way it is possible to run only the test relevant to what you are
+    currently working on, whilst still running the rest of the test suite.
+
+    Use `SPF_RUN_ALL_HLDT=true` to run all the high-level data tests,
+    irrespective of any `SPF_RUN_HLDT_1*` values. In other words, if
+    `SPF_RUN_ALL_HLDT=true` it will override the individual settings. This can
+    be useful after making some changes and checking an individual test, to then
+    easily verify that all the high-level data tests still pass.
