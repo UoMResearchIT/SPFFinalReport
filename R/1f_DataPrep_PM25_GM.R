@@ -14,7 +14,7 @@
 run_data_prep_pm25_gm <- function() {
 
   # Loading shapefiles
-  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
+  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
 
   ##############################################
   ### Preparing PM data from ground monitors ###
@@ -25,7 +25,7 @@ run_data_prep_pm25_gm <- function() {
 
   # Converting to long lat
   mcr_msoa <- mcr_msoa %>%
-    st_transform(CRS("+proj=longlat +datum=WGS84 +no_defs"))
+    sf::st_transform(sp::CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
   # Reading in LTN network data
   tmp1 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/BroomLane_AQ_hourly.csv')
@@ -98,33 +98,37 @@ run_data_prep_pm25_gm <- function() {
   rm(tmp1, tmp2, tmp3, tmp4, tmp5, tmp6)
 
   # List of Stations
-  stations_aurn_dat <- importMeta(source = "aurn", all = TRUE) %>%
-    filter(variable == 'PM2.5' &
-             (as.Date(start_date, format = '%Y-%m-%d') <= as.Date('2021-12-31')) &
-             (as.Date(end_date, format = '%Y-%m-%d') >= as.Date('2020-01-01') |
-                end_date == 'ongoing') &
-             longitude > (st_bbox(mcr_msoa)[1] - 0.5) &
-             longitude < (st_bbox(mcr_msoa)[3] + 0.5) &
-             latitude > (st_bbox(mcr_msoa)[2] - 0.5) &
-             latitude < (st_bbox(mcr_msoa)[4] + 0.5)) %>%
+  # TODO: Temporarily use saved AURN data to get this function working
+  stations_aurn_dat <- readRDS("Data_act/Processed/PM25/aurn_meta_2024-10-09.rds") %>%
+  # stations_aurn_dat <- openair::importMeta(source = "aurn", all = TRUE) %>%
+    dplyr::filter(variable == 'PM2.5' &
+                    (as.Date(start_date, format = '%Y-%m-%d') <= as.Date('2021-12-31')) &
+                    (as.Date(end_date, format = '%Y-%m-%d') >= as.Date('2020-01-01') |
+                       end_date == 'ongoing') &
+                    longitude > (sf::st_bbox(mcr_msoa)[1] - 0.5) &
+                    longitude < (sf::st_bbox(mcr_msoa)[3] + 0.5) &
+                    latitude > (sf::st_bbox(mcr_msoa)[2] - 0.5) &
+                    latitude < (sf::st_bbox(mcr_msoa)[4] + 0.5)) %>%
     dplyr::select(code, site, latitude, longitude) %>%
     unique() %>%
-    filter(!(site %in% c('Glazebury', 'Liverpool Speke')))
+    dplyr::filter(!(site %in% c('Glazebury', 'Liverpool Speke')))
 
   # Downloading pollutant/weather data
-  aurn_dat <- importAURN(site = stations_aurn_dat$code,
-                         year = 2020:2021,
-                         pollutant = c('pm2.5'),
-                         meta = FALSE,
-                         data_type = 'hourly',
-                         verbose = FALSE) %>%
+  # TODO: Temporarily use saved AURN data to get this function working
+  aurn_dat <- readRDS("Data_act/Processed/PM25/aurn_dat_20-21_2024-10-09.rds") %>%
+  # aurn_dat <- openair::importAURN(site = stations_aurn_dat$code,
+  #                                 year = 2020:2021,
+  #                                 pollutant = c('pm2.5'),
+  #                                 meta = FALSE,
+  #                                 data_type = 'hourly',
+  #                                 verbose = FALSE) %>%
     # Altering columns
     dplyr::mutate(
       # Removing negative values
       pm2.5 = ifelse(pm2.5 <= 0, NA, pm2.5),
       # Adding hour
-      hour = if_else(is.na(as.numeric(substr(date, 12, 13))),
-                     0, as.numeric(substr(date, 12, 13))),
+      hour = dplyr::if_else(is.na(as.numeric(substr(date, 12, 13))),
+                            0, as.numeric(substr(date, 12, 13))),
       # Keeping datetime
       datetime = date,
       # Adding just the date
@@ -141,66 +145,66 @@ run_data_prep_pm25_gm <- function() {
   ### Aggregating to MSOA and bringing together ###
   #################################################
   # Getting closest station for each MSOA
-  A1 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry(),
+  A1 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry(),
                           stations_aurn_dat[,c('longitude', 'latitude')]), 1, which.min)
-  A2 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry(),
+  A2 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry(),
                           stations_ltn_dat[,c('longitude', 'latitude')]), 1, which.min)
-  A3 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry(),
+  A3 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry(),
                           stations_gm_dat[,c('longitude', 'latitude')]), 1, which.min)
 
   # Getting data from nearest station (AURN)
   tmp1 <- data.frame(area_id = mcr_msoa$area_id,
                      code_aurn = stations_aurn_dat$code[A1]) %>%
-    left_join(aurn_dat %>%
-                dplyr::select(code_aurn = code, date, hour, pm25_aurn = pm2.5),
-              by = 'code_aurn') %>%
+    dplyr::left_join(aurn_dat %>%
+                       dplyr::select(code_aurn = code, date, hour, pm25_aurn = pm2.5),
+                     by = 'code_aurn') %>%
     dplyr::select(area_id, date, hour, pm25_aurn, code_aurn)
 
   # Getting data from nearest station (LTN)
   tmp2 <- data.frame(area_id = mcr_msoa$area_id,
                      code_ltn = stations_ltn_dat$code[A2]) %>%
-    left_join(ltn_dat %>%
-                dplyr::select(code_ltn = code, date, hour, pm25_ltn = pm2.5),
-              by = 'code_ltn') %>%
+    dplyr::left_join(ltn_dat %>%
+                       dplyr::select(code_ltn = code, date, hour, pm25_ltn = pm2.5),
+                     by = 'code_ltn') %>%
     dplyr::select(area_id, date, hour, pm25_ltn, code_ltn)
 
   # Getting data from nearest station (Both)
   tmp3 <- data.frame(area_id = mcr_msoa$area_id,
                      code_gm = stations_gm_dat$code[A3]) %>%
-    left_join(gm_dat %>%
-                dplyr::select(code_gm = code, date, hour, pm25_gm = pm2.5),
-              by = 'code_gm') %>%
+    dplyr::left_join(gm_dat %>%
+                       dplyr::select(code_gm = code, date, hour, pm25_gm = pm2.5),
+                     by = 'code_gm') %>%
     dplyr::select(area_id, date, hour, pm25_gm, code_gm)
 
   # Merging together
   pm25_gm <- expand.grid(area_id = mcr_msoa$area_id,
                          date =seq(as.Date('2020-12-01'), as.Date('2021-12-31'), by = 1),
                          hour = 0:23)%>%
-    left_join(tmp1,
-              by = c('area_id', 'date', 'hour')) %>%
-    left_join(tmp2,
-              by = c('area_id', 'date', 'hour')) %>%
-    left_join(tmp3,
-              by = c('area_id', 'date', 'hour'))
+    dplyr::left_join(tmp1,
+                     by = c('area_id', 'date', 'hour')) %>%
+    dplyr::left_join(tmp2,
+                     by = c('area_id', 'date', 'hour')) %>%
+    dplyr::left_join(tmp3,
+                     by = c('area_id', 'date', 'hour'))
 
   # Removing unecessary datasets
   rm(tmp1, tmp2, tmp3)
 
   # Getting stations with non-missing data
   aurn_dat <- aurn_dat %>%
-    left_join(stations_aurn_dat %>%
-                dplyr::select(code, longitude, latitude),
-              by = "code")
+    dplyr::left_join(stations_aurn_dat %>%
+                       dplyr::select(code, longitude, latitude),
+                     by = "code")
   # Getting stations with non-missing data
   ltn_dat <- ltn_dat %>%
-    left_join(stations_ltn_dat %>%
-                dplyr::select(code, longitude, latitude),
-              by = "code")
+    dplyr::left_join(stations_ltn_dat %>%
+                       dplyr::select(code, longitude, latitude),
+                     by = "code")
   # Getting stations with non-missing data
   gm_dat <- gm_dat %>%
-    left_join(stations_gm_dat %>%
-                dplyr::select(code, longitude, latitude),
-              by = "code")
+    dplyr::left_join(stations_gm_dat %>%
+                       dplyr::select(code, longitude, latitude),
+                     by = "code")
 
   # Empty dataset for data from nearest *non-missing* station
   tmp1 <- NULL
@@ -221,24 +225,24 @@ run_data_prep_pm25_gm <- function() {
       test3 <- gm_dat %>%
         dplyr::filter(date == i & hour == j & !is.na(pm2.5))
       # Getting closest non-missing station for each MSOA
-      A1 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry(),
+      A1 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry(),
                               test1[,c('longitude', 'latitude')]),
                   1, which.min)
       # Getting closest non-missing station for each MSOA
-      A2 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry(),
+      A2 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry(),
                               test2[,c('longitude', 'latitude')]),
                   1, which.min)
       # Getting closest non-missing station for each MSOA
-      A3 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry(),
+      A3 <- apply(proxy::dist(mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry(),
                               test3[,c('longitude', 'latitude')]),
                   1, which.min)
       # Getting data from nearest station (AURN)
       if (length(A1) > 0){
         test1 <- data.frame(area_id = mcr_msoa$area_id,
                             code_aurn_near = test1$code[A1]) %>%
-          left_join(test1 %>%
-                      dplyr::select(code_aurn_near = code, date, hour, pm25_aurn_near = pm2.5),
-                    by = 'code_aurn_near') %>%
+          dplyr::left_join(test1 %>%
+                             dplyr::select(code_aurn_near = code, date, hour, pm25_aurn_near = pm2.5),
+                           by = 'code_aurn_near') %>%
           dplyr::select(area_id, date, hour, pm25_aurn_near, code_aurn_near)
         # Appending
         tmp1 <- rbind(tmp1, test1)
@@ -247,9 +251,9 @@ run_data_prep_pm25_gm <- function() {
       if (length(A2) > 0){
         test2 <- data.frame(area_id = mcr_msoa$area_id,
                             code_ltn_near = test2$code[A2]) %>%
-          left_join(test2 %>%
-                      dplyr::select(code_ltn_near = code, date, hour, pm25_ltn_near = pm2.5),
-                    by = 'code_ltn_near') %>%
+          dplyr::left_join(test2 %>%
+                             dplyr::select(code_ltn_near = code, date, hour, pm25_ltn_near = pm2.5),
+                           by = 'code_ltn_near') %>%
           dplyr::select(area_id, date, hour, pm25_ltn_near, code_ltn_near)
         # Appending
         tmp2 <- rbind(tmp2, test2)
@@ -258,9 +262,9 @@ run_data_prep_pm25_gm <- function() {
         # Getting data from nearest station (Both)
         test3 <- data.frame(area_id = mcr_msoa$area_id,
                             code_gm_near = test3$code[A3]) %>%
-          left_join(test3 %>%
-                      dplyr::select(code_gm_near = code, date, hour, pm25_gm_near = pm2.5),
-                    by = 'code_gm_near') %>%
+          dplyr::left_join(test3 %>%
+                             dplyr::select(code_gm_near = code, date, hour, pm25_gm_near = pm2.5),
+                           by = 'code_gm_near') %>%
           dplyr::select(area_id, date, hour, pm25_gm_near, code_gm_near)
         # Appending
         tmp3 <- rbind(tmp3, test3)
@@ -274,12 +278,12 @@ run_data_prep_pm25_gm <- function() {
 
   # Merging together
   pm25_gm <- pm25_gm %>%
-    left_join(tmp1,
-              by = c('area_id', 'date', 'hour')) %>%
-    left_join(tmp2,
-              by = c('area_id', 'date', 'hour')) %>%
-    left_join(tmp3,
-              by = c('area_id', 'date', 'hour'))
+    dplyr::left_join(tmp1,
+                     by = c('area_id', 'date', 'hour')) %>%
+    dplyr::left_join(tmp2,
+                     by = c('area_id', 'date', 'hour')) %>%
+    dplyr::left_join(tmp3,
+                     by = c('area_id', 'date', 'hour'))
 
   # Removing unecessary files
   rm(tmp1, tmp2, tmp3, aurn_dat, ltn_dat, mcr_msoa,
@@ -289,11 +293,11 @@ run_data_prep_pm25_gm <- function() {
   ### Saving outputs ###
   ######################
   # Save aurn data on monitor level
-  save(gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn.RData")
-  save(stations_gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn_metadata.RData")
+  saveRDS(gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn.rds")
+  saveRDS(stations_gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn_metadata.rds")
 
   # Save aurn data on MSOA level
-  save(pm25_gm, file = "Data_act/Processed/PM25/pm25_gm.RData")
+  saveRDS(pm25_gm, file = "Data_act/Processed/PM25/pm25_gm.rds")
 
   invisible(NULL)
 }
