@@ -15,7 +15,7 @@
 run_data_prep_pm25_emep <- function() {
 
   # Loading shapefiles
-  load("Data_ref/Processed/Shapefiles/shapefiles.RData")
+  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
 
   #######################################
   ### Initial processing of EMEP from ###
@@ -32,12 +32,12 @@ run_data_prep_pm25_emep <- function() {
   # Loop for each file
   for (i in 1:length(files)){
     # Opening raster to get number of days
-    ncin <- raster(files[i],
-                   band = 1,
-                   verbose = FALSE,
-                   stopIfNotEqualSpaced = FALSE)
+    ncin <- raster::raster(files[i],
+                           band = 1,
+                           verbose = FALSE,
+                           stopIfNotEqualSpaced = FALSE)
     # Getting the number of  days
-    N_days <- floor(nbands(ncin)/24)
+    N_days <- floor(raster::nbands(ncin)/24)
     # Dates
     Dates <- start_date[i] + (1:N_days) - 1
     # Loop for each day in the year
@@ -47,16 +47,16 @@ run_data_prep_pm25_emep <- function() {
       # Looping for each hour in the day
       for (k in (24*(j-1)+1):(24*j)){
         # Opening raster
-        ncin <- raster(files[i],
-                       band = k,
-                       verbose = FALSE,
-                       stopIfNotEqualSpaced = FALSE)
+        ncin <- raster::raster(files[i],
+                               band = k,
+                               verbose = FALSE,
+                               stopIfNotEqualSpaced = FALSE)
         # Cropping for the UK
-        ncin <- crop(ncin, extent(-2.755, -1.895, 53.325, 53.695))
+        ncin <- raster::crop(ncin, raster::extent(-2.755, -1.895, 53.325, 53.695))
         # Saving raster
-        writeRaster(ncin,
-                    filename = paste('Data_act/Processed/PM25/EMEP/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
-                    overwrite = TRUE)
+        raster::writeRaster(ncin,
+                            filename = paste('Data_act/Processed/PM25/EMEP/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
+                            overwrite = TRUE)
         # else {keep <- keep + ncin}
         print(paste(date, '-', sprintf("%02d", (k - 1) %% 24), "00", sep = ''))
       }
@@ -67,11 +67,11 @@ run_data_prep_pm25_emep <- function() {
   ### Aggregating to MSOA and bringing together ###
   #################################################
   # Empty raster
-  r0 <- raster(xmn = -2.755,
-               xmx = -1.895,
-               ymn = 53.325,
-               ymx = 53.695,
-               res = 0.01)
+  r0 <- raster::raster(xmn = -2.755,
+                       xmx = -1.895,
+                       ymn = 53.325,
+                       ymx = 53.695,
+                       res = 0.01)
 
   # Adding unique  ID
   r0[] <- 1:(dim(r0)[1]*dim(r0)[2])
@@ -82,7 +82,7 @@ run_data_prep_pm25_emep <- function() {
 
   # Converting to long lat
   mcr_msoa <- mcr_msoa %>%
-    st_transform(CRS("+proj=longlat +datum=WGS84 +no_defs"))
+    sf::st_transform(sp::CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
   # Extracting values
   a1 <- raster::extract(r0, # Grid unique IDs
@@ -121,31 +121,34 @@ run_data_prep_pm25_emep <- function() {
     # Loop for each time
     for (j in 0:23){
       # Reading in PM25 from CAMS
-      r <- raster(paste('Data_act/Processed/PM25/EMEP/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
+      r <- raster::raster(paste('Data_act/Processed/PM25/EMEP/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
       # Renaming raster
       names(r) <- 'pm25'
       # Creating aggregated estimates of PM25 by MSOA
       tmp1 <- r %>%
         # Converting raster to dataframe
-        crop(r0) %>%
-        stack(r0) %>%
-        rasterToPoints() %>%
+        raster::crop(r0) %>%
+        raster::stack(r0) %>%
+        raster::rasterToPoints() %>%
         as.data.frame()%>%
         # Renaming columns
         dplyr::select(IDGRID = layer, pm25) %>%
         # Merging on weights to aggregate
-        right_join(Weights_msoa,
-                   by = 'IDGRID') %>%
+        dplyr::right_join(Weights_msoa,
+                          by = 'IDGRID') %>%
         # Aggregating grid to
-        ddply(.(area_id),
-              summarize,
-              pm25_cams_agg = weighted.mean(pm25, weight))
+        # Note: Using the .(area_id) syntax causes a name conflict with dplyr -
+        # so use the formula syntax for the 'group by' var instead, i.e.
+        # '~area_id' rather than '.(area_id)'
+        plyr::ddply(~area_id,
+                    plyr::summarize,
+                    pm25_cams_agg = weighted.mean(pm25, weight))
       # Extracting PM2.5 values at centroids
-      tmp1$pm25_cams_cent<- raster::extract(r, mcr_msoa[,c('cent_long', 'cent_lat')] %>% st_drop_geometry())
+      tmp1$pm25_cams_cent<- raster::extract(r, mcr_msoa[,c('cent_long', 'cent_lat')] %>% sf::st_drop_geometry())
       # Adding on date and hour
       tmp1 <- tmp1 %>%
-        mutate(hour = j,
-               date = i) %>%
+        dplyr::mutate(hour = j,
+                      date = i) %>%
         # Outputting datasets
         dplyr::select(area_id, date, hour, pm25_cams_cent, pm25_cams_agg)
       # Appending together
@@ -161,7 +164,7 @@ run_data_prep_pm25_emep <- function() {
   ### Saving outputs ###
   ######################
   # Save aurn data
-  save(pm25_emep, file = "Data_act/Processed/PM25/pm25_emep.RData")
+  saveRDS(pm25_emep, file = "Data_act/Processed/PM25/pm25_emep.rds")
 
   invisible(NULL)
 }
