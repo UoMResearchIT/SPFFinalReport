@@ -7,23 +7,23 @@
 #'
 #' @examples
 #' \dontrun{
-#' get_exposures_q1_2021()
+#' process_exposures_q1_2021()
 #' }
 #'
 process_exposures_q1_2021 <- function(msoa_lim = NULL) {
 
   # Read population data
-  load("Data_ref/Processed/Population/pop_dat.RData")
-  load("Data_ref/Processed/PM25/pm25_emep.RData")
-  load("Data_ref/Processed/PM25/pm25_cams.RData")
-
-  # Suppress summarise info
-  options(dplyr.summarise.inform = FALSE)
+  pop_dat <- readRDS("Data_act/Processed/Population/pop_dat.rds")
+  pm25_emep <- readRDS("Data_act/Processed/PM25/pm25_emep.rds")
+  pm25_cams <- readRDS("Data_act/Processed/PM25/pm25_cams.rds")
 
   # TEMP: Number of loops whilst getting the code working
   msoa_lim <- msoa_lim %||% 2
   # msoa_lim <- msoa_lim %||% 7
   # msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
+
+  # Suppress summarise info
+  options(dplyr.summarise.inform = FALSE)
 
   # Setting seed
   set.seed(1409)
@@ -31,14 +31,14 @@ process_exposures_q1_2021 <- function(msoa_lim = NULL) {
   # Merging pm2.5 data together
   pm25_ctm <- pm25_cams %>%
     dplyr::select(area_id, date, hour, pm25_cams_agg)%>%
-    left_join(pm25_emep %>%
-                dplyr::select(area_id, date, hour, pm25_emep_agg = pm25_cams_agg),
-              by = c("area_id", "date", "hour")) %>%
-    filter(as.Date(date) >= as.Date("2020-12-20") &
-             as.Date(date) <= as.Date("2021-03-31")) %>%
-    mutate(pm25_emep_agg = ifelse(is.na(pm25_emep_agg), pm25_cams_agg, pm25_emep_agg),
-           pm25_five = 5,
-           date = as.Date(date))
+    dplyr::left_join(pm25_emep %>%
+                       dplyr::select(area_id, date, hour, pm25_emep_agg = pm25_cams_agg),
+                     by = c("area_id", "date", "hour")) %>%
+    dplyr::filter(as.Date(date) >= as.Date("2020-12-20") &
+                    as.Date(date) <= as.Date("2021-03-31")) %>%
+    dplyr::mutate(pm25_emep_agg = ifelse(is.na(pm25_emep_agg), pm25_cams_agg, pm25_emep_agg),
+                  pm25_five = 5,
+                  date = as.Date(date))
 
   # Removing uncessary datasets
   rm(pm25_cams, pm25_emep)
@@ -47,24 +47,24 @@ process_exposures_q1_2021 <- function(msoa_lim = NULL) {
   ### Estimating exposures ###
   ############################
   # Loop for each MSOA
-  for (k in unique(pop_dat$area_id)[1:7]){
+  for (k in unique(pop_dat$area_id)[1:msoa_lim]) {
     t1 <- Sys.time()
     # Saving datasets
-    load(paste('Output_act/CaseStudy2/Activities/activities_', k, '.RData', sep = ''))
+    activities_complete <- readRDS(paste('Output_act/CaseStudy2/Activities/activities_', k, '.rds', sep = ''))
 
     # Parparing data for exposure modelling
     activities_complete <- activities_complete %>%
       # Only keeping specific period
-      filter(as.numeric(date) >= 18616 &
-               as.numeric(date) <= 18717) %>%
+      dplyr::filter(as.numeric(date) >= 18616 &
+                      as.numeric(date) <= 18717) %>%
       # Adding on demographic variables
-      left_join(pop_dat %>%
-                  dplyr::select(pop_id, area_id, sex, sex_label, agegr4, agegr4_label, nssec5, nssec5_label),
-                by = 'pop_id') %>%
+      dplyr::left_join(pop_dat %>%
+                         dplyr::select(pop_id, area_id, sex, sex_label, agegr4, agegr4_label, nssec5, nssec5_label),
+                       by = 'pop_id') %>%
       # Merging on pm data
-      left_join(pm25_ctm %>%
-                  dplyr::select(area_id, date, hour, pm25_cams_agg, pm25_five, pm25_emep_agg),
-                by = c('area_id', 'date', 'hour')) %>%
+      dplyr::left_join(pm25_ctm %>%
+                         dplyr::select(area_id, date, hour, pm25_cams_agg, pm25_five, pm25_emep_agg),
+                       by = c('area_id', 'date', 'hour')) %>%
       as.data.frame()
 
     # Transportation exposures
@@ -85,7 +85,7 @@ process_exposures_q1_2021 <- function(msoa_lim = NULL) {
     activities_complete <- calculate_household(act_dat = activities_complete, pop_dat = pop_dat,
                                                ambient = "pm25_five", outvar = "pm25_five_hhd")
     # Saving datasets
-    save(activities_complete, file = paste('Output_act/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.RData', sep = ''))
+    saveRDS(activities_complete, file = paste('Output_act/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.rds', sep = ''))
 
     t2 <- Sys.time()
     # Printing index
