@@ -13,7 +13,7 @@
 collate_results_q1_2021 <- function(msoa_lim = NULL) {
 
   # Read population data
-  load("Data_ref/Processed/Population/pop_dat.RData")
+  pop_dat <- readRDS("Data_act/Processed/Population/pop_dat.rds")
 
   # TEMP: Number of loops whilst getting the code working
   msoa_lim <- msoa_lim %||% 2
@@ -31,7 +31,7 @@ collate_results_q1_2021 <- function(msoa_lim = NULL) {
   for (k in unique(pop_dat$area_id)[1:msoa_lim]) {
     t1 <- Sys.time()
     # Saving datasets
-    load(paste('Output_act/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.RData', sep = ''))
+    activities_complete <- readRDS(paste('Output_act/CaseStudy2/Exposures_Q1_2021/exposures_', k, '.rds', sep = ''))
     # Preparing case study 2
     activities_complete <- activities_complete %>%
       # Only keeping Q1 2021
@@ -50,15 +50,19 @@ collate_results_q1_2021 <- function(msoa_lim = NULL) {
                                                   ifelse(micro_group == "transport", pm25_five_tns,
                                                          ifelse(micro_group == "home", pm25_five_hhd, NA)))))%>%
       # Averaging by day
-      ddply(.(area_id, pop_id, date, daytype, daytype_label, season, season_label,
-              sex, sex_label, agegr4, agegr4_label, nssec5, nssec5_label),
-            summarize,
-            exposure_cams = mean(exposure_cams),
-            exposure_emep = mean(exposure_emep),
-            exposure_five = mean(exposure_five),
-            pm25_cams_agg = mean(pm25_cams_agg),
-            pm25_emep_agg = mean(pm25_emep_agg),
-            pm25_five = mean(pm25_five))
+      # Note: Using the .(area_id, pop_id, ...) syntax causes a name conflict
+      # with dplyr - so use the formula syntax for the 'group by' var instead,
+      # i.e. '~ area_id + pop_id + ...' rather than '.(area_id, pop_id, ...)'
+      plyr::ddply(~ area_id + pop_id + date + daytype + daytype_label + season +
+                    season_label + sex + sex_label + agegr4 + agegr4_label +
+                    nssec5 + nssec5_label,
+                  plyr::summarize,
+                  exposure_cams = mean(exposure_cams),
+                  exposure_emep = mean(exposure_emep),
+                  exposure_five = mean(exposure_five),
+                  pm25_cams_agg = mean(pm25_cams_agg),
+                  pm25_emep_agg = mean(pm25_emep_agg),
+                  pm25_five = mean(pm25_five))
     # Appending on
     out_q12021 <- rbind(out_q12021, activities_complete)
     t2 <- Sys.time()
@@ -68,7 +72,7 @@ collate_results_q1_2021 <- function(msoa_lim = NULL) {
   }
 
   # Saving outputs
-  save(out_q12021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_Q1_2021.RData')
+  saveRDS(out_q12021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_Q1_2021.rds')
 
   invisible(NULL)
 }
