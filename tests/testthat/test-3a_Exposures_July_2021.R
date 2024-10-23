@@ -1,14 +1,14 @@
 source(here::here("tests","testthat", "test-helpers.R"))
 
-test_that("activities 2021 data matches reference data", {
+test_that("exposures jul 2021 data matches reference data", {
 
   skip_on_cran()
   skip_on_bioc()
   skip_on_ci()
 
   # Check system env vars to determine whether to run this high level data test
-  skip_if(!env_should_run_test("SPF_RUN_HLDT_2"),
-          glue::glue("'SPF_RUN_HLDT_2=false' and 'SPF_RUN_ALL_HLDT=false';",
+  skip_if(!env_should_run_test("SPF_RUN_HLDT_3A"),
+          glue::glue("'SPF_RUN_HLDT_3A=false' and 'SPF_RUN_ALL_HLDT=false';",
                      " to run this test, set one or both to true"))
 
   pop_dat <- readRDS(here::here("Data_act/Processed/Population/pop_dat.rds"))
@@ -32,18 +32,18 @@ test_that("activities 2021 data matches reference data", {
   for (k in test_areas) {
 
     # Reference data
-    path1 <- paste("Output_ref/CaseStudy2/Activities/activities_", k, ".RData",
-                   sep = "")
+    path1 <- paste("Output_ref/CaseStudy2/Exposures_July_2021/exposures_", k,
+                   ".RData", sep = "")
 
     # Data produced by running package code
-    path2 <- paste("Output_act/CaseStudy2/Activities/activities_", k, ".rds",
-                   sep = "")
+    path2 <- paste("Output_act/CaseStudy2/Exposures_July_2021/exposures_", k,
+                   ".rds", sep = "")
 
     # Example ref data path:
-    #   "Output_ref/CaseStudy2/Activities/activities_E02000984.RData"
+    #   "Output_ref/CaseStudy2/Exposures_July_2021/exposures_E02000984.RData"
 
     # Example act data path:
-    #   "Output_act/CaseStudy2/Activities/activities_E02000984.rds"
+    #   "Output_act/CaseStudy2/Exposures_July_2021/exposures_E02000984.rds"
 
     # This should load 1 object 'activities_complete' into the current
     # environment; it is a data frame

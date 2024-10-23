@@ -180,9 +180,9 @@ calculate_household <- function(act_dat,
     dplyr::mutate(uniid = 1:dplyr::n()) %>%
     dplyr::ungroup() %>%
     dplyr::arrange(date, time, pop_id)  %>%
-    left_join(pop_dat %>%
-                dplyr::select(pop_id, housetype),
-              by = 'pop_id') %>%
+    dplyr::left_join(pop_dat %>%
+                       dplyr::select(pop_id, housetype),
+                     by = 'pop_id') %>%
     as.data.frame()
 
   # Getting number of population
@@ -230,10 +230,10 @@ calculate_household <- function(act_dat,
     }
 
     # calculate volume of home (zoopla + onaverage.co.uk)
-    V <- ((tmp1$housetype == 'detached') + 0) * rtri(Npop, min = 81, max = 214, mode = 159) * runif(1, min = 2.1, max = 2.6) +
-      ((tmp1$housetype == 'semi-detached') + 0) * rtri(Npop, min = 56, max = 204, mode = 84)  * runif(1, min = 2.1, max = 2.6) +
-      ((tmp1$housetype == 'terrace') + 0) * rtri(Npop, min = 33, max = 155, mode = 59)  * runif(1, min = 2.1, max = 2.6) +
-      ((tmp1$housetype == 'flat') + 0) * rtri(Npop, min = 34, max = 106, mode = 41)  * runif(1, min = 2.1, max = 2.6)
+    V <- ((tmp1$housetype == 'detached') + 0) * DescTools::rTri(Npop, min = 81, max = 214, mode = 159) * runif(1, min = 2.1, max = 2.6) +
+      ((tmp1$housetype == 'semi-detached') + 0) * DescTools::rTri(Npop, min = 56, max = 204, mode = 84)  * runif(1, min = 2.1, max = 2.6) +
+      ((tmp1$housetype == 'terrace') + 0) * DescTools::rTri(Npop, min = 33, max = 155, mode = 59)  * runif(1, min = 2.1, max = 2.6) +
+      ((tmp1$housetype == 'flat') + 0) * DescTools::rTri(Npop, min = 34, max = 106, mode = 41)  * runif(1, min = 2.1, max = 2.6)
 
     # extract ambient concentration
     Cout <- tmp1[, ambient, drop = TRUE]
@@ -264,10 +264,10 @@ calculate_household <- function(act_dat,
 ################################################################
 calculate_indoor <- function(dat, ambient, outvar) {
   # parameters (Normal from Burke et al. (2001) truncated)
-  a <- rtruncnorm(n = nrow(dat), a = 0, mean = 6.467, sd = 2.1)
-  b <- rtruncnorm(n = nrow(dat), a = 0, mean = 0.507, sd = 0.11)
+  a <- truncnorm::rtruncnorm(n = nrow(dat), a = 0, mean = 6.467, sd = 2.1)
+  b <- truncnorm::rtruncnorm(n = nrow(dat), a = 0, mean = 0.507, sd = 0.11)
   # Estimating ambient
-  dat[,outvar] <- rtruncnorm(n = 1, a = 0, mean = a + b * dat[,ambient, drop = TRUE], sd = 3.467)
+  dat[,outvar] <- truncnorm::rtruncnorm(n = 1, a = 0, mean = a + b * dat[,ambient, drop = TRUE], sd = 3.467)
   # Returning dataset
   return(dat)
 }
@@ -283,10 +283,10 @@ calculate_indoor <- function(dat, ambient, outvar) {
 ################################################################
 calculate_transport <- function(dat, ambient, outvar) {
   # parameters (Normal from Burke et al. (2001) truncated)
-  a <- rtruncnorm(n = nrow(dat), a = 0, mean = 33, sd = 7.2)
-  b <- rtruncnorm(n = nrow(dat), a = 0, mean = 0.26, sd = 0.14)
+  a <- truncnorm::rtruncnorm(n = nrow(dat), a = 0, mean = 33, sd = 7.2)
+  b <- truncnorm::rtruncnorm(n = nrow(dat), a = 0, mean = 0.26, sd = 0.14)
   # Estimating ambient
-  dat[,outvar] <- rtruncnorm(n = 1, a = 0, mean = a + b * dat[,ambient, drop = TRUE], sd = 12)
+  dat[,outvar] <- truncnorm::rtruncnorm(n = 1, a = 0, mean = a + b * dat[,ambient, drop = TRUE], sd = 12)
   # Returning dataset
   return(dat)
 }
