@@ -31,7 +31,7 @@ collate_results_jul_2021 <- function(msoa_lim = NULL) {
   for (k in unique(pop_dat$area_id)[1:msoa_lim]) {
     t1 <- Sys.time()
     # Saving datasets
-    load(paste('Output_act/CaseStudy2/Exposures_July_2021/exposures_', k, '.RData', sep = ''))
+    activities_complete <- readRDS(paste('Output_act/CaseStudy2/Exposures_July_2021/exposures_', k, '.rds', sep = ''))
     # Preparing case study 2
     activities_complete <- activities_complete %>%
       # Only keepting July
@@ -50,15 +50,19 @@ collate_results_jul_2021 <- function(msoa_lim = NULL) {
                                                 ifelse(micro_group == "transport", pm25_gm_near_tns,
                                                        ifelse(micro_group == "home", pm25_gm_near_hhd, NA)))))%>%
       # Averaging by day
-      ddply(.(area_id, pop_id, date, daytype, daytype_label, season, season_label,
-              sex, sex_label, agegr4, agegr4_label, nssec5, nssec5_label),
-            summarize,
-            exposure_aurn = mean(exposure_aurn),
-            exposure_ltn = mean(exposure_ltn),
-            exposure_gm = mean(exposure_gm),
-            pm25_aurn_near = mean(pm25_aurn_near),
-            pm25_ltn_near = mean(pm25_ltn_near),
-            pm25_gm_near = mean(pm25_gm_near))
+      # Note: Using the .(area_id, pop_id, ...) syntax causes a name conflict
+      # with dplyr - so use the formula syntax for the 'group by' var instead,
+      # i.e. '~ area_id + pop_id + ...' rather than '.(area_id, pop_id, ...)'
+      plyr::ddply(~ area_id + pop_id + date + daytype + daytype_label + season +
+                    season_label + sex + sex_label + agegr4 + agegr4_label +
+                    nssec5 + nssec5_label,
+                  plyr::summarize,
+                  exposure_aurn = mean(exposure_aurn),
+                  exposure_ltn = mean(exposure_ltn),
+                  exposure_gm = mean(exposure_gm),
+                  pm25_aurn_near = mean(pm25_aurn_near),
+                  pm25_ltn_near = mean(pm25_ltn_near),
+                  pm25_gm_near = mean(pm25_gm_near))
     # Appending on
     out_july2021 <- rbind(out_july2021, activities_complete)
     t2 <- Sys.time()
@@ -68,7 +72,7 @@ collate_results_jul_2021 <- function(msoa_lim = NULL) {
   }
 
   # Saving outputs
-  save(out_july2021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_July_2021.RData')
+  saveRDS(out_july2021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_July_2021.rds')
 
   invisible(NULL)
 }
