@@ -139,8 +139,8 @@ run_data_prep_pm25_emep <- function() {
         # Aggregating grid to
         # Note: Using the .(area_id) syntax causes a name conflict with dplyr -
         # so use the formula syntax for the 'group by' var instead, i.e.
-        # '~area_id' rather than '.(area_id)'
-        plyr::ddply(~area_id,
+        # '~ area_id' rather than '.(area_id)'
+        plyr::ddply(~ area_id,
                     plyr::summarize,
                     pm25_cams_agg = weighted.mean(pm25, weight))
       # Extracting PM2.5 values at centroids
