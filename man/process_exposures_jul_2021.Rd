@@ -17,7 +17,7 @@ Process Exposures data for July 2021
 }
 \examples{
 \dontrun{
-get_exposures_jul_2021()
+process_exposures_jul_2021()
 }
 
 }

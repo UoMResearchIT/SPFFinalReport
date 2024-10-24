@@ -2,7 +2,7 @@
 % Please edit documentation in R/1d_DataPrep_PM25_CAMS.R
 \name{run_data_prep_pm25_cams}
 \alias{run_data_prep_pm25_cams}
-\title{Process the PM25 CAMS data}
+\title{Process the pm25 cams data}
 \usage{
 run_data_prep_pm25_cams()
 }
@@ -10,7 +10,7 @@ run_data_prep_pm25_cams()
 NULL (invisibly).
 }
 \description{
-This function implements a data preparation step to process the PM25 CAMS
+This function implements a data preparation step to process the pm25 cams
 data. It is useful only for its side effects, i.e. for saving the processed
 data.
 }

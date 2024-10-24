@@ -17,7 +17,7 @@ Process Activities data
 }
 \examples{
 \dontrun{
-get_activities()
+process_activities()
 }
 
 }

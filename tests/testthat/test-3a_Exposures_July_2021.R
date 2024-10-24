@@ -1,5 +1,3 @@
-source(here::here("tests", "test-helpers.R"))
-
 test_that("exposures jul 2021 data matches reference data", {
 
   skip_on_cran()
@@ -7,8 +5,7 @@ test_that("exposures jul 2021 data matches reference data", {
   skip_on_ci()
 
   # Check system env vars to determine whether to run this high level data test
-  skip_if(!env_should_run_test("SPF_RUN_HLDT_3A"),
-          "Configured not to run (env var SPF_RUN_HLDT_3A is not 'true')")
+  skip_if_r_cmd_check_or_not_configured("SPF_RUN_HLDT_3A")
 
   pop_dat <- readRDS(here::here("Data_act/Processed/Population/pop_dat.rds"))
 
