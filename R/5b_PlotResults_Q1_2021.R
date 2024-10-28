@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Plot results for Q1 2021
 #'
 #' @return NULL (invisibly).

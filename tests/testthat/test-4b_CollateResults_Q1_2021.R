@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 test_that("results q1 2021 data matches reference data", {
 
   skip_on_cran()
@@ -5,7 +8,7 @@ test_that("results q1 2021 data matches reference data", {
   skip_on_ci()
 
   # Check system env vars to determine whether to run this high level data test
-  skip_if_r_cmd_check_or_not_configured("SPF_RUN_HLDT_4B")
+  skip_if_r_cmd_check_or_not_configured("DIMEX_RUN_HLDT_4B")
 
   # This should load 1 object 'out_q12021' into the current environment, it is
   # a data frame

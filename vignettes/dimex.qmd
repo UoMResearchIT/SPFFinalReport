@@ -1,5 +1,5 @@
 ---
-title: "spf"
+title: "dimex"
 author: "Toni Price"
 date: last-modified
 date-format: "[Last updated:] DD MMMM, YYYY"
@@ -8,7 +8,7 @@ format:
     mermaid: 
       theme: default
 vignette: >
-  %\VignetteIndexEntry{spf}
+  %\VignetteIndexEntry{dimex}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ~~~{=comment}
 ```{r setup}
-library(spf)
+library(dimex)
 ```
 ~~~
 
@@ -71,4 +71,5 @@ See [configuration](config.html) for configuration information.
 
 ## Development
 
-For development work on the `spf` package, see [development](development.html).
+For development work on the `dimex` package, see
+[development](development.html).

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Process the PM25 EMEP data
 #'
 #' This function implements a data preparation step to process the PM25 EMEP

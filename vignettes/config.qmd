@@ -20,14 +20,14 @@ knitr::opts_chunk$set(
 
 ~~~{=comment}
 ```{r setup}
-library(spf)
+library(dimex)
 ```
 ~~~
 
 ## Background
 
-This vignette describes how to configure the `spf` package. See the
-[introduction to spf](spf.html) vignette for context.
+This vignette describes how to configure the `dimex` package. See the
+[introduction to dimex](dimex.html) vignette for context.
 
 ## Configuration via System Environment Variables
 
@@ -102,6 +102,6 @@ effect. This can be achieved by doing one of the following:
 
 ### Configuration variables
 
-System environment variables for the `spf` package start with 'SPF_'.
+System environment variables for the `dimex` package start with 'DIMEX_'.
 
 TODO: TBC - Add info about the ref, act and test root paths

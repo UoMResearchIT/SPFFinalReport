@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 # Test helpers
 
 is_r_cmd_check <- function() {
@@ -12,7 +15,7 @@ is_r_cmd_check <- function() {
 env_should_run_hl_data_test <- function(env_var_nm = NULL) {
   env_var_nm <- env_var_nm %||% ""
   # Read system env vars to determine whether to run the specified test
-  run_all <- (Sys.getenv("SPF_RUN_ALL_HLDT", unset = "false") == "true")
+  run_all <- (Sys.getenv("DIMEX_RUN_ALL_HLDT", unset = "false") == "true")
   run_all || (Sys.getenv(env_var_nm, unset = "false") == "true")
 }
 

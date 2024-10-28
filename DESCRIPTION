@@ -1,13 +1,12 @@
-Package: spf
+Package: dimex
 Type: Package
-Title: Personal Exposure Model for Pollution
+Title: Data Integration Model for personal exposures (DIMEX)
 Version: 0.1.0
-Authors@R: c(
 Authors@R: c(
   person("Matthew", "Thomas", role = c("aut")),
   person("Toni", "Price", email = "maintainer-placeholder@example.com", role = c("aut", "cre")))
 Description: Models personal exposure to pollution. Package derived from the
-  SPFFinalReport Repository (created for the case study and report for the final
+  SPFFinalReport repository (created for the case study and report for the final
   SPF reporting period).
 License: Apache License (>= 2) 
 Encoding: UTF-8

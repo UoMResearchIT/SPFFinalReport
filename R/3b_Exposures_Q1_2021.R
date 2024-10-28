@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Process Exposures data for Q1 2021
 #'
 #' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs

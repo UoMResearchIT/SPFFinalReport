@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Process the pm25 cams data
 #'
 #' This function implements a data preparation step to process the pm25 cams

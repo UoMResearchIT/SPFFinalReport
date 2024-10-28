@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(spf)
+library(dimex)
 
-test_check("spf")
+test_check("dimex")

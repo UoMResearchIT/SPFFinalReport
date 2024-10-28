@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 ################################################################################################
 ### This file contains all source code needed for the the Data Integration Model for personal###
 ### exposures (DIMEX) case studies for the SPF final report                                  ###

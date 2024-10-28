@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Process Activities data
 #'
 #' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs
