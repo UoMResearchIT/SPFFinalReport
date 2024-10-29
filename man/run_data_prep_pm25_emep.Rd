@@ -4,7 +4,14 @@
 \alias{run_data_prep_pm25_emep}
 \title{Process the PM25 EMEP data}
 \usage{
-run_data_prep_pm25_emep()
+run_data_prep_pm25_emep(config = NULL, config_overrides = NULL)
+}
+\arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
 }
 \value{
 NULL (invisibly).

@@ -9,6 +9,9 @@
 #' @param use_cached_openair_data TRUE if cached versions of the openair data
 #'   should be used, FALSE otherwise. Default: TRUE
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -17,7 +20,10 @@
 #' run_data_prep_pm25_gm()
 #' }
 #'
-run_data_prep_pm25_gm <- function(use_cached_openair_data = NULL) {
+run_data_prep_pm25_gm <- function(config = NULL, config_overrides = NULL,
+                                  use_cached_openair_data = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   use_cached_openair_data <- use_cached_openair_data %||% TRUE
 

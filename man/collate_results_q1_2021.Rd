@@ -4,9 +4,19 @@
 \alias{collate_results_q1_2021}
 \title{Collate results for Q1 2021}
 \usage{
-collate_results_q1_2021(msoa_lim = NULL)
+collate_results_q1_2021(
+  config = NULL,
+  config_overrides = NULL,
+  msoa_lim = NULL
+)
 }
 \arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
+
 \item{msoa_lim}{Number of MSOAs to process. Default: Number of unique MSOAs}
 }
 \value{

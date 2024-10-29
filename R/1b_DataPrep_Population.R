@@ -7,6 +7,9 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -15,7 +18,9 @@
 #' run_data_prep_population()
 #' }
 #'
-run_data_prep_population <- function() {
+run_data_prep_population <- function(config = NULL, config_overrides = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   # Setting seed
   set.seed(1409)

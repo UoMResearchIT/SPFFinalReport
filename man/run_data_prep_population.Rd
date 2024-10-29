@@ -4,7 +4,14 @@
 \alias{run_data_prep_population}
 \title{Process the Population data}
 \usage{
-run_data_prep_population()
+run_data_prep_population(config = NULL, config_overrides = NULL)
+}
+\arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
 }
 \value{
 NULL (invisibly).

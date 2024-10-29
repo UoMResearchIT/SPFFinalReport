@@ -4,7 +4,14 @@
 \alias{run_data_prep_study_region}
 \title{Process the Study Region data}
 \usage{
-run_data_prep_study_region()
+run_data_prep_study_region(config = NULL, config_overrides = NULL)
+}
+\arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
 }
 \value{
 NULL (invisibly).
@@ -17,6 +24,7 @@ data.
 \examples{
 \dontrun{
 run_data_prep_study_region()
+run_data_prep_study_region(config_overrides = list(seed_val = 10))
 }
 
 }

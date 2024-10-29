@@ -4,9 +4,19 @@
 \alias{run_data_prep_pm25_gm}
 \title{Process the PM25 GM data}
 \usage{
-run_data_prep_pm25_gm(use_cached_openair_data = NULL)
+run_data_prep_pm25_gm(
+  config = NULL,
+  config_overrides = NULL,
+  use_cached_openair_data = NULL
+)
 }
 \arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
+
 \item{use_cached_openair_data}{TRUE if cached versions of the openair data
 should be used, FALSE otherwise. Default: TRUE}
 }

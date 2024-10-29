@@ -4,9 +4,15 @@
 \alias{process_activities}
 \title{Process Activities data}
 \usage{
-process_activities(msoa_lim = NULL)
+process_activities(config = NULL, config_overrides = NULL, msoa_lim = NULL)
 }
 \arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
+
 \item{msoa_lim}{Number of MSOAs to process. Default: Number of unique MSOAs}
 }
 \value{

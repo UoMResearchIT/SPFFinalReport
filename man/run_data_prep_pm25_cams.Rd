@@ -4,7 +4,14 @@
 \alias{run_data_prep_pm25_cams}
 \title{Process the pm25 cams data}
 \usage{
-run_data_prep_pm25_cams()
+run_data_prep_pm25_cams(config = NULL, config_overrides = NULL)
+}
+\arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
 }
 \value{
 NULL (invisibly).

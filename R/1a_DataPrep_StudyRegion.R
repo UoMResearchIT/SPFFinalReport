@@ -7,15 +7,21 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' run_data_prep_study_region()
+#' run_data_prep_study_region(config_overrides = list(seed_val = 10))
 #' }
 #'
-run_data_prep_study_region <- function() {
+run_data_prep_study_region <- function(config = NULL, config_overrides = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   #################################
   ### Preparing MSOA shapefiles ###

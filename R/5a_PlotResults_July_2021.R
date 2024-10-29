@@ -3,6 +3,9 @@
 
 #' Plot results for July 2021
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -11,7 +14,9 @@
 #' plot_results_jul_2021()
 #' }
 #'
-plot_results_jul_2021 <- function() {
+plot_results_jul_2021 <- function(config = NULL, config_overrides = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   # Read shapefile data
   ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")

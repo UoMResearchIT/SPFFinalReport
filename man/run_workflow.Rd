@@ -2,9 +2,14 @@
 % Please edit documentation in R/workflow.R
 \name{run_workflow}
 \alias{run_workflow}
-\title{Run the steps in the data prep, analysis and visualisation pipeline}
+\title{Run the steps in the data prep, analysis and visualisation workflow pipeline}
 \usage{
-run_workflow(steps_to_run = NULL, banner_only = NULL)
+run_workflow(
+  steps_to_run = NULL,
+  config = NULL,
+  config_overrides = NULL,
+  banner_only = NULL
+)
 }
 \arguments{
 \item{steps_to_run}{A character string specifying comma-separated identifiers
@@ -12,6 +17,12 @@ for steps to run in the workflow. These can be:
 1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b
 Default: "1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b" (run all
 steps)}
+
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
 
 \item{banner_only}{A boolean indicating whether to only show banners for each
 step which would be run, or to run the function as well (useful for
@@ -22,7 +33,8 @@ NULL (invisibly).
 }
 \description{
 This function runs each step in the data preparation, data analysis and
-visualisation pipeline. Note that it will take a long time to run.
+visualisation pipeline. Note that it will generally take an appreciable
+amount of time to run.
 }
 \examples{
 run_workflow("1a", banner_only = TRUE)
@@ -31,7 +43,7 @@ run_workflow("1a")
 run_workflow("1a,1b,1c,1d,1e,1f,2,3a,3b,4a,4b,5a,5b", banner_only = TRUE)
 run_workflow(banner_only = TRUE)
 run_workflow("4a, 4b")
-run_workflow("1a,1b,1c,1d,1e,1f,2,3a,3b,4a,4b")
+run_workflow("1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b")
 run_workflow()
 }
 

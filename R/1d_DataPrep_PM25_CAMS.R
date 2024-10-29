@@ -7,6 +7,9 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -15,7 +18,9 @@
 #' run_data_prep_pm25_cams()
 #' }
 #'
-run_data_prep_pm25_cams <- function() {
+run_data_prep_pm25_cams <- function(config = NULL, config_overrides = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   # Loading shapefiles
   ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")

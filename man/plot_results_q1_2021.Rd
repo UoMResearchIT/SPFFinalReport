@@ -4,7 +4,14 @@
 \alias{plot_results_q1_2021}
 \title{Plot results for Q1 2021}
 \usage{
-plot_results_q1_2021()
+plot_results_q1_2021(config = NULL, config_overrides = NULL)
+}
+\arguments{
+\item{config}{A list containing parameters to control the run.
+TODO: Describe the config options and their defaults}
+
+\item{config_overrides}{A list containing settings with which to override the
+default config values if required.}
 }
 \value{
 NULL (invisibly).

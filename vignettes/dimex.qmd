@@ -76,26 +76,33 @@ The main entry point for running the code is the
 <!-- with pkgdown -->
 [run_workflow()](/reference/run_workflow.html)
 function.
-If run without any arguments, it will run all workflow steps by default. You can
-also:
-- Test which steps will run by providing a `banner_only` argument (in which
+If called without any arguments, it will run all workflow steps by default. You
+can also:
+
+- Check which steps will run by providing a `banner_only` argument (in which
 case the steps would not be run but a banner would be printed for each step);
 and
-- Run a selection of steps by supplying a comma-separated string of step IDs,
-for example, "1a" or "4a, 4b".
+- Run a subset of steps by supplying a comma-separated string of step IDs, for
+example, "4a, 4b" or "1a".
 
 ```{r, eval=FALSE}
-# Run each step in the workflow
+# Run each step in the workflow with the default config
 run_workflow()
 
 # Run steps 4a and 4b only
 run_workflow("4a, 4b")
 
-# Don't run any steps but print out a banner for each step that would be run
+# Don't run any steps but print out the banner to show each step that would be run
 run_workflow(banner_only = TRUE)
+
+# Run steps 4a and 4b only, with the specified config
+# See the [configuration](config.html) vignette for information on how to create a
+# non-default config
+# TODO: config = ...
+run_workflow("4a, 4b", config)
 ```
 
 ## Development
 
-For development work on the `dimex` package, see
-[development](development.html).
+For development work on the `dimex` package, see the
+[development](development.html) vignette.

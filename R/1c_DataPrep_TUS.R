@@ -7,6 +7,9 @@
 #' Survey data. It is useful only for its side effects, i.e. for saving the
 #' processed data.
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -15,7 +18,9 @@
 #' run_data_prep_tus()
 #' }
 #'
-run_data_prep_tus <- function() {
+run_data_prep_tus <- function(config = NULL, config_overrides = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   # TODO: Diagnose and resolve this warning produced by running this code:
   # Warning message:

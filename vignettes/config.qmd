@@ -26,10 +26,18 @@ library(dimex)
 
 ## Background
 
-This vignette describes how to configure the `dimex` package. See the
-[introduction to dimex](dimex.html) vignette for context.
+This vignette describes how to configure the `dimex` package. See
+[introduction to dimex](dimex.html) for context.
 
-## Configuration via System Environment Variables
+There are two categories of configuration: localised (environment-dependent) and
+generic.
+
+Localised configuration values are specified via [system environment variables](#sys-env-vars), whilst generic configuration values are specified via
+the [config](#generic-config) object.
+
+## System Environment Variables for localised configuration {#sys-env-vars}
+
+TODO: Add context about/examples of sys env vars on different platforms.
 
 ### `.Renviron` file
 
@@ -100,8 +108,12 @@ effect. This can be achieved by doing one of the following:
     This can be helpful for testing specific changes without modifying the
     environment file.
 
-### Configuration variables
+### Valid system environment variables
 
 System environment variables for the `dimex` package start with 'DIMEX_'.
 
 TODO: TBC - Add info about the ref, act and test root paths
+
+## The `config` object for generic configuration {#generic-config}
+
+TODO: TBC

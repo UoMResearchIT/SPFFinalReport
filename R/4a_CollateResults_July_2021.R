@@ -5,6 +5,9 @@
 #'
 #' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs
 #'
+#' @inheritParams get_config
+#' @inheritParams run_workflow
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -13,7 +16,10 @@
 #' collate_results_jul_2021()
 #' }
 #'
-collate_results_jul_2021 <- function(msoa_lim = NULL) {
+collate_results_jul_2021 <- function(config = NULL, config_overrides = NULL,
+                                     msoa_lim = NULL) {
+
+  config <- get_config(config, config_overrides)
 
   # Read population data
   load("Data_ref/Processed/Population/pop_dat.RData")
