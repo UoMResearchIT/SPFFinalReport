@@ -20,11 +20,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-~~~{=comment}
 ```{r setup}
 library(dimex)
 ```
-~~~
 
 ## Introduction
 
@@ -65,9 +63,37 @@ For each of these data wrangling phases, there are three possible environments:
   - small enough to use for unit/integration tests
   - can be reliably reproduced
 
-## Configuration
+## Getting started
+
+### Configuration
 
 See [configuration](config.html) for configuration information.
+
+### Running the pipeline
+
+The main entry point for running the code is the
+<!-- TODO: Make sure this link is working once the doc site is being built -->
+<!-- with pkgdown -->
+[run_workflow()](/reference/run_workflow.html)
+function.
+If run without any arguments, it will run all workflow steps by default. You can
+also:
+- Test which steps will run by providing a `banner_only` argument (in which
+case the steps would not be run but a banner would be printed for each step);
+and
+- Run a selection of steps by supplying a comma-separated string of step IDs,
+for example, "1a" or "4a, 4b".
+
+```{r, eval=FALSE}
+# Run each step in the workflow
+run_workflow()
+
+# Run steps 4a and 4b only
+run_workflow("4a, 4b")
+
+# Don't run any steps but print out a banner for each step that would be run
+run_workflow(banner_only = TRUE)
+```
 
 ## Development
 
