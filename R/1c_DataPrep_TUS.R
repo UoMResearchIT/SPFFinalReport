@@ -229,5 +229,5 @@ run_data_prep_tus <- function() {
   # Save shapefiles
   saveRDS(tus_dat, "Data_act/Processed/TimeUseSurvey/tus_dat.rds")
 
-  invisible(NULL)
+  invisible()
 }

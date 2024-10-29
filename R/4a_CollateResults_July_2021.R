@@ -77,5 +77,5 @@ collate_results_jul_2021 <- function(msoa_lim = NULL) {
   # Saving outputs
   saveRDS(out_july2021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_July_2021.rds')
 
-  invisible(NULL)
+  invisible()
 }

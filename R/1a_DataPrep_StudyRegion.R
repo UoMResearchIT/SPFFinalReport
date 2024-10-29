@@ -99,5 +99,5 @@ run_data_prep_study_region <- function() {
   saveRDS(ew_msoa_region, "Data_act/Processed/Shapefiles/ew_msoa_region.rds")
   saveRDS(uk_full,        "Data_act/Processed/Shapefiles/uk_full.rds")
 
-  invisible(NULL)
+  invisible()
 }

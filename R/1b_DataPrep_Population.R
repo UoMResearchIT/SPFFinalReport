@@ -157,5 +157,5 @@ run_data_prep_population <- function() {
   # Save population data
   saveRDS(pop_dat, "Data_act/Processed/Population/pop_dat.rds")
 
-  invisible(NULL)
+  invisible()
 }

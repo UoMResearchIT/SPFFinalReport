@@ -170,5 +170,5 @@ process_activities <- function(msoa_lim = NULL) {
     print(k)
   }
 
-  invisible(NULL)
+  invisible()
 }

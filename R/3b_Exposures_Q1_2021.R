@@ -96,5 +96,5 @@ process_exposures_q1_2021 <- function(msoa_lim = NULL) {
     print(t2-t1)
   }
 
-  invisible(NULL)
+  invisible()
 }

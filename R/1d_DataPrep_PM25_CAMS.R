@@ -197,5 +197,5 @@ run_data_prep_pm25_cams <- function() {
   # Save cams
   saveRDS(pm25_cams, "Data_act/Processed/PM25/pm25_cams.rds")
 
-  invisible(NULL)
+  invisible()
 }

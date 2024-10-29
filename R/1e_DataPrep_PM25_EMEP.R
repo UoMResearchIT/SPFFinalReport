@@ -169,5 +169,5 @@ run_data_prep_pm25_emep <- function() {
   # Save aurn data
   saveRDS(pm25_emep, file = "Data_act/Processed/PM25/pm25_emep.rds")
 
-  invisible(NULL)
+  invisible()
 }

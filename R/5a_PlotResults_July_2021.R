@@ -330,5 +330,5 @@ plot_results_jul_2021 <- function() {
     ggplot2::theme(legend.position = 'bottom')
   ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig4a_AgeGr_Sex.pdf", plot = p, width = 10)
 
-  invisible(NULL)
+  invisible()
 }

@@ -316,5 +316,5 @@ run_data_prep_pm25_gm <- function(use_cached_openair_data = NULL) {
   # Save aurn data on MSOA level
   saveRDS(pm25_gm, file = "Data_act/Processed/PM25/pm25_gm.rds")
 
-  invisible(NULL)
+  invisible()
 }
