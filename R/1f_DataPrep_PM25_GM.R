@@ -6,6 +6,9 @@
 #' This function implements a data preparation step to process the PM25 GM data.
 #' It is useful only for its side effects, i.e. for saving the processed data.
 #'
+#' @param use_cached_openair_data TRUE if cached versions of the openair data
+#'   should be used, FALSE otherwise. Default: TRUE
+#'
 #' @return NULL (invisibly).
 #' @export
 #'
@@ -14,7 +17,9 @@
 #' run_data_prep_pm25_gm()
 #' }
 #'
-run_data_prep_pm25_gm <- function() {
+run_data_prep_pm25_gm <- function(use_cached_openair_data = NULL) {
+
+  use_cached_openair_data <- use_cached_openair_data %||% TRUE
 
   # Loading shapefiles
   ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
@@ -101,9 +106,14 @@ run_data_prep_pm25_gm <- function() {
   rm(tmp1, tmp2, tmp3, tmp4, tmp5, tmp6)
 
   # List of Stations
-  # TODO: Temporarily use saved AURN data to get this function working
-  stations_aurn_dat <- readRDS("Data_act/Processed/PM25/aurn_meta_2024-10-09.rds") %>%
-  # stations_aurn_dat <- openair::importMeta(source = "aurn", all = TRUE) %>%
+
+  if (use_cached_openair_data) {
+    # Use saved AURN data
+    aurn_meta_import <- readRDS("Data_act/Processed/PM25/aurn_meta_2024-10-09.rds")
+  } else {
+    aurn_meta_import <- openair::importMeta(source = "aurn", all = TRUE)
+  }
+  stations_aurn_dat <- aurn_meta_import %>%
     dplyr::filter(variable == 'PM2.5' &
                     (as.Date(start_date, format = '%Y-%m-%d') <= as.Date('2021-12-31')) &
                     (as.Date(end_date, format = '%Y-%m-%d') >= as.Date('2020-01-01') |
@@ -117,14 +127,18 @@ run_data_prep_pm25_gm <- function() {
     dplyr::filter(!(site %in% c('Glazebury', 'Liverpool Speke')))
 
   # Downloading pollutant/weather data
-  # TODO: Temporarily use saved AURN data to get this function working
-  aurn_dat <- readRDS("Data_act/Processed/PM25/aurn_dat_20-21_2024-10-09.rds") %>%
-  # aurn_dat <- openair::importAURN(site = stations_aurn_dat$code,
-  #                                 year = 2020:2021,
-  #                                 pollutant = c('pm2.5'),
-  #                                 meta = FALSE,
-  #                                 data_type = 'hourly',
-  #                                 verbose = FALSE) %>%
+  if (use_cached_openair_data) {
+    # Use saved AURN data
+    aurn_import <- readRDS("Data_act/Processed/PM25/aurn_dat_20-21_2024-10-09.rds")
+  } else {
+    aurn_import <- openair::importAURN(site = stations_aurn_dat$code,
+                                       year = 2020:2021,
+                                       pollutant = c('pm2.5'),
+                                       meta = FALSE,
+                                       data_type = 'hourly',
+                                       verbose = FALSE)
+  }
+  aurn_dat <- aurn_import %>%
     # Altering columns
     dplyr::mutate(
       # Removing negative values

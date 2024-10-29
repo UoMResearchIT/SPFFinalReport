@@ -4,7 +4,11 @@
 \alias{run_data_prep_pm25_gm}
 \title{Process the PM25 GM data}
 \usage{
-run_data_prep_pm25_gm()
+run_data_prep_pm25_gm(use_cached_openair_data = NULL)
+}
+\arguments{
+\item{use_cached_openair_data}{TRUE if cached versions of the openair data
+should be used, FALSE otherwise. Default: TRUE}
 }
 \value{
 NULL (invisibly).

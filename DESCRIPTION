@@ -22,6 +22,7 @@ Imports:
     haven,
     lubridate,
     magrittr,
+    openair,
     plyr,
     proxy,
     raster,
