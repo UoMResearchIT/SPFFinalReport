@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow.R
 \name{get_config}
 \alias{get_config}
-\title{Create a config control object to specify parameters for a run}
+\title{Create a config object to specify parameters for a run}
 \usage{
 get_config(config = NULL, overrides = NULL)
 }
@@ -15,10 +15,10 @@ defaults. If NULL then the returned list will contain all default values.}
 }
 \value{
 A list containing settings for a run, constructed from defaults which
-would be overridden if \code{overrides} is supplied.
+would be overridden if \code{config} and/or \code{overrides} are supplied.
 }
 \description{
-Create a config control object to specify parameters for a run
+Create a config object to specify parameters for a run
 }
 \examples{
 get_config()

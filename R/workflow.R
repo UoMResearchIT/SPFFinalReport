@@ -6,7 +6,7 @@
 #'   defaults. If NULL then the returned list will contain all default values.
 #'
 #' @return A list containing settings for a run, constructed from defaults which
-#'   would be overridden if `overrides` is supplied.
+#'   would be overridden if `config` and/or `overrides` are supplied.
 #' @export
 #'
 #' @examples
