@@ -2,18 +2,20 @@
 % Please edit documentation in R/utils-path.R
 \name{path_from_components}
 \alias{path_from_components}
-\title{Construct a file system path from individual path components}
+\title{Construct a file system path from a vector of individual path components}
 \usage{
 path_from_components(components)
 }
 \arguments{
-\item{components}{A character vector: the path components.}
+\item{components}{A character vector: the path components. Note that this
+function calls \code{\link[=file.path]{file.path()}} as it does the same thing though with a vector
+of components instead of a variable number of character string arguments.}
 }
 \value{
 The constructed path.
 }
 \description{
-Construct a file system path from individual path components
+Construct a file system path from a vector of individual path components
 }
 \examples{
 \dontrun{

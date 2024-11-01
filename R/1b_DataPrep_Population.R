@@ -7,8 +7,7 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -18,9 +17,7 @@
 #' run_data_prep_population()
 #' }
 #'
-run_data_prep_population <- function(config = NULL, config_overrides = NULL) {
-
-  config <- get_config(config, config_overrides)
+run_data_prep_population <- function(cfg = NULL) {
 
   # Setting seed
   set.seed(1409)
@@ -160,7 +157,7 @@ run_data_prep_population <- function(config = NULL, config_overrides = NULL) {
   ### Saving outputs ###
   ######################
   # Save population data
-  saveRDS(pop_dat, "Data_act/Processed/Population/pop_dat.rds")
+  saveRDS(pop_dat, "Data/Processed/Population/pop_dat.rds")
 
   invisible()
 }

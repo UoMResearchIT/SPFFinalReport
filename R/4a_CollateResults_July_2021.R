@@ -5,8 +5,7 @@
 #'
 #' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -16,10 +15,7 @@
 #' collate_results_jul_2021()
 #' }
 #'
-collate_results_jul_2021 <- function(config = NULL, config_overrides = NULL,
-                                     msoa_lim = NULL) {
-
-  config <- get_config(config, config_overrides)
+collate_results_jul_2021 <- function(cfg = NULL, msoa_lim = NULL) {
 
   # Read population data
   load("Data_ref/Processed/Population/pop_dat.RData")
@@ -40,7 +36,7 @@ collate_results_jul_2021 <- function(config = NULL, config_overrides = NULL,
   for (k in unique(pop_dat$area_id)[1:msoa_lim]) {
     t1 <- Sys.time()
     # Saving datasets
-    activities_complete <- readRDS(paste('Output_act/CaseStudy2/Exposures_July_2021/exposures_', k, '.rds', sep = ''))
+    activities_complete <- readRDS(paste('Output/CaseStudy2/Exposures_July_2021/exposures_', k, '.rds', sep = ''))
     # Preparing case study 2
     activities_complete <- activities_complete %>%
       # Only keepting July
@@ -81,7 +77,7 @@ collate_results_jul_2021 <- function(config = NULL, config_overrides = NULL,
   }
 
   # Saving outputs
-  saveRDS(out_july2021, file = 'Output_act/CaseStudy2/Analysis/DailyAverage_July_2021.rds')
+  saveRDS(out_july2021, file = 'Output/CaseStudy2/Analysis/DailyAverage_July_2021.rds')
 
   invisible()
 }

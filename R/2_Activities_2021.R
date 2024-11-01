@@ -5,8 +5,7 @@
 #'
 #' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -16,14 +15,11 @@
 #' process_activities()
 #' }
 #'
-process_activities <- function(config = NULL, config_overrides = NULL,
-                               msoa_lim = NULL) {
-
-  config <- get_config(config, config_overrides)
+process_activities <- function(cfg = NULL, msoa_lim = NULL) {
 
   # Read population data
-  pop_dat <- readRDS("Data_act/Processed/Population/pop_dat.rds")
-  tus_dat <- readRDS("Data_act/Processed/TimeUseSurvey/tus_dat.rds")
+  pop_dat <- readRDS("Data/Processed/Population/pop_dat.rds")
+  tus_dat <- readRDS("Data/Processed/TimeUseSurvey/tus_dat.rds")
 
   # TEMP: Number of loops whilst getting the code working
   msoa_lim <- msoa_lim %||% 2
@@ -31,7 +27,8 @@ process_activities <- function(config = NULL, config_overrides = NULL,
   # msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
 
   # Suppress summarise info
-  options(dplyr.summarise.inform = FALSE)
+  op <- options(dplyr.summarise.inform = FALSE)
+  on.exit(options(op), add = TRUE, after = FALSE)
 
   # Setting seed
   set.seed(1409)
@@ -170,7 +167,7 @@ process_activities <- function(config = NULL, config_overrides = NULL,
       dplyr::select(-c(minutes, sample))
 
     # Saving datasets
-    saveRDS(activities_complete, file = paste('Output_act/CaseStudy2/Activities/activities_', k, '.rds', sep = ''))
+    saveRDS(activities_complete, file = paste('Output/CaseStudy2/Activities/activities_', k, '.rds', sep = ''))
 
     # Printing index
     print(k)

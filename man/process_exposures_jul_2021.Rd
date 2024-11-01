@@ -4,18 +4,11 @@
 \alias{process_exposures_jul_2021}
 \title{Process Exposures data for July 2021}
 \usage{
-process_exposures_jul_2021(
-  config = NULL,
-  config_overrides = NULL,
-  msoa_lim = NULL
-)
+process_exposures_jul_2021(cfg = NULL, msoa_lim = NULL)
 }
 \arguments{
-\item{config}{A list containing parameters to control the run.
-TODO: Describe the config options and their defaults}
-
-\item{config_overrides}{A list containing settings with which to override the
-default config values if required.}
+\item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
+values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}
 
 \item{msoa_lim}{Number of MSOAs to process. Default: Number of unique MSOAs}
 }

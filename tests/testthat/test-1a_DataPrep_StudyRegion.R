@@ -19,7 +19,7 @@ test_that("study region data matches reference data", {
   # code
   # Note: The objects in the reference shapefiles.RData are S4 objects of type
   # Large SpatialPolygonsDataFrame whilst this is a data frame
-  act_ew_msoa <- readRDS(here::here("Data_act/Processed/Shapefiles/ew_msoa.rds"))
+  act_ew_msoa <- readRDS(here::here("Data/Processed/Shapefiles/ew_msoa.rds"))
 
   # Retain only vars required for comparison
   act_ew_msoa <- as.data.frame(act_ew_msoa) %>%

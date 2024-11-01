@@ -29,15 +29,18 @@ library(dimex)
 This vignette describes how to configure the `dimex` package. See
 [introduction to dimex](dimex.html) for context.
 
-There are two categories of configuration: localised (environment-dependent) and
-generic.
+For information about configuration that is relevant within a development
+environment, see [development](development.html).
 
-Localised configuration values are specified via [system environment variables](#sys-env-vars), whilst generic configuration values are specified via
-the [config](#generic-config) object.
+There are two categories of configuration: localised (environment-dependent) and
+default package-level configuration which can be customised to a user's
+circumstances if required.
+
+Environment-dependent configuration values are specified via
+[system environment variables](#sys-env-vars), whilst package-level
+configuration values are specified via the [config](#pkg-config) object.
 
 ## System Environment Variables for localised configuration {#sys-env-vars}
-
-TODO: Add context about/examples of sys env vars on different platforms.
 
 ### `.Renviron` file
 
@@ -62,11 +65,14 @@ A user-specific `.Renviron` would typically be stored at:
     ~/.Renviron
     ````
 
-Create this file if necessary. From within R you can use the `usethis` package
-to do this:
+Create this file if necessary. From within R, the `usethis` package can do this
+for you:
 
 ```
-> usethis::edit_r_environ("user")
+# Create a new user-level .Renviron file, or open an existing one for editing
+usethis::edit_r_environ("user")
+# Or, as this is the default:
+usethis::edit_r_environ()
 ```
 
 Entries in a project-level `.Renviron` file, located in the working directory or
@@ -80,7 +86,8 @@ The `usethis` package supports creation/editing of a project-level `.Renviron`
 file too:
 
 ```
-> usethis::edit_r_environ("project")
+# Create a new project-level .Renviron file, or open an existing one for editing
+usethis::edit_r_environ("project")
 ```
 
 **NB**
@@ -92,7 +99,7 @@ effect. This can be achieved by doing one of the following:
 - Reload `.Renviron` in a running R session with, e.g.
 
     ````
-    > readRenviron("~/.Renviron")
+    readRenviron("~/.Renviron")
     ````
     
     (where you shoul replace "~/.Renviron" with the appropriate path to your
@@ -102,7 +109,7 @@ effect. This can be achieved by doing one of the following:
   specific environment variables within the current R session:
   
     ```
-    > Sys.setenv(VAR_NAME = "value")
+    Sys.setenv(VAR_NAME = "value")
     ```
 
     This can be helpful for testing specific changes without modifying the
@@ -112,8 +119,58 @@ effect. This can be achieved by doing one of the following:
 
 System environment variables for the `dimex` package start with 'DIMEX_'.
 
-TODO: TBC - Add info about the ref, act and test root paths
+TODO: Add info about the act, ref and test root paths
 
-## The `config` object for generic configuration {#generic-config}
+| Environment | Variable name   | Description                                      |
+|:------------|:----------------|:-------------------------------------------------|
+| act         | DIMEX_STORE     | Root path of the dimex Data and Output           |
+| ref         | DIMEX_STORE_REF | Root path of the dimex 'reference' Data and Output |
 
-TODO: TBC
+## The `config` object for package-level configuration {#pkg-config}
+
+This configuration relates to package-level values which do not necessarily need
+customising, as long as a user's data and output on their personal filesystem
+conforms to the expected structure.
+
+If required, the configuration can be customised as it is stored on a per-user
+basis.
+
+## The `config` template {#config-template}
+
+To create a default configuration for the first time and save it to your
+personal system, run:
+
+```{r, eval=FALSE}
+write_user_cfg()
+```
+
+The location of the saved configuration file is OS-specific. By default its
+directory is set according to your OS convention:
+
+| OS       | Default configuration directory             |
+|:---------|:--------------------------------------------|
+| Windows  | C:/Users/Username/AppData/Local/R-dimex     |
+| Linux    | ~/.config/R-dimex                           |
+| macOS    | ~/Library/Application Support/R-dimex       |
+
+The `dimex` package expects to find a configuration file within this directory.
+
+To update or recreate this config file, run:
+```{r, eval=FALSE}
+write_user_cfg(overwrite = TRUE)
+```
+
+Though note that there is currently no conversion path for existing config files
+so any custom changes would then need to be *manually re-applied*.
+
+## Default `config` values and overriding them {#default-config-values}
+
+Defaults:
+
+TODO: Describe defaults
+
+In general, defaults can be overridden by manually editing the config.
+
+TODO: Show examples of overriding the defaults
+
+--------------------------------------------------------------------------------

@@ -7,8 +7,7 @@
 #' Survey data. It is useful only for its side effects, i.e. for saving the
 #' processed data.
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -18,9 +17,7 @@
 #' run_data_prep_tus()
 #' }
 #'
-run_data_prep_tus <- function(config = NULL, config_overrides = NULL) {
-
-  config <- get_config(config, config_overrides)
+run_data_prep_tus <- function(cfg = NULL) {
 
   # TODO: Diagnose and resolve this warning produced by running this code:
   # Warning message:
@@ -232,7 +229,7 @@ run_data_prep_tus <- function(config = NULL, config_overrides = NULL) {
   ### Saving outputs ###
   ######################
   # Save shapefiles
-  saveRDS(tus_dat, "Data_act/Processed/TimeUseSurvey/tus_dat.rds")
+  saveRDS(tus_dat, "Data/Processed/TimeUseSurvey/tus_dat.rds")
 
   invisible()
 }

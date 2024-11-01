@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 test_that("escape_txt works as expected", {
   expect_equal(escape_txt("."), "\\.")
   expect_equal(escape_txt("ab[c]"), "ab\\[c\\]")
@@ -46,9 +49,21 @@ test_that("get_path_components works for windows UNC paths", {
 })
 
 test_that("path_from_components works for unix-style root paths", {
+
+  skip_on_os("windows")
+
   linux_path <- "/path/to somewhere/else"
   components <- get_path_components(linux_path)
 
-  # TODO: Run this test only on linux, i.e. in a platform-dependent way (??)
   expect_equal(path_from_components(components), linux_path)
+})
+
+test_that("path_from_components works for windows root paths", {
+
+  skip_on_os(c("mac", "linux", "solaris"))
+
+  windows_path <- "D:\\Users\\user"
+  components <- get_path_components(windows_path)
+
+  expect_equal(path_from_components(components), windows_path)
 })

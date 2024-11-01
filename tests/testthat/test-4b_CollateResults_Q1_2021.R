@@ -14,7 +14,7 @@ test_that("results q1 2021 data matches reference data", {
   # a data frame
   load(file = here::here("Output_ref/CaseStudy2/Analysis/DailyAverage_Q1_2021.RData"))
 
-  act_out_q12021 <- readRDS(here::here("Output_act/CaseStudy2/Analysis/DailyAverage_Q1_2021.rds"))
+  act_out_q12021 <- readRDS(here::here("Output/CaseStudy2/Analysis/DailyAverage_Q1_2021.rds"))
 
   expect_equal(act_out_q12021, out_q12021)
 })

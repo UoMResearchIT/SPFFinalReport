@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Escape special characters in the given string
 #'
 #' Given a character string, ensure this would function as a regular expression
@@ -80,9 +83,11 @@ get_path_components <- function(path) {
   path_components
 }
 
-#' Construct a file system path from individual path components
+#' Construct a file system path from a vector of individual path components
 #'
-#' @param components A character vector: the path components.
+#' @param components A character vector: the path components. Note that this
+#'   function calls [file.path()] as it does the same thing though with a vector
+#'   of components instead of a variable number of character string arguments.
 #'
 #' @return The constructed path.
 #' @export

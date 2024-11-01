@@ -9,8 +9,7 @@
 #' @param use_cached_openair_data TRUE if cached versions of the openair data
 #'   should be used, FALSE otherwise. Default: TRUE
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -20,15 +19,12 @@
 #' run_data_prep_pm25_gm()
 #' }
 #'
-run_data_prep_pm25_gm <- function(config = NULL, config_overrides = NULL,
-                                  use_cached_openair_data = NULL) {
-
-  config <- get_config(config, config_overrides)
+run_data_prep_pm25_gm <- function(cfg = NULL, use_cached_openair_data = NULL) {
 
   use_cached_openair_data <- use_cached_openair_data %||% TRUE
 
   # Loading shapefiles
-  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
+  ew_msoa <- readRDS("Data/Processed/Shapefiles/ew_msoa.rds")
 
   ##############################################
   ### Preparing PM data from ground monitors ###
@@ -115,7 +111,7 @@ run_data_prep_pm25_gm <- function(config = NULL, config_overrides = NULL,
 
   if (use_cached_openair_data) {
     # Use saved AURN data
-    aurn_meta_import <- readRDS("Data_act/Processed/PM25/aurn_meta_2024-10-09.rds")
+    aurn_meta_import <- readRDS("Data/Processed/PM25/aurn_meta_2024-10-09.rds")
   } else {
     aurn_meta_import <- openair::importMeta(source = "aurn", all = TRUE)
   }
@@ -135,7 +131,7 @@ run_data_prep_pm25_gm <- function(config = NULL, config_overrides = NULL,
   # Downloading pollutant/weather data
   if (use_cached_openair_data) {
     # Use saved AURN data
-    aurn_import <- readRDS("Data_act/Processed/PM25/aurn_dat_20-21_2024-10-09.rds")
+    aurn_import <- readRDS("Data/Processed/PM25/aurn_dat_20-21_2024-10-09.rds")
   } else {
     aurn_import <- openair::importAURN(site = stations_aurn_dat$code,
                                        year = 2020:2021,
@@ -316,11 +312,11 @@ run_data_prep_pm25_gm <- function(config = NULL, config_overrides = NULL,
   ### Saving outputs ###
   ######################
   # Save aurn data on monitor level
-  saveRDS(gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn.rds")
-  saveRDS(stations_gm_dat, file = "Data_act/Processed/PM25/GroundMonitoring/pm25_aurn_metadata.rds")
+  saveRDS(gm_dat, file = "Data/Processed/PM25/GroundMonitoring/pm25_aurn.rds")
+  saveRDS(stations_gm_dat, file = "Data/Processed/PM25/GroundMonitoring/pm25_aurn_metadata.rds")
 
   # Save aurn data on MSOA level
-  saveRDS(pm25_gm, file = "Data_act/Processed/PM25/pm25_gm.rds")
+  saveRDS(pm25_gm, file = "Data/Processed/PM25/pm25_gm.rds")
 
   invisible()
 }

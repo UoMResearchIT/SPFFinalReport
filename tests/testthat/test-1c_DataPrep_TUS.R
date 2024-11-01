@@ -16,7 +16,7 @@ test_that("time use survey data matches reference data", {
 
   # This will load the time use survey data which is produced by running the
   # package code
-  act_tus_dat <- readRDS(here::here("Data_act/Processed/TimeUseSurvey/tus_dat.rds"))
+  act_tus_dat <- readRDS(here::here("Data/Processed/TimeUseSurvey/tus_dat.rds"))
 
   expect_equal(act_tus_dat, tus_dat)
 })

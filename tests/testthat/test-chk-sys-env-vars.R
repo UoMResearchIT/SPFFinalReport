@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 test_that("loading nonexistent sys env var shows correct msg", {
   expect_snapshot(chk_sys_env_vars("DIMEX_TST_SHOULD_EXIST"), error = TRUE)
 })

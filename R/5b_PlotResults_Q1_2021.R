@@ -3,8 +3,7 @@
 
 #' Plot results for Q1 2021
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -14,17 +13,15 @@
 #' plot_results_q1_2021()
 #' }
 #'
-plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
-
-  config <- get_config(config, config_overrides)
+plot_results_q1_2021 <- function(cfg = NULL) {
 
   # TODO: Diagnose (and possibly eliminate?) this warning:
   # Warning message:
   # Removed 5 rows containing missing values or values outside the scale range (`geom_line()`).
 
   # Read shapefile data
-  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
-  ew_msoa_region <- readRDS("Data_act/Processed/Shapefiles/ew_msoa_region.rds")
+  ew_msoa <- readRDS("Data/Processed/Shapefiles/ew_msoa.rds")
+  ew_msoa_region <- readRDS("Data/Processed/Shapefiles/ew_msoa_region.rds")
 
   # Subsetting Greater Manchester shapefiles
   mcr_msoa <- subset(ew_msoa, parent_area_name %in% c('Bolton', 'Bury', 'Manchester', 'Oldham', 'Rochdale',
@@ -33,7 +30,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                                                              'Salford', 'Stockport', 'Tameside', 'Trafford', 'Wigan'))
 
   # Loading exposures
-  out_q12021 <- readRDS('Output_act/CaseStudy2/Analysis/DailyAverage_Q1_2021.rds')
+  out_q12021 <- readRDS('Output/CaseStudy2/Analysis/DailyAverage_Q1_2021.rds')
 
   # Relabelling exposures
   out_q12021$nssec5[which(out_q12021$nssec5 == -1)] <- 0
@@ -130,7 +127,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
     ggplot2::facet_grid(sex_label ~ agegr4_label) +
     ggplot2::labs(x = expression('Average ambient PM'[2.5] * ' (' * mu *'g/m'^3 * ')'),
                   y = expression('Average personal exposure to PM'[2.5] * ' (' * mu *'g/m'^3 * ')'))
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig1b.pdf", plot = p, width = 14, height = 7)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig1b.pdf", plot = p, width = 14, height = 7)
 
   # Saving coefficients
   readr::write_csv(coeffs_q12021, file = 'Coeffs_q12021.csv')
@@ -165,7 +162,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
     ggplot2::labs(x = "Date",
                   y = expression('Concentration of PM'[2.5] * ' (' * mu *'g/m'^3 * ')'),
                   colour = '')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig2b_diff.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig2b_diff.pdf", plot = p, width = 10)
 
   #############################################
   ### Figure 3 - Maps of personal exposures ###
@@ -310,7 +307,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
 
   # Outputting plot
   p <- gridExtra::arrangeGrob(p1, p2, p3, ncol = 3)
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig3b.pdf", plot = p, width = 10, height = 4)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig3b.pdf", plot = p, width = 10, height = 4)
 
 
   ###############################################
@@ -326,7 +323,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig4b_nssec5.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig4b_nssec5.pdf", plot = p, width = 10)
 
   p <- ggplot2::ggplot(out_q12021,
                        ggplot2::aes(x = exposure_emep)) +
@@ -338,7 +335,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig4b_AgeGr_Sex.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig4b_AgeGr_Sex.pdf", plot = p, width = 10)
 
   ####################################################
   ### Figure 5 - Density plots of the differences ####
@@ -353,7 +350,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig5b_nssec5.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig5b_nssec5.pdf", plot = p, width = 10)
 
   p <- ggplot2::ggplot(out_q12021,
                        ggplot2::aes(x = exposure_five - exposure_emep)) +
@@ -365,7 +362,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig5b_DayType.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig5b_DayType.pdf", plot = p, width = 10)
 
   p <- ggplot2::ggplot(out_q12021,
                        ggplot2::aes(x = exposure_five - exposure_emep)) +
@@ -377,7 +374,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig5b_AgeGr.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig5b_AgeGr.pdf", plot = p, width = 10)
 
   p <- ggplot2::ggplot(out_q12021,
                        ggplot2::aes(x = exposure_five - exposure_emep)) +
@@ -389,7 +386,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig5b_Sex.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig5b_Sex.pdf", plot = p, width = 10)
 
   p <- ggplot2::ggplot(out_q12021,
                        ggplot2::aes(x = exposure_five - exposure_emep)) +
@@ -401,7 +398,7 @@ plot_results_q1_2021 <- function(config = NULL, config_overrides = NULL) {
                   fill = "") +
     ggplot2::theme_bw() +
     ggplot2::theme(legend.position = 'bottom')
-  ggplot2::ggsave("Output_act/CaseStudy2/Fig/Fig5b_AgeGr_Sex.pdf", plot = p, width = 10)
+  ggplot2::ggsave("Output/CaseStudy2/Fig/Fig5b_AgeGr_Sex.pdf", plot = p, width = 10)
 
   invisible()
 }

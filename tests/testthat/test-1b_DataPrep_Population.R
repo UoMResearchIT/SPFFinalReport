@@ -16,7 +16,7 @@ test_that("population data matches reference data", {
 
   # This will load the population data which is produced by running the package
   # code
-  act_pop_dat <- readRDS(here::here("Data_act/Processed/Population/pop_dat.rds"))
+  act_pop_dat <- readRDS(here::here("Data/Processed/Population/pop_dat.rds"))
 
   expect_equal(act_pop_dat, pop_dat)
 })

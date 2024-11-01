@@ -140,3 +140,61 @@ applicable)
     `DIMEX_RUN_ALL_HLDT=true` it will override the individual settings. This can
     be useful after making some changes and checking an individual test, to then
     easily verify that all the high-level data tests still pass.
+
+- To temporarily set a specific high-level data test to run in the current R
+  session, run (for e.g.):
+
+  ```
+  # Set the high-level data test for step "1a" to run
+  Sys.setenv(DIMEX_RUN_HLDT_1A = "true")
+  ```
+  
+  To reverse this, do one of the following:
+  
+  ```
+  Sys.setenv(DIMEX_RUN_HLDT_1A = "false")
+  # Or:
+  Sys.unsetenv("DIMEX_RUN_HLDT_1A")
+  ```
+
+- To temporarily set all the high-level data tests to run in the current R
+  session, use:
+
+  ```
+  Sys.setenv(DIMEX_RUN_ALL_HLDT = "true")
+  ```
+  
+  To reverse this, do one of the following:
+  
+  ```
+  Sys.setenv(DIMEX_RUN_ALL_HLDT = "false")
+  # Or:
+  Sys.unsetenv("DIMEX_RUN_ALL_HLDT")
+  ```
+  
+### The config template
+
+To update the config template, edit the functions [generate_cfg_template()] and
+[get_cfg_template_keys()].
+
+Note NB: After updating the config template, save an updated copy to the package
+config location by running:
+```{r, eval=FALSE}
+write_cfg_template()
+```
+
+Note NB: <br>
+Changing the template will necessitate updating user config files that have
+already been created.
+
+TODO: When there is a conversion utility, update the following: <br>
+**There is currently no mechanism to convert the format of a user config file**
+*so until such time as this can be implemented, any local changes to a user
+config will need to be* **manually updated**.
+To update the user config, run:
+```{r, eval=FALSE}
+# NB: The following will *overwrite* any local changes to the user config!
+# Until there is a conversion utility available, local changes will need to be
+# *manually updated*.
+write_user_cfg(overwrite = TRUE)
+```

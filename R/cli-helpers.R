@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 #' Print a banner to the console ahead of running a step in the workflow
 #'
 #' @param id A character string for the step id.

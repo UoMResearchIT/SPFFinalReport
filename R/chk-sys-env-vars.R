@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
+
 chk_sys_env_vars <- function(varnames) {
 
   not_found <- lapply(varnames, function(varname) {
@@ -22,9 +25,9 @@ chk_sys_env_vars <- function(varnames) {
 
     cli::cli_abort(c(
       "{n_not_found} required system environment var{?s} {?is/are } not set",
-      "i" = "You need a .Renviron file for this.",
-      "i" = glue::glue("(e.g. set VAR_NAME=\"<value>\" in .Renviron",
-                       " for each required variable)"),
+      "i" = "You need a '.Renviron' file for this",
+      "i" = "(e.g. set VAR_NAME=<value> in .Renviron for each variable).",
+      "i" = "Not found in system environment:",
       not_found
     ))
   }

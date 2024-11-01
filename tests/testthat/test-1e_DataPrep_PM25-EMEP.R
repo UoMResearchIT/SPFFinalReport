@@ -17,7 +17,7 @@ test_that("pm25 emep data matches reference data", {
   # This will load the pm25 emep data which is produced by running the package
   # code
   act_pm25_emep_dat <- readRDS(
-    here::here("Data_act/Processed/PM25/pm25_emep.rds")
+    here::here("Data/Processed/PM25/pm25_emep.rds")
   )
 
   expect_equal(act_pm25_emep_dat, pm25_emep)

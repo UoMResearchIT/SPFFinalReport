@@ -7,8 +7,7 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -18,12 +17,10 @@
 #' run_data_prep_pm25_emep()
 #' }
 #'
-run_data_prep_pm25_emep <- function(config = NULL, config_overrides = NULL) {
-
-  config <- get_config(config, config_overrides)
+run_data_prep_pm25_emep <- function(cfg = NULL) {
 
   # Loading shapefiles
-  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
+  ew_msoa <- readRDS("Data/Processed/Shapefiles/ew_msoa.rds")
 
   #######################################
   ### Initial processing of EMEP from ###
@@ -63,7 +60,7 @@ run_data_prep_pm25_emep <- function(config = NULL, config_overrides = NULL) {
         ncin <- raster::crop(ncin, raster::extent(-2.755, -1.895, 53.325, 53.695))
         # Saving raster
         raster::writeRaster(ncin,
-                            filename = paste('Data_act/Processed/PM25/EMEP/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
+                            filename = paste('Data/Processed/PM25/EMEP/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
                             overwrite = TRUE)
         # else {keep <- keep + ncin}
         print(paste(date, '-', sprintf("%02d", (k - 1) %% 24), "00", sep = ''))
@@ -129,7 +126,7 @@ run_data_prep_pm25_emep <- function(config = NULL, config_overrides = NULL) {
     # Loop for each time
     for (j in 0:23){
       # Reading in PM25 from CAMS
-      r <- raster::raster(paste('Data_act/Processed/PM25/EMEP/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
+      r <- raster::raster(paste('Data/Processed/PM25/EMEP/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
       # Renaming raster
       names(r) <- 'pm25'
       # Creating aggregated estimates of PM25 by MSOA
@@ -172,7 +169,7 @@ run_data_prep_pm25_emep <- function(config = NULL, config_overrides = NULL) {
   ### Saving outputs ###
   ######################
   # Save aurn data
-  saveRDS(pm25_emep, file = "Data_act/Processed/PM25/pm25_emep.rds")
+  saveRDS(pm25_emep, file = "Data/Processed/PM25/pm25_emep.rds")
 
   invisible()
 }

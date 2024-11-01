@@ -10,7 +10,7 @@ test_that("activities 2021 data matches reference data", {
   # Check system env vars to determine whether to run this high level data test
   skip_if_r_cmd_check_or_not_configured("DIMEX_RUN_HLDT_2")
 
-  pop_dat <- readRDS(here::here("Data_act/Processed/Population/pop_dat.rds"))
+  pop_dat <- readRDS(here::here("Data/Processed/Population/pop_dat.rds"))
 
   # Note: There are 346 areas (hence 346 tests to run)
   areas <- sort(unique(pop_dat$area_id))
@@ -35,14 +35,14 @@ test_that("activities 2021 data matches reference data", {
                    sep = "")
 
     # Data produced by running package code
-    path2 <- paste("Output_act/CaseStudy2/Activities/activities_", k, ".rds",
+    path2 <- paste("Output/CaseStudy2/Activities/activities_", k, ".rds",
                    sep = "")
 
     # Example ref data path:
     #   "Output_ref/CaseStudy2/Activities/activities_E02000984.RData"
 
     # Example act data path:
-    #   "Output_act/CaseStudy2/Activities/activities_E02000984.rds"
+    #   "Output/CaseStudy2/Activities/activities_E02000984.rds"
 
     # This should load 1 object 'activities_complete' into the current
     # environment; it is a data frame

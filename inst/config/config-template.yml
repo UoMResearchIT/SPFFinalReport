@@ -1,0 +1,21 @@
+run:
+  seed_val: 1409
+  msoa_lim: 2
+store:
+  dat:
+    raw:
+      base: Data/Raw
+      shapefiles:
+        dir: Shapefiles
+    wrangled:
+      base: Data/Processed
+      shapefiles:
+        dir: Shapefiles
+        names_ref:
+          msoa_file: shapefiles.RData
+        names:
+          ew_msoa_file: ew_msoa.rds
+          ew_msoa_region_file: ew_msoa_region.rds
+          uk_full_file: uk_full.rds
+  out:
+    base: Output

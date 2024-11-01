@@ -7,8 +7,7 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -16,12 +15,9 @@
 #' @examples
 #' \dontrun{
 #' run_data_prep_study_region()
-#' run_data_prep_study_region(config_overrides = list(seed_val = 10))
 #' }
 #'
-run_data_prep_study_region <- function(config = NULL, config_overrides = NULL) {
-
-  config <- get_config(config, config_overrides)
+run_data_prep_study_region <- function(cfg = NULL) {
 
   #################################
   ### Preparing MSOA shapefiles ###
@@ -101,9 +97,9 @@ run_data_prep_study_region <- function(config = NULL, config_overrides = NULL) {
   # Save shapefiles
   # Note: The objects in the reference shapefiles.RData are S4 objects of type
   # Large SpatialPolygonsDataFrame whilst these are data frames
-  saveRDS(ew_msoa,        "Data_act/Processed/Shapefiles/ew_msoa.rds")
-  saveRDS(ew_msoa_region, "Data_act/Processed/Shapefiles/ew_msoa_region.rds")
-  saveRDS(uk_full,        "Data_act/Processed/Shapefiles/uk_full.rds")
+  saveRDS(ew_msoa,        "Data/Processed/Shapefiles/ew_msoa.rds")
+  saveRDS(ew_msoa_region, "Data/Processed/Shapefiles/ew_msoa_region.rds")
+  saveRDS(uk_full,        "Data/Processed/Shapefiles/uk_full.rds")
 
   invisible()
 }

@@ -7,8 +7,7 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -18,13 +17,11 @@
 #' run_data_prep_pm25_cams()
 #' }
 #'
-run_data_prep_pm25_cams <- function(config = NULL, config_overrides = NULL) {
-
-  config <- get_config(config, config_overrides)
+run_data_prep_pm25_cams <- function(cfg = NULL) {
 
   # Loading shapefiles
-  ew_msoa <- readRDS("Data_act/Processed/Shapefiles/ew_msoa.rds")
-  uk_full <- readRDS("Data_act/Processed/Shapefiles/uk_full.rds")
+  ew_msoa <- readRDS("Data/Processed/Shapefiles/ew_msoa.rds")
+  uk_full <- readRDS("Data/Processed/Shapefiles/uk_full.rds")
 
   #########################################
   ### Initial processing from NetCDF UK ###
@@ -91,7 +88,7 @@ run_data_prep_pm25_cams <- function(config = NULL, config_overrides = NULL) {
         ncin[is.na(r[])] <- NA
         # Saving raster
         raster::writeRaster(ncin,
-                            filename = paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
+                            filename = paste('Data/Processed/PM25/CAMS-Europe/PM25_', date, '-', sprintf("%02d", k %% 24), "00.tif", sep = ''),
                             overwrite = TRUE)
         # else {keep <- keep + ncin}
         print(paste(date, '-', sprintf("%02d", (k - 1) %% 24), "00", sep = ''))
@@ -157,7 +154,7 @@ run_data_prep_pm25_cams <- function(config = NULL, config_overrides = NULL) {
     # Loop for each time
     for (j in 0:23){
       # Reading in PM25 from CAMS
-      r <- raster::raster(paste('Data_act/Processed/PM25/CAMS-Europe/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
+      r <- raster::raster(paste('Data/Processed/PM25/CAMS-Europe/PM25_', i, '-', sprintf("%02d", j), "00.tif", sep = ''))
       # Renaming raster
       names(r) <- 'pm25'
       # Creating aggregated estimates of PM25 by MSOA
@@ -200,7 +197,7 @@ run_data_prep_pm25_cams <- function(config = NULL, config_overrides = NULL) {
   ### Saving outputs ###
   ######################
   # Save cams
-  saveRDS(pm25_cams, "Data_act/Processed/PM25/pm25_cams.rds")
+  saveRDS(pm25_cams, "Data/Processed/PM25/pm25_cams.rds")
 
   invisible()
 }

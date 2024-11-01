@@ -1,42 +1,5 @@
-#' Create a config object to specify parameters for a run
-#'
-#' @param config A list containing parameters to control the run.
-#'   TODO: Describe the config options and their defaults
-#' @param overrides A list containing settings with which to override the
-#'   defaults. If NULL then the returned list will contain all default values.
-#'
-#' @return A list containing settings for a run, constructed from defaults which
-#'   would be overridden if `config` and/or `overrides` are supplied.
-#' @export
-#'
-#' @examples
-#' get_config()
-#' get_config(overrides = list(seed_val = 200))
-#'
-get_config <- function(config = NULL, overrides = NULL) {
-
-  # Set the default config
-  def_config <- list(
-    seed_val     = 1409,
-    # For testing, to limit the number of msoa's
-    tst_msoa_lim = 2
-  )
-
-  # TODO: Read config from file to override the defaults
-  # loaded_config <- yaml::read_yaml(...)
-  # def_config <- modifyList(def_config, loaded_config)
-
-  config <- config %||% def_config
-
-  # TODO: Read config from file to override the defaults
-
-  # Apply supplied overrides
-  if (!is.null(overrides)) {
-    config <- modifyList(config, overrides)
-  }
-
-  config
-}
+# SPDX-FileCopyrightText: [2024] University of Manchester
+# SPDX-License-Identifier: apache-2.0
 
 #' Run the steps in the data prep, analysis and visualisation workflow pipeline
 #'
@@ -44,14 +7,16 @@ get_config <- function(config = NULL, overrides = NULL) {
 #' visualisation pipeline. Note that it will generally take an appreciable
 #' amount of time to run.
 #'
-#' @inheritParams get_config
+#' @inheritParams write_cfg_template
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
 #' @param steps_to_run A character string specifying comma-separated identifiers
 #'   for steps to run in the workflow. These can be:
 #'   1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b
 #'   Default: "1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b" (run all
 #'   steps)
-#' @param config_overrides A list containing settings with which to override the
-#'   default config values if required.
+#' @param cfg_overrides An optional list containing settings with which to
+#'   override the config values for this run.
 #' @param banner_only A boolean indicating whether to only show banners for each
 #'   step which would be run, or to run the function as well (useful for
 #'   checking which steps would be run).
@@ -70,13 +35,15 @@ get_config <- function(config = NULL, overrides = NULL) {
 #' run_workflow()
 #' }
 #'
-run_workflow <- function(steps_to_run = NULL, config = NULL,
-                         config_overrides = NULL, banner_only = NULL) {
+run_workflow <- function(steps_to_run = NULL, cfg = NULL, cfg_overrides = NULL,
+                         cfg_dir = NULL, cfg_name = NULL, banner_only = NULL) {
 
   steps_to_run <- steps_to_run %||%
     "1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b"
 
   banner_only <- banner_only %||% FALSE
+
+  cfg <- get_cfg(cfg, cfg_overrides, cfg_dir, cfg_name)
 
   # TODO: Validate config first!
 
@@ -122,7 +89,7 @@ run_workflow <- function(steps_to_run = NULL, config = NULL,
 
     func <- funcs[[step_id]]
     if (!banner_only) {
-      func(config, config_overrides)
+      func(cfg)
     }
   })
 

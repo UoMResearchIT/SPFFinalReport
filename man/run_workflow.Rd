@@ -6,8 +6,10 @@
 \usage{
 run_workflow(
   steps_to_run = NULL,
-  config = NULL,
-  config_overrides = NULL,
+  cfg = NULL,
+  cfg_overrides = NULL,
+  cfg_dir = NULL,
+  cfg_name = NULL,
   banner_only = NULL
 )
 }
@@ -18,11 +20,18 @@ for steps to run in the workflow. These can be:
 Default: "1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b" (run all
 steps)}
 
-\item{config}{A list containing parameters to control the run.
-TODO: Describe the config options and their defaults}
+\item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
+values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}
 
-\item{config_overrides}{A list containing settings with which to override the
-default config values if required.}
+\item{cfg_overrides}{An optional list containing settings with which to
+override the config values for this run.}
+
+\item{cfg_dir}{A character string specifying the config directory, or NULL
+for the default. Default: An OS-specific path for user configuration files
+in the user's home directory.}
+
+\item{cfg_name}{A character string specifying the config file name, or NULL
+for the default. Default: 'config.yml'}
 
 \item{banner_only}{A boolean indicating whether to only show banners for each
 step which would be run, or to run the function as well (useful for

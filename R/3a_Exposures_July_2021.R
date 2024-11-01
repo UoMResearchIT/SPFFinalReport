@@ -5,8 +5,7 @@
 #'
 #' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs
 #'
-#' @inheritParams get_config
-#' @inheritParams run_workflow
+#' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
 #' @export
@@ -16,14 +15,11 @@
 #' process_exposures_jul_2021()
 #' }
 #'
-process_exposures_jul_2021 <- function(config = NULL, config_overrides = NULL,
-                                       msoa_lim = NULL) {
-
-  config <- get_config(config, config_overrides)
+process_exposures_jul_2021 <- function(cfg = NULL, msoa_lim = NULL) {
 
   # Read population data
-  pop_dat <- readRDS("Data_act/Processed/Population/pop_dat.rds")
-  pm25_gm <- readRDS("Data_act/Processed/PM25/pm25_gm.rds")
+  pop_dat <- readRDS("Data/Processed/Population/pop_dat.rds")
+  pm25_gm <- readRDS("Data/Processed/PM25/pm25_gm.rds")
 
   # TEMP: Number of loops whilst getting the code working
   # msoa_lim <- msoa_lim %||% 2
@@ -31,7 +27,8 @@ process_exposures_jul_2021 <- function(config = NULL, config_overrides = NULL,
   msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
 
   # Suppress summarise info
-  options(dplyr.summarise.inform = FALSE)
+  op <- options(dplyr.summarise.inform = FALSE)
+  on.exit(options(op), add = TRUE, after = FALSE)
 
   # Setting seed
   set.seed(1409)
@@ -47,7 +44,7 @@ process_exposures_jul_2021 <- function(config = NULL, config_overrides = NULL,
   #   k <- area_ids[j]
     t1 <- Sys.time()
     # Saving datasets
-    activities_complete <- readRDS(paste('Output_act/CaseStudy2/Activities/activities_', k, '.rds', sep = ''))
+    activities_complete <- readRDS(paste('Output/CaseStudy2/Activities/activities_', k, '.rds', sep = ''))
 
     # Parparing data for exposure modelling
     activities_complete <- activities_complete %>%
@@ -85,7 +82,7 @@ process_exposures_jul_2021 <- function(config = NULL, config_overrides = NULL,
     activities_complete <- calculate_household(act_dat = activities_complete, pop_dat = pop_dat,
                                                ambient = "pm25_gm_near", outvar = "pm25_gm_near_hhd")
     # Saving datasets
-    saveRDS(activities_complete, file = paste('Output_act/CaseStudy2/Exposures_July_2021/exposures_', k, '.rds', sep = ''))
+    saveRDS(activities_complete, file = paste('Output/CaseStudy2/Exposures_July_2021/exposures_', k, '.rds', sep = ''))
 
     t2 <- Sys.time()
     # Printing index
