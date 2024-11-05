@@ -8,7 +8,7 @@ path_from_cfg(env, key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
 }
 \arguments{
 \item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'ref', 'act' or 'test'. See section \emph{Details}
+path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
 for more information.}
 
 \item{key}{A single character string of hierarchical keys to look up with

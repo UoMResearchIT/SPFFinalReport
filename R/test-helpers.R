@@ -110,7 +110,7 @@ get_test_cfg <- function() {
       ),
 
       locations = list(
-        base_path = file.path("maindir", "subdir", "another"),
+        base_path = file.path("basedir", "subdir", "level3dir"),
         other_path = file.path("jump", "skip")
       )
     )

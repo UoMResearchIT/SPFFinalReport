@@ -38,11 +38,11 @@ test_that("exposures q1 2021 data matches reference data", {
     path2 <- paste("Output/CaseStudy2/Exposures_Q1_2021/exposures_", k,
                    ".rds", sep = "")
 
-    # Example ref data path:
-    #   "Output_ref/CaseStudy2/Exposures_Q1_2021/exposures_E02000984.RData"
-
-    # Example act data path:
+    # Example data path for env 'main':
     #   "Output/CaseStudy2/Exposures_Q1_2021/exposures_E02000984.rds"
+
+    # Example data path for env 'ref':
+    #   "Output_ref/CaseStudy2/Exposures_Q1_2021/exposures_E02000984.RData"
 
     # This should load 1 object 'activities_complete' into the current
     # environment; it is a data frame

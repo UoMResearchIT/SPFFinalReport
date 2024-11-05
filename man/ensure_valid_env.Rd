@@ -8,7 +8,7 @@ ensure_valid_env(env, null_ok = NULL)
 }
 \arguments{
 \item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'ref', 'act' or 'test'. See section \emph{Details}
+path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
 for more information.}
 
 \item{null_ok}{Whether it is valid for \code{env} to be NULL.}
@@ -22,10 +22,10 @@ Check the validity of a specified 'environment' string
 \details{
 Valid environments for data are: \if{html}{\out{<br>}}
 \itemize{
+\item main: Data produced by running the package code
 \item ref:  Reference data (historical data which is used for regression
 testing)
-\item act:  Actual data (data produced by running the package code)
-\item test: Test data (data used for testing purposes)
+\item test: Test data
 }
 }
 \examples{

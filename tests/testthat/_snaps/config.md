@@ -15,7 +15,7 @@
     Condition
       Error in `ensure_valid_env()`:
       ! `env` must be a valid option
-      i Valid envs are: act, ref, and test.
+      i Valid envs are: main, ref, and test.
       x You've supplied 'nonexistent'.
 
 # path_from_cfg gives error message for missing env
@@ -29,7 +29,7 @@
 # get_root gives expected msg if sys env var missing
 
     Code
-      get_root("act")
+      get_root("main")
     Condition
       Error in `chk_sys_env_vars()`:
       ! 1 required system environment var is not set

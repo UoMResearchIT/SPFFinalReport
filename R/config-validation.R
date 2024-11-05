@@ -93,7 +93,7 @@ ensure_cfg_param_types <- function(exp_keys = NULL, cfg_dir = NULL,
 #' Check the validity of a specified 'environment' string
 #'
 #' @param env A character string specifying the environment for which to get the
-#'   path. This should be one of 'ref', 'act' or 'test'. See section *Details*
+#'   path. This should be one of 'main', 'ref' or 'test'. See section *Details*
 #'   for more information.
 #' @param null_ok Whether it is valid for `env` to be NULL.
 #'
@@ -102,10 +102,10 @@ ensure_cfg_param_types <- function(exp_keys = NULL, cfg_dir = NULL,
 #'
 #' @details
 #' Valid environments for data are: <br>
+#'   - main: Data produced by running the package code
 #'   - ref:  Reference data (historical data which is used for regression
 #'     testing)
-#'   - act:  Actual data (data produced by running the package code)
-#'   - test: Test data (data used for testing purposes)
+#'   - test: Test data
 #'
 #' @examples
 #' ensure_valid_env("ref")
@@ -115,7 +115,7 @@ ensure_cfg_param_types <- function(exp_keys = NULL, cfg_dir = NULL,
 #'
 ensure_valid_env <- function(env, null_ok = NULL) {
 
-  valid_envs <- c("act", "ref", "test")
+  valid_envs <- c("main", "ref", "test")
 
   null_ok <- null_ok %||% TRUE
 

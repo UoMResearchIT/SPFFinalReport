@@ -314,15 +314,18 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
 #' - DIMEX_STORE_REF
 #'
 #' @examples
-#' get_root("act")
+#' get_root()
+#' get_root("main")
 #' get_root("ref")
 #'
-get_root <- function(env) {
+get_root <- function(env = NULL) {
+
+  env <- env %||% "main"
 
   ensure_valid_env(env, null_ok = FALSE)
 
   vars <- c(
-    act = "DIMEX_STORE",
+    main = "DIMEX_STORE",
     ref = "DIMEX_STORE_REF"
   )
 

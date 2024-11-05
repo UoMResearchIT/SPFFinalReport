@@ -4,11 +4,11 @@
 \alias{get_root}
 \title{Get the root path for an environment}
 \usage{
-get_root(env)
+get_root(env = NULL)
 }
 \arguments{
 \item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'ref', 'act' or 'test'. See section \emph{Details}
+path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
 for more information.}
 }
 \value{
@@ -25,7 +25,8 @@ TODO: Add details for setting root paths according to env \if{html}{\out{<br>}}
 }
 }
 \examples{
-get_root("act")
+get_root()
+get_root("main")
 get_root("ref")
 
 }

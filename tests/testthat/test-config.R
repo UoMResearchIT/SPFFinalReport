@@ -34,7 +34,7 @@ test_that("get_cfg_val returns expected value", {
   expect_equal(val, "periwinkle")
 
   val <- get_cfg_val("top.locations.base_path", cfg = tst_cfg)
-  expect_equal(val, file.path("maindir", "subdir", "another"))
+  expect_equal(val, file.path("basedir", "subdir", "level3dir"))
 })
 
 test_that("path_from_cfg gives error message for invalid env", {
@@ -51,7 +51,7 @@ test_that("get_root gives expected msg if sys env var missing", {
   Sys.unsetenv("DIMEX_STORE")
   withr::defer(Sys.setenv("DIMEX_STORE" = dimex_store_val))
 
-  expect_snapshot(get_root("act"), error = TRUE)
+  expect_snapshot(get_root("main"), error = TRUE)
 })
 
 test_that("local_sys_env_vars temporarily alters vars", {
@@ -65,7 +65,7 @@ test_that("local_sys_env_vars temporarily alters vars", {
   expect_equal(Sys.getenv("DIMEX_STORE_REF"), "yyy")
 })
 
-test_that("path_from_cfg gives expected path in env 'act'", {
+test_that("path_from_cfg gives expected path for env 'main'", {
 
   tst_key <-"top.locations.other_path"
 
@@ -77,13 +77,13 @@ test_that("path_from_cfg gives expected path in env 'act'", {
   # Temporarily set required system env var
   local_sys_env_vars(c(DIMEX_STORE = cfg_dir))
 
-  act_path <- path_from_cfg(env = "act", key = tst_key, cfg = tst_cfg)
+  act_path <- path_from_cfg(env = "main", key = tst_key, cfg = tst_cfg)
 
   exp_path <- file.path(cfg_dir, "jump", "skip")
   expect_equal(act_path, exp_path)
 })
 
-test_that("path_from_cfg gives expected path in env 'ref'", {
+test_that("path_from_cfg gives expected path for env 'ref'", {
 
   tst_key <-"top.locations.base_path"
 
@@ -97,6 +97,6 @@ test_that("path_from_cfg gives expected path in env 'ref'", {
 
   act_path <- path_from_cfg(env = "ref", key = tst_key, cfg = tst_cfg)
 
-  exp_path <- file.path(cfg_dir, "maindir", "subdir", "another")
+  exp_path <- file.path(cfg_dir, "basedir", "subdir", "level3dir")
   expect_equal(act_path, exp_path)
 })
