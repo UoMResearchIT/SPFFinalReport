@@ -178,70 +178,9 @@ ensure_valid_phase <- function(phase, null_ok = NULL) {
   invisible()
 }
 
-#' Recursively list all keys in a config
-#'
-#' Retrieve a list of hierarchical config keys, flattened into single strings
-#'   with components in the hierarchy separated by `key_sep`. If no arguments
-#'   are provided, this function retrieves the keys for the default config.
-#'
-#' @inheritParams get_user_cfg_dir
-#' @inheritParams get_user_cfg_name
-#' @inheritParams write_cfg_template
-#' @inheritParams ensure_cfg_param_types
-#'
-#' @return A character vector of hierarchical keys, flattened into single
-#'   strings with components in the hierarchy separated by `key_sep`.
-#' @export
-#'
-#' @examples
-#' get_cfg_keys()
-#' \dontrun{
-#' get_cfg_keys(key_sep = "#")
-#' }
-#'
-get_cfg_keys <- function(cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
-                         cfg = NULL) {
-
-  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
-
-  # TODO: Implement key_sep
-  if (!is.null(key_sep)) {
-    cli::cli_abort(c(
-      "Required feature not implemented",
-      "i" = "Support for {.var key_sep} is not yet implemented.",
-      "x" = "Cannot handle a non-NULL {.var key_sep}."
-    ))
-  }
-  key_sep <- key_sep %||% "."
-
-  # Initialize an empty vector to store the keys
-  keys <- c()
-
-  # Iterate over each element in the list
-  for (name in names(cfg)) {
-    # Always add the top-level key
-    keys <- c(keys, name)
-
-    # If the element is a list, recurse
-    if (is.list(cfg[[name]])) {
-      # Add the current name and recurse on the inner list
-      # TODO: Change 'key_sep = NULL' to 'key_sep' when it is implemented!
-      inner_keys <- get_cfg_keys(cfg_dir, cfg_name, key_sep = NULL, cfg = cfg[[name]])
-
-      # Combine the current name with the keys from the inner list
-      full_keys <- paste(name, inner_keys, sep = key_sep)
-      keys <- c(keys, full_keys)
-    }
-  }
-
-  keys
-}
-
 #' Retrieve any invalid keys from a config
 #'
-#' Identifies keys in the config which do not exist in `exp_keys`. Note that
-#' this ignores the set of top-level keys.
-#' TODO: Is this the desired behaviour, to ignore top-level keys?
+#' Identifies keys in the config which do not exist in `exp_keys`.
 #'
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
@@ -260,17 +199,12 @@ get_invalid_cfg_keys <- function(exp_keys = NULL, cfg_dir = NULL,
 
   exp_keys <- exp_keys %||% get_cfg_template_keys()
 
-  # # TODO: Implement required_keys (?) - and if so, add required_keys param to
-  # # validate_cfg() to complement the exp_keys
-  # top_level <- c("dat", "dat.raw", "dat.wrangled", "dat.out")
-  # required_keys <- setdiff(exp_keys, top_level)
-
   cfg_keys <- get_cfg_keys(cfg_dir, cfg_name, key_sep, cfg)
 
   invalid <- list()
   if (!identical(cfg_keys, exp_keys)) {
     # Find keys in cfg that do not exist in exp_keys
-    invalid <- as.list(setdiff(cfg_keys, exp_keys))
+    invalid <- as.list(sort(setdiff(cfg_keys, exp_keys)))
   }
   invalid
 }

@@ -13,6 +13,12 @@ test_that("%notin% works for a vector value to (not) match", {
   expect_identical(c("a", "b") %notin% c("b", "c", "d"), c(TRUE, FALSE))
 })
 
+test_that("escape_txt works as expected", {
+  expect_equal(escape_txt("."), "\\.")
+  expect_equal(escape_txt("ab[c]"), "ab\\[c\\]")
+  expect_equal(escape_txt("$30"), "\\$30")
+})
+
 test_that("is_strict_vec returns TRUE when null_ok is TRUE and x is NULL", {
   expect_true(is_strict_vec(NULL, null_ok = TRUE))
 })

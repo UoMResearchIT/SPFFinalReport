@@ -33,9 +33,7 @@ values. Default: The template config returned by \code{\link[=generate_cfg_templ
 A character vector containing any invalid keys found in the config.
 }
 \description{
-Identifies keys in the config which do not exist in \code{exp_keys}. Note that
-this ignores the set of top-level keys.
-TODO: Is this the desired behaviour, to ignore top-level keys?
+Identifies keys in the config which do not exist in \code{exp_keys}.
 }
 \examples{
 get_invalid_cfg_keys()

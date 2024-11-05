@@ -4,27 +4,9 @@
       get_cfg_val("non.existent", cfg = tst_cfg)
     Condition
       Error in `get_cfg_val()`:
-      ! `key` not found in config
+      ! Key 'non.existent' not found in config
       i The key must correspond to hierarchical names in the config, separated by '.'.
       x You've supplied 'non.existent'.
-
-# path_from_cfg gives error message for invalid env
-
-    Code
-      path_from_cfg(env = "nonexistent")
-    Condition
-      Error in `ensure_valid_env()`:
-      ! `env` must be a valid option
-      i Valid envs are: main, ref, and test.
-      x You've supplied 'nonexistent'.
-
-# path_from_cfg gives error message for missing env
-
-    Code
-      path_from_cfg(key = "dat.raw.base")
-    Condition
-      Error in `path_from_cfg()`:
-      ! argument "env" is missing, with no default
 
 # get_root gives expected msg if sys env var missing
 
@@ -37,4 +19,14 @@
       i (e.g. set VAR_NAME=<value> in .Renviron for each variable).
       i Not found in system environment:
       i  1. DIMEX_STORE
+
+# get_dat_path gives error message for invalid env
+
+    Code
+      get_dat_path(env = "nonexistent")
+    Condition
+      Error in `ensure_valid_env()`:
+      ! `env` must be a valid option
+      i Valid envs are: main, ref, and test.
+      x You've supplied 'nonexistent'.
 

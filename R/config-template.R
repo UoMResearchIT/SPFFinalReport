@@ -43,12 +43,18 @@ generate_cfg_template <- function() {
 
           # ------------------------------------------------------------------ #
           # Base directory
-          base = file.path("Data", "Raw"),
+          base_dir = file.path("Data", "Raw"),
 
           # ------------------------------------------------------------------ #
-          # Shapefiles
-          shapefiles = list(
-            dir = file.path("Shapefiles")
+          # Directory names
+          dir_names = list(
+            shapefiles = file.path("Shapefiles")
+          ),
+
+          shapefile_layer_names = list(
+            ew_msoa = paste0("Middle_Layer_Super_Output_Areas_",
+                             "(December_2011)_Boundaries"),
+            uk_full = "gadm36_GBR_0"
           )
         ),
 
@@ -56,26 +62,27 @@ generate_cfg_template <- function() {
         # Wrangled (processed) data, i.e. transformed/merged
         wrangled = list (
 
-          # ------------------------------------------------------------------ #
-          # Base directory
-          base = file.path("Data", "Processed"),
+          base_dir = file.path("Data", "Processed"),
 
           # ------------------------------------------------------------------ #
-          # Shapefiles
-          shapefiles = list(
+          # Directory names
+          dir_names = list(
+            shapefiles = file.path("Shapefiles")
+          ),
 
-            # ---------------------------------------------------------------- #
-            # Base directory
-            dir = file.path("Shapefiles"),
+          # ---------------------------------------------------------------- #
+          # File names
+          file_names = list(
+            shapefiles = list(
+              ew_msoa        = "ew_msoa.rds",
+              ew_msoa_region = "ew_msoa_region.rds",
+              uk_full        = "uk_full.rds"
+            )
+          ),
 
-            names_ref = list(
-              msoa_file = "shapefiles.RData"
-            ),
-
-            names = list(
-              ew_msoa_file        = "ew_msoa.rds",
-              ew_msoa_region_file = "ew_msoa_region.rds",
-              uk_full_file        = "uk_full.rds"
+          file_names_ref = list(
+            shapefiles = list(
+              msoa = "shapefiles.RData"
             )
           )
         )
@@ -87,7 +94,7 @@ generate_cfg_template <- function() {
 
         # -------------------------------------------------------------------- #
         # Base directory
-        base = file.path("Output")
+        base_dir = file.path("Output")
       )
     )
   )
@@ -109,29 +116,34 @@ generate_cfg_template <- function() {
 #' get_cfg_template_keys()
 #'
 get_cfg_template_keys <- function() {
-  c(
+  sort(c(
     "run",
-    "run.seed_val",
     "run.msoa_lim",
+    "run.seed_val",
     "store",
     "store.dat",
     "store.dat.raw",
-    "store.dat.raw.base",
-    "store.dat.raw.shapefiles",
-    "store.dat.raw.shapefiles.dir",
+    "store.dat.raw.base_dir",
+    "store.dat.raw.dir_names",
+    "store.dat.raw.dir_names.shapefiles",
+    "store.dat.raw.shapefile_layer_names",
+    "store.dat.raw.shapefile_layer_names.ew_msoa",
+    "store.dat.raw.shapefile_layer_names.uk_full",
     "store.dat.wrangled",
-    "store.dat.wrangled.base",
-    "store.dat.wrangled.shapefiles",
-    "store.dat.wrangled.shapefiles.dir",
-    "store.dat.wrangled.shapefiles.names_ref",
-    "store.dat.wrangled.shapefiles.names_ref.msoa_file",
-    "store.dat.wrangled.shapefiles.names",
-    "store.dat.wrangled.shapefiles.names.ew_msoa_file",
-    "store.dat.wrangled.shapefiles.names.ew_msoa_region_file",
-    "store.dat.wrangled.shapefiles.names.uk_full_file",
+    "store.dat.wrangled.base_dir",
+    "store.dat.wrangled.dir_names",
+    "store.dat.wrangled.dir_names.shapefiles",
+    "store.dat.wrangled.file_names",
+    "store.dat.wrangled.file_names_ref",
+    "store.dat.wrangled.file_names_ref.shapefiles",
+    "store.dat.wrangled.file_names_ref.shapefiles.msoa",
+    "store.dat.wrangled.file_names.shapefiles",
+    "store.dat.wrangled.file_names.shapefiles.ew_msoa",
+    "store.dat.wrangled.file_names.shapefiles.ew_msoa_region",
+    "store.dat.wrangled.file_names.shapefiles.uk_full",
     "store.out",
-    "store.out.base"
-  )
+    "store.out.base_dir"
+  ))
 }
 
 #' Retrieve the config template file name

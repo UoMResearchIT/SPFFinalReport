@@ -238,6 +238,87 @@ get_cfg <- function(cfg = NULL, overrides = NULL, cfg_dir = NULL,
   cfg
 }
 
+#' Recursively list all keys in a config
+#'
+#' Retrieve a list of hierarchical config keys, each flattened into single
+#'   strings where components in the hierarchy are separated by `key_sep`. If no
+#'   arguments are provided, this function retrieves the keys for the default
+#'   config.
+#'
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
+#' @inheritParams write_cfg_template
+#' @inheritParams ensure_cfg_param_types
+#'
+#' @return A character vector of hierarchical keys, each flattened into single
+#'   strings where components in the hierarchy are separated by `key_sep`.
+#' @export
+#'
+#' @examples
+#' get_cfg_keys()
+#' \dontrun{
+#' get_cfg_keys(key_sep = "#")
+#' }
+#'
+get_cfg_keys <- function(cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
+                         cfg = NULL) {
+
+  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
+
+  # TODO: Implement key_sep - see sweep_key()
+  if (!is.null(key_sep)) {
+    cli::cli_abort(c(
+      "Required feature not implemented",
+      "i" = "Support for {.var key_sep} is not yet implemented.",
+      "x" = "Cannot handle a non-NULL {.var key_sep}."
+    ))
+  }
+  key_sep <- key_sep %||% "."
+
+  # Initialize an empty vector to store the keys
+  keys <- c()
+
+  # Iterate over each element in the list
+  for (name in names(cfg)) {
+    # Always add the top-level key
+    keys <- c(keys, name)
+
+    # If the element is a list, recurse
+    if (is.list(cfg[[name]])) {
+      # Add the current name and recurse on the inner list
+      # TODO: Change 'key_sep = NULL' to 'key_sep' when it is implemented!
+      inner_keys <- get_cfg_keys(cfg_dir, cfg_name, key_sep = NULL, cfg = cfg[[name]])
+
+      # Combine the current name with the keys from the inner list
+      full_keys <- paste(name, inner_keys, sep = key_sep)
+      keys <- c(keys, full_keys)
+    }
+  }
+
+  sort(keys)
+}
+
+#' Ensure a hierarchical key string has the correct separator
+#'
+#' @inheritParams get_cfg_val
+#' @inheritParams ensure_cfg_param_types
+#' @param old_key_sep A character string specifying the separator between
+#'   hierarchical key elements that are used for `key`. Default: '.'
+#'
+#' @return The key with hierarchical elements separated by `key_sep`.
+#' @export
+#'
+#' @examples
+#' sweep_key("one.two.three") # => one.two.three
+#' sweep_key("one.two.three", "#") # => one#two#three
+#'
+sweep_key <- function(key, key_sep = NULL, old_key_sep = NULL) {
+  key_sep <- key_sep %||% "."
+  old_key_sep <- old_key_sep %||% "."
+  keys <- stringr::str_split_1(key, escape_txt(old_key_sep))
+  glue::glue_collapse(keys, sep = key_sep)
+}
+
 #' Get a config value from the config
 #'
 #' Retrieve a config value from the user config or the supplied config.
@@ -261,7 +342,7 @@ get_cfg <- function(cfg = NULL, overrides = NULL, cfg_dir = NULL,
 #' x <- get_cfg_val("store.dat.raw")
 #'
 #' # This is a 'leaf' entry so returns a list of length 1 (character)
-#' x <- get_cfg_val("store.dat.raw.base", cfg = generate_cfg_template())
+#' x <- get_cfg_val("store.dat.raw.base_dir", cfg = generate_cfg_template())
 #'
 get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
                         cfg = NULL) {
@@ -274,7 +355,8 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
     cli::cli_abort(c(
       "{.var key} is invalid",
       "i" = paste0("{.var key} must be a single character string of",
-                   "hierarchical keys with components separated by {key_sep}."),
+                   " hierarchical keys with components separated by",
+                   " '{key_sep}'."),
       "x" = "You've supplied a NULL {.var key}."
     ))
   }
@@ -289,7 +371,7 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
   if (is.null(val)) {
     lst_style <-  list('vec-sep' = key_sep, 'vec-last' = key_sep)
     cli::cli_abort(c(
-      "{.var key} not found in config",
+      "Key '{key}' not found in config",
       "i" = paste0("The key must correspond to hierarchical names in the",
                    " config, separated by '{key_sep}'."),
       "x" = "You've supplied '{cli::cli_vec(key, style = {lst_style})}'."
@@ -297,6 +379,49 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, key_sep = NULL,
   }
 
   val
+}
+
+#' Get a path value from the configuration
+#'
+#' @inheritParams ensure_valid_env
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
+#' @inheritParams write_cfg_template
+#' @inheritParams ensure_cfg_param_types
+#' @param dat_keys A character vector where each element is a key in the same
+#'   format as expected by [get_cfg_val()]. These are single character strings
+#'   of hierarchical keys to look up (with each level of the hierarchy separated
+#'   by the value of `key_sep`, which is a dot by default).
+#'
+#' @return A character string: the requested path, retrieved from the default
+#'   config or the given config, if provided.
+#' @export
+#'
+#' @examples
+#' get_dat_path("store.dat.wrangled.base_dir", cfg = generate_cfg_template())
+#'
+#' cfg <- get_cfg_val("store.dat.raw", cfg = generate_cfg_template())
+#' dat_keys <- c("base_dir", "dir_names.shapefiles")
+#' get_dat_path(dat_keys, "ref", cfg = cfg)
+#'
+get_dat_path <- function(dat_keys, env = NULL, cfg_dir = NULL, cfg_name = NULL,
+                         key_sep = NULL, cfg = NULL) {
+
+  env <- env %||% "main"
+  ensure_valid_env(env, null_ok = FALSE)
+
+  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
+
+  sub_paths <- lapply(dat_keys, function(key) {
+    val <- get_cfg_val(key, cfg_dir, cfg_name, key_sep, cfg = cfg)
+    # Convert the path into components
+    rel_path <- get_path_components(val)
+  })
+
+  sub_paths <- unlist(lapply(sub_paths, path_from_components))
+
+  # Get path taking env into account
+  file.path(get_root(env), path_from_components(sub_paths))
 }
 
 #' Get the root path for an environment
@@ -355,38 +480,4 @@ get_root <- function(env = NULL) {
   }
 
   root
-}
-
-#' Get a path value from the configuration
-#'
-#' @inheritParams ensure_valid_env
-#' @inheritParams get_user_cfg_dir
-#' @inheritParams get_user_cfg_name
-#' @inheritParams write_cfg_template
-#' @inheritParams ensure_cfg_param_types
-#' @inheritParams get_cfg_val
-#'
-#' @return A character string: the requested path, retrieved from the default
-#'   config or the given config, if provided.
-#' @export
-#'
-#' @examples
-#' path_from_cfg("ref", "store.dat.wrangled.shapefiles.names_ref.msoa_file",
-#'               cfg = generate_cfg_template())
-#'
-path_from_cfg <- function(env, key, cfg_dir = NULL, cfg_name = NULL,
-                          cfg = NULL) {
-
-  ensure_valid_env(env, null_ok = FALSE)
-
-  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
-
-  # Convert the path into components
-  rel_path <- get_path_components(get_cfg_val(key, cfg = cfg))
-
-  # Convert back to a path (which should now be OS-independent)
-  rel_path <- path_from_components(rel_path)
-
-  # Get path taking env into account
-  file.path(get_root(env), rel_path)
 }

@@ -22,6 +22,19 @@ test_that("write_user_cfg writes expected config to file", {
   expect_true(res)
 })
 
+test_that("sweep_key works with default key_sep", {
+  expect_equal(sweep_key("one.two.three"), "one.two.three")
+})
+
+test_that("sweep_key works with non-default key_sep", {
+  expect_equal(sweep_key("one.two.three", "$"), "one$two$three")
+})
+
+test_that("get_cfg_keys works", {
+  exp_keys <- get_cfg_template_keys()
+  expect_equal(get_cfg_keys(cfg = generate_cfg_template()), exp_keys)
+})
+
 test_that("get_cfg_val fails if keys not found", {
   tst_cfg <- get_test_cfg()
   expect_snapshot(get_cfg_val("non.existent", cfg = tst_cfg), error = TRUE)
@@ -35,14 +48,6 @@ test_that("get_cfg_val returns expected value", {
 
   val <- get_cfg_val("top.locations.base_path", cfg = tst_cfg)
   expect_equal(val, file.path("basedir", "subdir", "level3dir"))
-})
-
-test_that("path_from_cfg gives error message for invalid env", {
-  expect_snapshot(path_from_cfg(env = "nonexistent"), error = TRUE)
-})
-
-test_that("path_from_cfg gives error message for missing env", {
-  expect_snapshot(path_from_cfg(key = "dat.raw.base"), error = TRUE)
 })
 
 test_that("get_root gives expected msg if sys env var missing", {
@@ -65,7 +70,11 @@ test_that("local_sys_env_vars temporarily alters vars", {
   expect_equal(Sys.getenv("DIMEX_STORE_REF"), "yyy")
 })
 
-test_that("path_from_cfg gives expected path for env 'main'", {
+test_that("get_dat_path gives error message for invalid env", {
+  expect_snapshot(get_dat_path(env = "nonexistent"), error = TRUE)
+})
+
+test_that("get_dat_path gives expected path for default env ('main')", {
 
   tst_key <-"top.locations.other_path"
 
@@ -77,13 +86,31 @@ test_that("path_from_cfg gives expected path for env 'main'", {
   # Temporarily set required system env var
   local_sys_env_vars(c(DIMEX_STORE = cfg_dir))
 
-  act_path <- path_from_cfg(env = "main", key = tst_key, cfg = tst_cfg)
+  act_path <- get_dat_path(tst_key, "main", cfg = tst_cfg)
 
   exp_path <- file.path(cfg_dir, "jump", "skip")
   expect_equal(act_path, exp_path)
 })
 
-test_that("path_from_cfg gives expected path for env 'ref'", {
+test_that("get_dat_path gives expected path for env 'main'", {
+
+  tst_key <-"top.locations.other_path"
+
+  tst_cfg <- get_test_cfg()
+
+  # This path should be cleaned up afterwards
+  cfg_dir <- local_mk_dir()
+
+  # Temporarily set required system env var
+  local_sys_env_vars(c(DIMEX_STORE = cfg_dir))
+
+  act_path <- get_dat_path(tst_key, "main", cfg = tst_cfg)
+
+  exp_path <- file.path(cfg_dir, "jump", "skip")
+  expect_equal(act_path, exp_path)
+})
+
+test_that("get_dat_path gives expected path for env 'ref'", {
 
   tst_key <-"top.locations.base_path"
 
@@ -95,7 +122,7 @@ test_that("path_from_cfg gives expected path for env 'ref'", {
   # Temporarily set required system env var
   local_sys_env_vars(c(DIMEX_STORE_REF = cfg_dir))
 
-  act_path <- path_from_cfg(env = "ref", key = tst_key, cfg = tst_cfg)
+  act_path <- get_dat_path(tst_key, "ref",  cfg = tst_cfg)
 
   exp_path <- file.path(cfg_dir, "basedir", "subdir", "level3dir")
   expect_equal(act_path, exp_path)

@@ -1,12 +1,6 @@
 # SPDX-FileCopyrightText: [2024] University of Manchester
 # SPDX-License-Identifier: apache-2.0
 
-test_that("escape_txt works as expected", {
-  expect_equal(escape_txt("."), "\\.")
-  expect_equal(escape_txt("ab[c]"), "ab\\[c\\]")
-  expect_equal(escape_txt("$30"), "\\$30")
-})
-
 test_that("get_path_components works for unix-style path separators", {
 
   linux_path <- "/path/spec"

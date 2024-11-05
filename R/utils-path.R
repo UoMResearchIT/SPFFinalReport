@@ -1,35 +1,6 @@
 # SPDX-FileCopyrightText: [2024] University of Manchester
 # SPDX-License-Identifier: apache-2.0
 
-#' Escape special characters in the given string
-#'
-#' Given a character string, ensure this would function as a regular expression
-#' by escaping regex metacharacters which appear in the string.
-#'
-#' @param txt The string which should be escaped so that it can function as a
-#'   regular expression.
-#'
-#' @return The given string with regex metacharacters escaped.
-#' @export
-#'
-#' @examples
-#' escape_txt(".") # => "\\."
-#' escape_txt("ab[c]") # => "ab\\[c\\]"
-#' escape_txt("$30") # => "\\$30"
-#'
-escape_txt <- function(txt) {
-  # List of regex metacharacters that need to be escaped
-  special_chars <- c(".", "\\", "|", "(", ")", "[", "]", "{", "}", "^", "$",
-                     "*", "+", "?")
-
-  # Escape each special character by prepending a backslash
-  for (char in special_chars) {
-    txt <- gsub(paste0("\\", char), paste0("\\\\", char), txt)
-  }
-
-  txt
-}
-
 #' Get path components from a path specification
 #'
 #' Split a path into its components in a platform-independent way. These

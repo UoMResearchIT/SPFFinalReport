@@ -100,9 +100,9 @@ get_test_cfg <- function() {
       ),
 
       fruit = list(
-        yellow = "bananas",
-        red = "apples",
-        green = "grapes"
+        yellow = "banana",
+        red = "apple",
+        green = "grape"
       ),
 
       shapes = list(
