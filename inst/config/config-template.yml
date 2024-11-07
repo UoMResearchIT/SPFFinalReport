@@ -7,25 +7,29 @@ store:
       dirs:
         base: Data/Raw
         shapefiles: Shapefiles
+        tus: TimeUseSurvey
       shapefile_layers:
         ew_msoa: Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries
         uk_full: gadm36_GBR_0
+      tus:
+        uk_metadata_location: uktus_metadata_location.csv
     wrangled:
       dirs:
         base: Data/Processed
         shapefiles: Shapefiles
         population: Population
         tus: TimeUseSurvey
-      files:
-        shapefiles:
-          ew_msoa: ew_msoa.rds
-          ew_msoa_region: ew_msoa_region.rds
-          uk_full: uk_full.rds
-          pop_dat: pop_dat.rds
-          tus_dat: tus_dat.rds
-      files_ref:
-        shapefiles:
-          msoa: shapefiles.RData
+      shapefiles:
+        ew_msoa: ew_msoa.rds
+        ew_msoa_region: ew_msoa_region.rds
+        uk_full: uk_full.rds
+        pop_dat: pop_dat.rds
+        tus_dat: tus_dat.rds
+      shapefiles_ref:
+        msoa: shapefiles.RData
   out:
     dirs:
       base: Output
+      activities: CaseStudy2/Activities
+    nm_patterns:
+      activities: activities_

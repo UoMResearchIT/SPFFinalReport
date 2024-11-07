@@ -44,13 +44,13 @@ run_data_prep_study_region <- function(env = NULL, cfg_dir = NULL,
   key2 <- "store.dat.wrangled.dirs.shapefiles"
   shape_dat_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
 
-  key <- "store.dat.wrangled.files.shapefiles.ew_msoa"
+  key <- "store.dat.wrangled.shapefiles.ew_msoa"
   ew_msoa_fname <- get_cfg_val(key, cfg = cfg)
 
-  key <- "store.dat.wrangled.files.shapefiles.ew_msoa_region"
+  key <- "store.dat.wrangled.shapefiles.ew_msoa_region"
   ew_msoa_region_fname <- get_cfg_val(key, cfg = cfg)
 
-  key <- "store.dat.wrangled.files.shapefiles.uk_full"
+  key <- "store.dat.wrangled.shapefiles.uk_full"
   uk_full_fname <- get_cfg_val(key, cfg = cfg)
 
   #################################

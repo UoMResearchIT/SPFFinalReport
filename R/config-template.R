@@ -46,13 +46,18 @@ generate_cfg_template <- function() {
           # Directory names
           dirs = list(
             base = file.path("Data", "Raw"),
-            shapefiles = file.path("Shapefiles")
+            shapefiles = file.path("Shapefiles"),
+            tus = file.path("TimeUseSurvey")
           ),
 
           shapefile_layers = list(
             ew_msoa = paste0("Middle_Layer_Super_Output_Areas_",
                              "(December_2011)_Boundaries"),
             uk_full = "gadm36_GBR_0"
+          ),
+
+          tus = list(
+            uk_metadata_location = "uktus_metadata_location.csv"
           )
         ),
 
@@ -71,20 +76,16 @@ generate_cfg_template <- function() {
 
           # ---------------------------------------------------------------- #
           # File names
-          files = list(
-            shapefiles = list(
-              ew_msoa        = "ew_msoa.rds",
-              ew_msoa_region = "ew_msoa_region.rds",
-              uk_full        = "uk_full.rds",
-              pop_dat        = "pop_dat.rds",
-              tus_dat        = "tus_dat.rds"
-            )
+          shapefiles = list(
+            ew_msoa        = "ew_msoa.rds",
+            ew_msoa_region = "ew_msoa_region.rds",
+            uk_full        = "uk_full.rds",
+            pop_dat        = "pop_dat.rds",
+            tus_dat        = "tus_dat.rds"
           ),
 
-          files_ref = list(
-            shapefiles = list(
-              msoa = "shapefiles.RData"
-            )
+          shapefiles_ref = list(
+            msoa = "shapefiles.RData"
           )
         )
       ),
@@ -96,7 +97,13 @@ generate_cfg_template <- function() {
         # -------------------------------------------------------------------- #
         # Directory names
         dirs = list(
-          base = file.path("Output")
+          base = file.path("Output"),
+          activities = file.path("CaseStudy2", "Activities")
+        ),
+
+        # Patterns for file names which have an id number appended
+        nm_patterns = list(
+          activities = "activities_"
         )
       )
     )
@@ -129,28 +136,32 @@ get_cfg_template_keys <- function() {
     "store.dat.raw.dirs",
     "store.dat.raw.dirs.base",
     "store.dat.raw.dirs.shapefiles",
+    "store.dat.raw.dirs.tus",
     "store.dat.raw.shapefile_layers",
     "store.dat.raw.shapefile_layers.ew_msoa",
     "store.dat.raw.shapefile_layers.uk_full",
+    "store.dat.raw.tus",
+    "store.dat.raw.tus.uk_metadata_location",
     "store.dat.wrangled",
     "store.dat.wrangled.dirs",
     "store.dat.wrangled.dirs.base",
     "store.dat.wrangled.dirs.population",
     "store.dat.wrangled.dirs.shapefiles",
     "store.dat.wrangled.dirs.tus",
-    "store.dat.wrangled.files",
-    "store.dat.wrangled.files_ref",
-    "store.dat.wrangled.files_ref.shapefiles",
-    "store.dat.wrangled.files_ref.shapefiles.msoa",
-    "store.dat.wrangled.files.shapefiles",
-    "store.dat.wrangled.files.shapefiles.ew_msoa",
-    "store.dat.wrangled.files.shapefiles.ew_msoa_region",
-    "store.dat.wrangled.files.shapefiles.pop_dat",
-    "store.dat.wrangled.files.shapefiles.tus_dat",
-    "store.dat.wrangled.files.shapefiles.uk_full",
+    "store.dat.wrangled.shapefiles",
+    "store.dat.wrangled.shapefiles_ref",
+    "store.dat.wrangled.shapefiles_ref.msoa",
+    "store.dat.wrangled.shapefiles.ew_msoa",
+    "store.dat.wrangled.shapefiles.ew_msoa_region",
+    "store.dat.wrangled.shapefiles.pop_dat",
+    "store.dat.wrangled.shapefiles.tus_dat",
+    "store.dat.wrangled.shapefiles.uk_full",
     "store.out",
     "store.out.dirs",
-    "store.out.dirs.base"
+    "store.out.dirs.base",
+    "store.out.dirs.activities",
+    "store.out.nm_patterns",
+    "store.out.nm_patterns.activities"
   ))
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/config.R
 \name{get_cfg_pkg_id}
 \alias{get_cfg_pkg_id}
-\title{Get the package identifier for the user config location}
+\title{Get the package identifier for creating the user config path}
 \usage{
 get_cfg_pkg_id()
 }
@@ -11,9 +11,16 @@ A character string: The package identifier for configuration
 purposes.
 }
 \description{
-Retrieve an identifier to use as a OS-specific directory name when creating
-the package config. This will be used for creating an OS-specific path for
-storing user configuration files in a user's home directory.
+Retrieve an identifier to use as a directory name when creating the package
+config. See section \emph{Details} for more information.
+}
+\details{
+This path will be in an OS-specific location for storing user configuration
+files in a user's home directory. It is created according to the user's
+operating system guidelines as follows:
+| Windows:  | C:/Users/Username/AppData/Local/R-dimex |
+| Linux:    | ~/.config/R-dimex                       |
+| macOS:    | ~/Library/Application Support/R-dimex   |
 }
 \examples{
 get_cfg_pkg_id

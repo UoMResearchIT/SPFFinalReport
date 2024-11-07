@@ -1,15 +1,22 @@
 # SPDX-FileCopyrightText: [2024] University of Manchester
 # SPDX-License-Identifier: apache-2.0
 
-#' Get the package identifier for the user config location
+#' Get the package identifier for creating the user config path
 #'
-#' Retrieve an identifier to use as a OS-specific directory name when creating
-#' the package config. This will be used for creating an OS-specific path for
-#' storing user configuration files in a user's home directory.
+#' Retrieve an identifier to use as a directory name when creating the package
+#' config. See section *Details* for more information.
 #'
 #' @return A character string: The package identifier for configuration
 #'   purposes.
 #' @export
+#'
+#' @details
+#' This path will be in an OS-specific location for storing user configuration
+#'   files in a user's home directory. It is created according to the user's
+#'   operating system guidelines as follows:
+#'   | Windows:  | C:/Users/Username/AppData/Local/R-dimex |
+#'   | Linux:    | ~/.config/R-dimex                       |
+#'   | macOS:    | ~/Library/Application Support/R-dimex   |
 #'
 #' @examples
 #' get_cfg_pkg_id
@@ -22,15 +29,15 @@ get_cfg_pkg_id <- function() {
 #'
 #' @return A named character vector of the required system environment variables
 #'   where their names are the package environments that they relate to. Note
-#'   that the package environments, e.g. 'main' and 'ref', provide runtime
-#'   information for using the package and should not be confused with the
-#'   system environment (which specifies user-specific variables).
+#'   that the package environments (e.g. 'main' and 'ref') provide *runtime
+#'   information* for using the package and should not be confused with the
+#'   system environment which specifies user-specific variables.
 #' @export
 #'
 #' @details
-#' TODO: Add details of sys env vars <br>
-#' - DIMEX_STORE
-#' - DIMEX_STORE_REF
+#' TODO: Add details of sys env vars: <br>
+#'   - DIMEX_STORE
+#'   - DIMEX_STORE_REF
 #'
 #' @examples
 #' get_req_sys_env_vars()

@@ -9,15 +9,15 @@ get_req_sys_env_vars()
 \value{
 A named character vector of the required system environment variables
 where their names are the package environments that they relate to. Note
-that the package environments, e.g. 'main' and 'ref', provide runtime
-information for using the package and should not be confused with the
-system environment (which specifies user-specific variables).
+that the package environments (e.g. 'main' and 'ref') provide \emph{runtime
+information} for using the package and should not be confused with the
+system environment which specifies user-specific variables.
 }
 \description{
 Retrieve names of the required system environment variables
 }
 \details{
-TODO: Add details of sys env vars \if{html}{\out{<br>}}
+TODO: Add details of sys env vars: \if{html}{\out{<br>}}
 \itemize{
 \item DIMEX_STORE
 \item DIMEX_STORE_REF

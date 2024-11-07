@@ -19,25 +19,27 @@
 process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
                                cfg = NULL) {
 
-  env <- env %||% "main"
-  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
-
   # ------------------------------------ #
   # Read population data
   pop_dat <- get_pop_dat(env, cfg_dir, cfg_name, cfg)
   tus_dat <- get_tus_dat(env, cfg_dir, cfg_name, cfg)
 
-  # Paths to convert:
-  #
-  # Data_ref/Raw/TimeUseSurvey/uktus_metadata_location.csv
-  #
-  # paste('Output/CaseStudy2/Activities/activities_', k, '.rds', sep = '')
-  # glue::glue("Output/CaseStudy2/Activities/activities_{k}.rds")
+  key1 <- "store.dat.raw.dirs.base"
+  key2 <- "store.dat.raw.dirs.tus"
+  tus_dat_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
 
-  pop_dat <- get_pop_dat(env, cfg = cfg)
+  key <- "store.dat.raw.tus.uk_metadata_location"
+  tus_meta_nm <- get_cfg_val(key, cfg = cfg)
+
+  key1 <- "store.out.dirs.base"
+  key2 <- "store.out.dirs.activities"
+  activities_out_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.out.nm_patterns.activities"
+  activities_nm_pattern <- get_cfg_val(key, cfg = cfg)
 
   # Number of loops to run for msoa areas
-  msoa_lim <- get_cfg_val("run.msoa_lim", pop_dat)
+  msoa_lim <- get_cfg_val_msoa(pop_dat, "run.msoa_lim")
 
   # Suppress summarise info
   op <- options(dplyr.summarise.inform = FALSE)
@@ -113,7 +115,7 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
     # Removing uncessary columns
     dplyr::select(-c(tmp))%>%
     # Merging on location labels
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/TimeUseSurvey/uktus_metadata_location.csv") %>%
+    dplyr::left_join(readr::read_csv(file.path(tus_dat_dir, tus_meta_nm)) %>%
                        dplyr::select(location_popular = location,
                                      location_popular_label = location_label),
                      by = 'location_popular')
@@ -181,7 +183,9 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
       dplyr::select(-c(minutes, sample))
 
     # Saving datasets
-    saveRDS(activities_complete, file = paste('Output/CaseStudy2/Activities/activities_', k, '.rds', sep = ''))
+    fname <- file.path(activities_out_dir,
+                       glue::glue("{activities_nm_pattern}{k}.rds"))
+    saveRDS(activities_complete, file = fname)
 
     # Printing index
     print(k)
