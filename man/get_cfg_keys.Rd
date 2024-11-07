@@ -4,7 +4,7 @@
 \alias{get_cfg_keys}
 \title{Recursively list all keys in a config}
 \usage{
-get_cfg_keys(cfg_dir = NULL, cfg_name = NULL, key_sep = NULL, cfg = NULL)
+get_cfg_keys(cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
 }
 \arguments{
 \item{cfg_dir}{A character string specifying the config directory, or NULL
@@ -14,26 +14,20 @@ in the user's home directory.}
 \item{cfg_name}{A character string specifying the config file name, or NULL
 for the default. Default: 'config.yml'}
 
-\item{key_sep}{A character string specifying the separator between
-hierarchical key elements. Default: '.'}
-
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}
 }
 \value{
 A character vector of hierarchical keys, each flattened into single
-strings where components in the hierarchy are separated by \code{key_sep}.
+strings where components in the hierarchy are separated by a dot.
 }
 \description{
 Retrieve a list of hierarchical config keys, each flattened into single
-strings where components in the hierarchy are separated by \code{key_sep}. If no
+strings where components in the hierarchy are separated by a dot. If no
 arguments are provided, this function retrieves the keys for the default
 config.
 }
 \examples{
 get_cfg_keys()
-\dontrun{
-get_cfg_keys(key_sep = "#")
-}
 
 }

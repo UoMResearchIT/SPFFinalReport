@@ -4,18 +4,11 @@
 \alias{run_data_prep_study_region}
 \title{Process the Study Region data}
 \usage{
-run_data_prep_study_region(cfg = NULL, env = NULL, key_sep = NULL)
+run_data_prep_study_region(cfg = NULL)
 }
 \arguments{
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}
-
-\item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
-for more information.}
-
-\item{key_sep}{A character string specifying the separator between
-hierarchical key elements. Default: '.'}
 }
 \value{
 NULL (invisibly).

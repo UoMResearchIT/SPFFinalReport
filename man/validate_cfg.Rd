@@ -4,13 +4,7 @@
 \alias{validate_cfg}
 \title{Validate the config}
 \usage{
-validate_cfg(
-  exp_keys = NULL,
-  cfg_dir = NULL,
-  cfg_name = NULL,
-  key_sep = NULL,
-  cfg = NULL
-)
+validate_cfg(exp_keys = NULL, cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
 }
 \arguments{
 \item{exp_keys}{A character vector of expected config keys or NULL for the
@@ -22,9 +16,6 @@ in the user's home directory.}
 
 \item{cfg_name}{A character string specifying the config file name, or NULL
 for the default. Default: 'config.yml'}
-
-\item{key_sep}{A character string specifying the separator between
-hierarchical key elements. Default: '.'}
 
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}

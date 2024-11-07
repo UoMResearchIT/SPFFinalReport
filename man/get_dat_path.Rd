@@ -4,20 +4,13 @@
 \alias{get_dat_path}
 \title{Get a path value from the configuration}
 \usage{
-get_dat_path(
-  dat_keys,
-  env = NULL,
-  cfg_dir = NULL,
-  cfg_name = NULL,
-  key_sep = NULL,
-  cfg = NULL
-)
+get_dat_path(dat_keys, env = NULL, cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
 }
 \arguments{
 \item{dat_keys}{A character vector where each element is a key in the same
 format as expected by \code{\link[=get_cfg_val]{get_cfg_val()}}. These are single character strings
 of hierarchical keys to look up (with each level of the hierarchy separated
-by the value of \code{key_sep}, which is a dot by default).}
+by a dot).}
 
 \item{env}{A character string specifying the environment for which to get the
 path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
@@ -29,9 +22,6 @@ in the user's home directory.}
 
 \item{cfg_name}{A character string specifying the config file name, or NULL
 for the default. Default: 'config.yml'}
-
-\item{key_sep}{A character string specifying the separator between
-hierarchical key elements. Default: '.'}
 
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}

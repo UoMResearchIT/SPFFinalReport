@@ -8,8 +8,6 @@
 #' @inheritParams write_cfg_template
 #' @param exp_keys A character vector of expected config keys or NULL for the
 #'   default. Default: Keys as returned by [get_cfg_template_keys()]
-#' @param key_sep A character string specifying the separator between
-#'   hierarchical key elements. Default: '.'
 #' @param invalid_keys A character vector of keys which have been identified as
 #'   invalid (could be empty).
 #'
@@ -18,14 +16,10 @@
 #'
 #' @examples
 #' ensure_cfg_param_types()
-#' \dontrun{
-#' ensure_cfg_param_types(exp_keys, cfg_dir, cfg_name, key_sep, invalid_keys,
-#'                        cfg)
-#' }
 #'
 ensure_cfg_param_types <- function(exp_keys = NULL, cfg_dir = NULL,
-                                   cfg_name = NULL, key_sep = NULL,
-                                   invalid_keys = NULL, cfg = NULL) {
+                                   cfg_name = NULL, invalid_keys = NULL,
+                                   cfg = NULL) {
 
   is_single_str <- function(x) {
     is.null(x) || (is.character(x) && is.vector(x) && length(x == 1))
@@ -68,14 +62,6 @@ ensure_cfg_param_types <- function(exp_keys = NULL, cfg_dir = NULL,
       "{.var cfg_name} is not valid",
       "i" = "{.var cfg_name} must be a single character string.",
       "x" = "You've supplied \"{cfg_name} ({class(cfg_name)})\"."
-    ))
-  }
-
-  if (!is_single_str(key_sep)) {
-    cli::cli_abort(c(
-      "{.var key_sep} is not valid",
-      "i" = "{.var key_sep} must be a single character string.",
-      "x" = "You've supplied \"{key_sep} ({class(key_sep)})\"."
     ))
   }
 
@@ -182,10 +168,10 @@ ensure_valid_phase <- function(phase, null_ok = NULL) {
 #'
 #' Identifies keys in the config which do not exist in `exp_keys`.
 #'
+#' @inheritParams ensure_cfg_param_types
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
-#' @inheritParams ensure_cfg_param_types
 #'
 #' @return A character vector containing any invalid keys found in the config.
 #' @export
@@ -194,12 +180,11 @@ ensure_valid_phase <- function(phase, null_ok = NULL) {
 #' get_invalid_cfg_keys()
 #'
 get_invalid_cfg_keys <- function(exp_keys = NULL, cfg_dir = NULL,
-                                 cfg_name = NULL, key_sep = NULL,
-                                 cfg = NULL) {
+                                 cfg_name = NULL, cfg = NULL) {
 
   exp_keys <- exp_keys %||% get_cfg_template_keys()
 
-  cfg_keys <- get_cfg_keys(cfg_dir, cfg_name, key_sep, cfg)
+  cfg_keys <- get_cfg_keys(cfg_dir, cfg_name, cfg)
 
   invalid <- list()
   if (!identical(cfg_keys, exp_keys)) {
@@ -211,10 +196,10 @@ get_invalid_cfg_keys <- function(exp_keys = NULL, cfg_dir = NULL,
 
 #' Check if a config has any invalid keys
 #'
+#' @inheritParams ensure_cfg_param_types
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
-#' @inheritParams ensure_cfg_param_types
 #'
 #' @return TRUE if the keys are all valid, FALSE otherwise.
 #' @export
@@ -223,18 +208,17 @@ get_invalid_cfg_keys <- function(exp_keys = NULL, cfg_dir = NULL,
 #' cfg_keys_all_valid()
 #'
 cfg_keys_all_valid <- function(exp_keys = NULL, cfg_dir = NULL,
-                               cfg_name = NULL, key_sep = NULL,
-                               invalid_keys = NULL, cfg = NULL) {
+                               cfg_name = NULL, invalid_keys = NULL,
+                               cfg = NULL) {
 
   ensure_cfg_param_types(exp_keys = exp_keys, cfg_dir = cfg_dir,
-                         cfg_name = cfg_name, key_sep = key_sep,
-                         invalid_keys = invalid_keys, cfg = cfg)
+                         cfg_name = cfg_name, invalid_keys = invalid_keys,
+                         cfg = cfg)
 
   invalid_keys <- invalid_keys %||% get_invalid_cfg_keys(
     exp_keys = exp_keys,
     cfg_dir = cfg_dir,
     cfg_name = cfg_name,
-    key_sep = key_sep,
     cfg = cfg
   )
 
@@ -245,10 +229,10 @@ cfg_keys_all_valid <- function(exp_keys = NULL, cfg_dir = NULL,
 #'
 #' Check that all entries in the config are valid.
 #'
+#' @inheritParams ensure_cfg_param_types
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
-#' @inheritParams ensure_cfg_param_types
 #'
 #' @return TRUE if the config is valid, FALSE otherwise.
 #' @export
@@ -259,18 +243,17 @@ cfg_keys_all_valid <- function(exp_keys = NULL, cfg_dir = NULL,
 #' # TODO: Add example of validating a custom config
 #'
 validate_cfg <- function(exp_keys = NULL, cfg_dir = NULL,
-                         cfg_name = NULL, key_sep = NULL,
-                         cfg = NULL) {
+                         cfg_name = NULL, cfg = NULL) {
 
   ensure_cfg_param_types(exp_keys = exp_keys, cfg_dir = cfg_dir,
-                         cfg_name = cfg_name, key_sep = key_sep, cfg = cfg)
+                         cfg_name = cfg_name, cfg = cfg)
 
   # Initialize list to store structured error messages
   err_msgs <- list()
 
   # Check config keys
-  invalid_keys <- get_invalid_cfg_keys(exp_keys, cfg, cfg_dir, cfg_name,
-                                       key_sep)
+  invalid_keys <- get_invalid_cfg_keys(exp_keys, cfg, cfg_dir, cfg_name)
+
   if (!cfg_keys_all_valid(invalid_keys = invalid_keys)) {
     err_msgs <- append(err_msgs, list(
       "{.var cfg} must contain valid keys",

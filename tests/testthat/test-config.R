@@ -22,14 +22,6 @@ test_that("write_user_cfg writes expected config to file", {
   expect_true(res)
 })
 
-test_that("sweep_key works with default key_sep", {
-  expect_equal(sweep_key("one.two.three"), "one.two.three")
-})
-
-test_that("sweep_key works with non-default key_sep", {
-  expect_equal(sweep_key("one.two.three", "$"), "one$two$three")
-})
-
 test_that("get_cfg_keys works", {
   exp_keys <- get_cfg_template_keys()
   expect_equal(get_cfg_keys(cfg = generate_cfg_template()), exp_keys)

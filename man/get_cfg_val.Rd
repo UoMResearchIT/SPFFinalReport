@@ -4,12 +4,11 @@
 \alias{get_cfg_val}
 \title{Get a config value from the config}
 \usage{
-get_cfg_val(key, cfg_dir = NULL, cfg_name = NULL, key_sep = NULL, cfg = NULL)
+get_cfg_val(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
 }
 \arguments{
 \item{key}{A single character string of hierarchical keys to look up with
-each level of the hierarchy separated by the value of \code{key_sep} (which is a
-dot by default).}
+each level of the hierarchy separated by a dot.}
 
 \item{cfg_dir}{A character string specifying the config directory, or NULL
 for the default. Default: An OS-specific path for user configuration files
@@ -17,9 +16,6 @@ in the user's home directory.}
 
 \item{cfg_name}{A character string specifying the config file name, or NULL
 for the default. Default: 'config.yml'}
-
-\item{key_sep}{A character string specifying the separator between
-hierarchical key elements. Default: '.'}
 
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}

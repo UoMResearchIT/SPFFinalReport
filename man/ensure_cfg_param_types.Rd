@@ -8,7 +8,6 @@ ensure_cfg_param_types(
   exp_keys = NULL,
   cfg_dir = NULL,
   cfg_name = NULL,
-  key_sep = NULL,
   invalid_keys = NULL,
   cfg = NULL
 )
@@ -24,9 +23,6 @@ in the user's home directory.}
 \item{cfg_name}{A character string specifying the config file name, or NULL
 for the default. Default: 'config.yml'}
 
-\item{key_sep}{A character string specifying the separator between
-hierarchical key elements. Default: '.'}
-
 \item{invalid_keys}{A character vector of keys which have been identified as
 invalid (could be empty).}
 
@@ -41,9 +37,5 @@ Ensure parameters are of the expected type
 }
 \examples{
 ensure_cfg_param_types()
-\dontrun{
-ensure_cfg_param_types(exp_keys, cfg_dir, cfg_name, key_sep, invalid_keys,
-                       cfg)
-}
 
 }
