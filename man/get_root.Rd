@@ -4,12 +4,19 @@
 \alias{get_root}
 \title{Get the root path for an environment}
 \usage{
-get_root(env = NULL)
+get_root(env = NULL, sys_env_vars = NULL)
 }
 \arguments{
 \item{env}{A character string specifying the environment for which to get the
 path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
 for more information.}
+
+\item{sys_env_vars}{A named character vector of the required system
+environment variables where their names are the package environments that
+they relate to. Note that the package environments, e.g. 'main' and 'ref',
+provide runtime information for using the package and should not be
+confused with the system environment (which specifies user-specific
+variables).}
 }
 \value{
 A character string: the root path for the given environment.
@@ -17,16 +24,14 @@ A character string: the root path for the given environment.
 \description{
 Retrieve the root (base) path for the given environment.
 }
-\details{
-TODO: Add details for setting root paths according to env \if{html}{\out{<br>}}
-\itemize{
-\item DIMEX_STORE
-\item DIMEX_STORE_REF
-}
-}
 \examples{
+\dontrun{
 get_root()
 get_root("main")
 get_root("ref")
+}
 
+}
+\seealso{
+\code{\link[=get_req_sys_env_vars]{get_req_sys_env_vars()}}
 }

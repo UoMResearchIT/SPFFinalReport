@@ -18,6 +18,30 @@ get_cfg_pkg_id <- function() {
   "R-dimex"
 }
 
+#' Retrieve names of the required system environment variables
+#'
+#' @return A named character vector of the required system environment variables
+#'   where their names are the package environments that they relate to. Note
+#'   that the package environments, e.g. 'main' and 'ref', provide runtime
+#'   information for using the package and should not be confused with the
+#'   system environment (which specifies user-specific variables).
+#' @export
+#'
+#' @details
+#' TODO: Add details of sys env vars <br>
+#' - DIMEX_STORE
+#' - DIMEX_STORE_REF
+#'
+#' @examples
+#' get_req_sys_env_vars()
+#'
+get_req_sys_env_vars <- function() {
+  c(
+    main = "DIMEX_STORE",
+    ref = "DIMEX_STORE_REF"
+  )
+}
+
 #' Get the package config directory
 #'
 #' Retrieve the package config directory which is the directory for storing a
@@ -344,12 +368,74 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
   val
 }
 
+#' Get the root path for an environment
+#'
+#' Retrieve the root (base) path for the given environment.
+#'
+#' @inheritParams ensure_valid_env
+#' @param sys_env_vars A named character vector of the required system
+#'   environment variables where their names are the package environments that
+#'   they relate to. Note that the package environments, e.g. 'main' and 'ref',
+#'   provide runtime information for using the package and should not be
+#'   confused with the system environment (which specifies user-specific
+#'   variables).
+#'
+#' @return A character string: the root path for the given environment.
+#' @export
+#'
+#' @seealso [get_req_sys_env_vars()]
+#'
+#' @examples
+#' \dontrun{
+#' get_root()
+#' get_root("main")
+#' get_root("ref")
+#' }
+#'
+get_root <- function(env = NULL, sys_env_vars = NULL) {
+
+  env <- env %||% "main"
+
+  sys_env_vars <- sys_env_vars %||% get_req_sys_env_vars()
+
+  ensure_valid_env(env, null_ok = FALSE)
+
+  root <- if (env == "test") {
+    here::here("tests", "testthat", "dat")
+  } else {
+    ensure_sys_env_vars(unname(sys_env_vars))
+    Sys.getenv(sys_env_vars[env], unset = NA)
+  }
+
+  if (is.na(root)) {
+    cli::cli_abort(c(
+      "Could not find setting for root directory [{.var env}='{env}']",
+      "i" = glue::glue("Please ensure system environment variable",
+                       " {sys_env_vars[env]} is set as specified in the",
+                       " 'Configuration' documentation."),
+      "x" = "System env var '{lookup[env]}' not set in .Renviron."
+    ))
+  }
+
+  if (!dir.exists(root)) {
+    cli::cli_abort(c(
+      "Root directory not found [env='{env}']",
+      "i" = glue::glue("Directory specified by system env var",
+                       " '{sys_env_vars[env]}' must exist."),
+      "x" = "Directory '{root}' not found, not a directory or not accessible."
+    ))
+  }
+
+  root
+}
+
 #' Get a path value from the configuration
 #'
 #' @inheritParams ensure_valid_env
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
+#' @inheritParams get_root
 #' @param dat_keys A character vector where each element is a key in the same
 #'   format as expected by [get_cfg_val()]. These are single character strings
 #'   of hierarchical keys to look up (with each level of the hierarchy separated
@@ -367,7 +453,7 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
 #' get_dat_path(dat_keys, "ref", cfg = cfg)
 #'
 get_dat_path <- function(dat_keys, env = NULL, cfg_dir = NULL, cfg_name = NULL,
-                         cfg = NULL) {
+                         cfg = NULL, sys_env_vars = NULL) {
 
   env <- env %||% "main"
   ensure_valid_env(env, null_ok = FALSE)
@@ -383,63 +469,6 @@ get_dat_path <- function(dat_keys, env = NULL, cfg_dir = NULL, cfg_name = NULL,
   sub_paths <- unlist(lapply(sub_paths, path_from_components))
 
   # Get path taking env into account
-  file.path(get_root(env), path_from_components(sub_paths))
+  file.path(get_root(env, sys_env_vars), path_from_components(sub_paths))
 }
 
-#' Get the root path for an environment
-#'
-#' Retrieve the root (base) path for the given environment.
-#'
-#' @inheritParams ensure_valid_env
-#'
-#' @return A character string: the root path for the given environment.
-#' @export
-#'
-#' @details
-#' TODO: Add details for setting root paths according to env <br>
-#' - DIMEX_STORE
-#' - DIMEX_STORE_REF
-#'
-#' @examples
-#' get_root()
-#' get_root("main")
-#' get_root("ref")
-#'
-get_root <- function(env = NULL) {
-
-  env <- env %||% "main"
-
-  ensure_valid_env(env, null_ok = FALSE)
-
-  vars <- c(
-    main = "DIMEX_STORE",
-    ref = "DIMEX_STORE_REF"
-  )
-
-  chk_sys_env_vars(unname(vars))
-
-  root <- if (env == "test") {
-    here::here("tests", "testthat", "dat")
-  } else {
-    Sys.getenv(vars[env], unset = NA)
-  }
-
-  if (is.na(root)) {
-    cli::cli_abort(c(
-      "Could not find setting for root directory [{.var env}='{env}']",
-      "i" = glue::glue("Please ensure system environment variable",
-                       " {vars[env]} is set as specified in the",
-                       " 'Configuration' documentation."),
-      "x" = "System env var '{lookup[env]}' not set in .Renviron."
-    ))
-  }
-  if (!dir.exists(root)) {
-    cli::cli_abort(c(
-      "Root directory not found [env='{env}']",
-      "i" = "Directory specified by system env var '{vars[env]}' must exist.",
-      "x" = "Directory '{root}' not found, not a directory or not accessible."
-    ))
-  }
-
-  root
-}

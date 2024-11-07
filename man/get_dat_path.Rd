@@ -4,7 +4,14 @@
 \alias{get_dat_path}
 \title{Get a path value from the configuration}
 \usage{
-get_dat_path(dat_keys, env = NULL, cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
+get_dat_path(
+  dat_keys,
+  env = NULL,
+  cfg_dir = NULL,
+  cfg_name = NULL,
+  cfg = NULL,
+  sys_env_vars = NULL
+)
 }
 \arguments{
 \item{dat_keys}{A character vector where each element is a key in the same
@@ -25,6 +32,13 @@ for the default. Default: 'config.yml'}
 
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}
+
+\item{sys_env_vars}{A named character vector of the required system
+environment variables where their names are the package environments that
+they relate to. Note that the package environments, e.g. 'main' and 'ref',
+provide runtime information for using the package and should not be
+confused with the system environment (which specifies user-specific
+variables).}
 }
 \value{
 A character string: the requested path, retrieved from the default

@@ -31,7 +31,7 @@ Retrieve a config value from the user config or the supplied config.
 }
 \examples{
 # This is not a 'leaf' entry so returns a list of length > 1
-x <- get_cfg_val("store.dat.raw")
+x <- get_cfg_val("store.dat.raw", cfg = generate_cfg_template())
 
 # This is a 'leaf' entry so returns a list of length 1 (character)
 x <- get_cfg_val("store.dat.raw.base_dir", cfg = generate_cfg_template())

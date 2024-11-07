@@ -1,7 +1,25 @@
 # SPDX-FileCopyrightText: [2024] University of Manchester
 # SPDX-License-Identifier: apache-2.0
 
-chk_sys_env_vars <- function(varnames) {
+#' Ensure the presence of required system environment variables
+#'
+#' Check for presence of required system environment variables and abort if they
+#' are not found.
+#'
+#' @param varnames A character vector of variable names to check for in the
+#'   user's environment.
+#'
+#' @return NULL (invisibly)
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' ensure_sys_env_vars()
+#' }
+#'
+ensure_sys_env_vars <- function(varnames = NULL) {
+
+  varnames <- varnames %||% unname(get_req_sys_env_vars())
 
   not_found <- lapply(varnames, function(varname) {
 
@@ -31,4 +49,6 @@ chk_sys_env_vars <- function(varnames) {
       not_found
     ))
   }
+
+  invisible()
 }

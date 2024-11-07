@@ -185,12 +185,18 @@ local_sys_env_vars <- function(vars, envir = parent.frame()) {
     switch (var_nm,
             DIMEX_STORE = Sys.setenv(DIMEX_STORE = vars[var_nm]),
             DIMEX_STORE_REF = Sys.setenv(DIMEX_STORE_REF = vars[var_nm]),
+
+            DIMEX_TST_VAR1 = Sys.setenv(DIMEX_TST_VAR1 = vars[var_nm]),
+            DIMEX_TST_VAR2 = Sys.setenv(DIMEX_TST_VAR2 = vars[var_nm]),
     )
   })
 
   withr::defer({
     Sys.setenv(DIMEX_STORE = dimex_store_val)
     Sys.setenv(DIMEX_STORE_REF = dimex_store_ref_val)
+
+    Sys.unsetenv("DIMEX_TST_VAR1")
+    Sys.unsetenv("DIMEX_TST_VAR2")
   }, envir = envir)
 
   invisible()

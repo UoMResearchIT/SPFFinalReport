@@ -13,7 +13,7 @@
     Code
       get_root("main")
     Condition
-      Error in `chk_sys_env_vars()`:
+      Error in `ensure_sys_env_vars()`:
       ! 1 required system environment var is not set
       i You need a '.Renviron' file for this
       i (e.g. set VAR_NAME=<value> in .Renviron for each variable).

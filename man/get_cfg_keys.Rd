@@ -28,6 +28,6 @@ arguments are provided, this function retrieves the keys for the default
 config.
 }
 \examples{
-get_cfg_keys()
+get_cfg_keys(cfg = generate_cfg_template())
 
 }
