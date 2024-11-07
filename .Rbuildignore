@@ -7,6 +7,12 @@
 ^doc$
 ^Meta$
 
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+
+^vignettes/\.quarto$
+
 ^Data$
 ^Data_ref$
 

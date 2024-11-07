@@ -8,8 +8,7 @@ get_root(env = NULL, sys_env_vars = NULL)
 }
 \arguments{
 \item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
-for more information.}
+path. This should be one of 'main', 'ref' or 'test'.}
 
 \item{sys_env_vars}{A named character vector of the required system
 environment variables where their names are the package environments that

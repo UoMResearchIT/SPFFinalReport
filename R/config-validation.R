@@ -79,8 +79,7 @@ ensure_cfg_param_types <- function(exp_keys = NULL, cfg_dir = NULL,
 #' Check the validity of a specified 'environment' string
 #'
 #' @param env A character string specifying the environment for which to get the
-#'   path. This should be one of 'main', 'ref' or 'test'. See section *Details*
-#'   for more information.
+#'   path. This should be one of 'main', 'ref' or 'test'.
 #' @param null_ok Whether it is valid for `env` to be NULL.
 #'
 #' @return NULL (invisibly)

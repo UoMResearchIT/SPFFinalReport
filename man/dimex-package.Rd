@@ -8,6 +8,14 @@
 \description{
 Models personal exposure to pollution. Package derived from the SPFFinalReport repository (created for the case study and report for the final SPF reporting period).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://UoMResearchIT.github.io/SPFFinalReport}
+  \item \url{https://github.com/UoMResearchIT/SPFFinalReport}
+}
+
+}
 \author{
 \strong{Maintainer}: Toni Price \email{maintainer-placeholder@example.com}
 

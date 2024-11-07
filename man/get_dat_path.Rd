@@ -20,8 +20,7 @@ of hierarchical keys to look up (with each level of the hierarchy separated
 by a dot).}
 
 \item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
-for more information.}
+path. This should be one of 'main', 'ref' or 'test'.}
 
 \item{cfg_dir}{A character string specifying the config directory, or NULL
 for the default. Default: An OS-specific path for user configuration files

@@ -8,8 +8,7 @@ ensure_valid_env(env, null_ok = NULL)
 }
 \arguments{
 \item{env}{A character string specifying the environment for which to get the
-path. This should be one of 'main', 'ref' or 'test'. See section \emph{Details}
-for more information.}
+path. This should be one of 'main', 'ref' or 'test'.}
 
 \item{null_ok}{Whether it is valid for \code{env} to be NULL.}
 }

@@ -217,7 +217,7 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
 #' @examples
 #' read_user_cfg()
 #' \dontrun{
-#' read_user_cfg(file.path("path", "to", "config"), "conf.yml"))
+#' read_user_cfg(file.path("path", "to", "config"), "conf.yml")
 #' }
 #'
 read_user_cfg <- function(cfg_dir = NULL, cfg_name = NULL) {

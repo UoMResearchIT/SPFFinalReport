@@ -15,8 +15,9 @@ run_workflow(
 }
 \arguments{
 \item{steps_to_run}{A character string specifying comma-separated identifiers
-for steps to run in the workflow. These can be:
-1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b
+for steps to run in the workflow. \if{html}{\out{<br>}}
+These can be: \if{html}{\out{<br>}}
+1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b \if{html}{\out{<br>}}
 Default: "1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b, 5a, 5b" (run all
 steps)}
 
@@ -52,6 +53,7 @@ run_workflow("1a")
 run_workflow("1a,1b,1c,1d,1e,1f,2,3a,3b,4a,4b,5a,5b", banner_only = TRUE)
 run_workflow(banner_only = TRUE)
 run_workflow("4a, 4b")
+run_workflow("4a, 4b", banner_only = TRUE)
 run_workflow("1a, 1b, 1c, 1d, 1e, 1f, 2, 3a, 3b, 4a, 4b")
 run_workflow()
 }

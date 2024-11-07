@@ -23,7 +23,7 @@ Read the YAML config file into a named list
 \examples{
 read_user_cfg()
 \dontrun{
-read_user_cfg(file.path("path", "to", "config"), "conf.yml"))
+read_user_cfg(file.path("path", "to", "config"), "conf.yml")
 }
 
 }
