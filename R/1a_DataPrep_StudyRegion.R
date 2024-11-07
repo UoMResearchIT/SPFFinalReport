@@ -7,6 +7,9 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
+#' @inheritParams ensure_valid_env
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
@@ -17,18 +20,48 @@
 #' run_data_prep_study_region()
 #' }
 #'
-run_data_prep_study_region <- function(cfg = NULL) {
+run_data_prep_study_region <- function(env = NULL, cfg_dir = NULL,
+                                       cfg_name = NULL, cfg = NULL) {
+
+  env <- env %||% "main"
+  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
+
+  # ------------------------------------ #
+  # Input
+  key1 <- "store.dat.raw.base_dir"
+  key2 <- "store.dat.raw.dir_names.shapefiles"
+  raw_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.dat.raw.shapefile_layer_names.ew_msoa"
+  ew_msoa_layer_nm <- get_cfg_val(key, cfg = cfg)
+
+  key <- "store.dat.raw.shapefile_layer_names.uk_full"
+  uk_full_layer_nm <- get_cfg_val(key, cfg = cfg)
+
+  # ------------------------------------ #
+  # Output
+  key1 <- "store.dat.wrangled.base_dir"
+  key2 <- "store.dat.wrangled.dir_names.shapefiles"
+  wrangled_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.dat.wrangled.file_names.shapefiles.ew_msoa"
+  ew_msoa_fname <- get_cfg_val(key, cfg = cfg)
+
+  key <- "store.dat.wrangled.file_names.shapefiles.ew_msoa_region"
+  ew_msoa_region_fname <- get_cfg_val(key, cfg = cfg)
+
+  key <- "store.dat.wrangled.file_names.shapefiles.uk_full"
+  uk_full_fname <- get_cfg_val(key, cfg = cfg)
 
   #################################
   ### Preparing MSOA shapefiles ###
   #################################
   # Reading in whole UK shapefiles
-  uk_full <- sf::st_read(dsn = 'Data_ref/Raw/Shapefiles',
-                         layer = 'gadm36_GBR_0')
+
+  uk_full <- sf::st_read(dsn = raw_root, layer = uk_full_layer_nm)
 
   # import shapefile, converte to longitude/latitude coordinates and organise data
-  ew_msoa <- sf::st_read(dsn = "Data_ref/Raw/Shapefiles",
-                         layer = "Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries")
+  ew_msoa <- sf::st_read(dsn = raw_root, layer = ew_msoa_layer_nm)
 
   # Getting MSOA centroids in long lat format
   tmp_longlat <- ew_msoa %>%
@@ -97,9 +130,9 @@ run_data_prep_study_region <- function(cfg = NULL) {
   # Save shapefiles
   # Note: The objects in the reference shapefiles.RData are S4 objects of type
   # Large SpatialPolygonsDataFrame whilst these are data frames
-  saveRDS(ew_msoa,        "Data/Processed/Shapefiles/ew_msoa.rds")
-  saveRDS(ew_msoa_region, "Data/Processed/Shapefiles/ew_msoa_region.rds")
-  saveRDS(uk_full,        "Data/Processed/Shapefiles/uk_full.rds")
+  saveRDS(ew_msoa,        file.path(wrangled_root, ew_msoa_fname))
+  saveRDS(ew_msoa_region, file.path(wrangled_root, ew_msoa_region_fname))
+  saveRDS(uk_full,        file.path(wrangled_root, uk_full_fname))
 
   invisible()
 }
