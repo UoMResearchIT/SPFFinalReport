@@ -3,8 +3,9 @@
 
 #' Process Activities data
 #'
-#' @param msoa_lim Number of MSOAs to process. Default: Number of unique MSOAs
-#'
+#' @inheritParams ensure_valid_env
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
@@ -15,23 +16,36 @@
 #' process_activities()
 #' }
 #'
-process_activities <- function(cfg = NULL, msoa_lim = NULL) {
+process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
+                               cfg = NULL) {
 
+  env <- env %||% "main"
+  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
+
+  # ------------------------------------ #
   # Read population data
-  pop_dat <- readRDS("Data/Processed/Population/pop_dat.rds")
-  tus_dat <- readRDS("Data/Processed/TimeUseSurvey/tus_dat.rds")
+  pop_dat <- get_pop_dat(env, cfg_dir, cfg_name, cfg)
+  tus_dat <- get_tus_dat(env, cfg_dir, cfg_name, cfg)
 
-  # TEMP: Number of loops whilst getting the code working
-  msoa_lim <- msoa_lim %||% 2
-  # msoa_lim <- msoa_lim %||% 7
-  # msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
+  # Paths to convert:
+  #
+  # Data_ref/Raw/TimeUseSurvey/uktus_metadata_location.csv
+  #
+  # paste('Output/CaseStudy2/Activities/activities_', k, '.rds', sep = '')
+  # glue::glue("Output/CaseStudy2/Activities/activities_{k}.rds")
+
+  pop_dat <- get_pop_dat(env, cfg = cfg)
+
+  # Number of loops to run for msoa areas
+  msoa_lim <- get_cfg_val("run.msoa_lim", pop_dat)
 
   # Suppress summarise info
   op <- options(dplyr.summarise.inform = FALSE)
   on.exit(options(op), add = TRUE, after = FALSE)
 
   # Setting seed
-  set.seed(1409)
+  seed_val <- get_cfg_val("run.seed_val")
+  set.seed(seed_val)
 
   ##############################################
   ### Filling in missings in the TUS dataset ###

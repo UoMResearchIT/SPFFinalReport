@@ -4,23 +4,28 @@ run:
 store:
   dat:
     raw:
-      base_dir: Data/Raw
-      dir_names:
+      dirs:
+        base: Data/Raw
         shapefiles: Shapefiles
-      shapefile_layer_names:
+      shapefile_layers:
         ew_msoa: Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries
         uk_full: gadm36_GBR_0
     wrangled:
-      base_dir: Data/Processed
-      dir_names:
+      dirs:
+        base: Data/Processed
         shapefiles: Shapefiles
-      file_names:
+        population: Population
+        tus: TimeUseSurvey
+      files:
         shapefiles:
           ew_msoa: ew_msoa.rds
           ew_msoa_region: ew_msoa_region.rds
           uk_full: uk_full.rds
-      file_names_ref:
+          pop_dat: pop_dat.rds
+          tus_dat: tus_dat.rds
+      files_ref:
         shapefiles:
           msoa: shapefiles.RData
   out:
-    base_dir: Output
+    dirs:
+      base: Output

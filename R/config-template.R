@@ -25,7 +25,8 @@ generate_cfg_template <- function() {
       # See for the RNG
       seed_val = 1409L,
 
-      # For interactive use, to limit the number of msoa's processed
+      # Limit for the number of msoa's that will be processed; to process all
+      # msoa's, set msoa_lim to NA, i.e. 'msoa_lim = NA'
       msoa_lim = 2L
     ),
 
@@ -42,16 +43,13 @@ generate_cfg_template <- function() {
         raw = list (
 
           # ------------------------------------------------------------------ #
-          # Base directory
-          base_dir = file.path("Data", "Raw"),
-
-          # ------------------------------------------------------------------ #
           # Directory names
-          dir_names = list(
+          dirs = list(
+            base = file.path("Data", "Raw"),
             shapefiles = file.path("Shapefiles")
           ),
 
-          shapefile_layer_names = list(
+          shapefile_layers = list(
             ew_msoa = paste0("Middle_Layer_Super_Output_Areas_",
                              "(December_2011)_Boundaries"),
             uk_full = "gadm36_GBR_0"
@@ -62,25 +60,28 @@ generate_cfg_template <- function() {
         # Wrangled (processed) data, i.e. transformed/merged
         wrangled = list (
 
-          base_dir = file.path("Data", "Processed"),
-
           # ------------------------------------------------------------------ #
           # Directory names
-          dir_names = list(
-            shapefiles = file.path("Shapefiles")
+          dirs = list(
+            base = file.path("Data", "Processed"),
+            shapefiles = file.path("Shapefiles"),
+            population = file.path("Population"),
+            tus = file.path("TimeUseSurvey")
           ),
 
           # ---------------------------------------------------------------- #
           # File names
-          file_names = list(
+          files = list(
             shapefiles = list(
               ew_msoa        = "ew_msoa.rds",
               ew_msoa_region = "ew_msoa_region.rds",
-              uk_full        = "uk_full.rds"
+              uk_full        = "uk_full.rds",
+              pop_dat        = "pop_dat.rds",
+              tus_dat        = "tus_dat.rds"
             )
           ),
 
-          file_names_ref = list(
+          files_ref = list(
             shapefiles = list(
               msoa = "shapefiles.RData"
             )
@@ -93,8 +94,10 @@ generate_cfg_template <- function() {
       out = list (
 
         # -------------------------------------------------------------------- #
-        # Base directory
-        base_dir = file.path("Output")
+        # Directory names
+        dirs = list(
+          base = file.path("Output")
+        )
       )
     )
   )
@@ -123,26 +126,31 @@ get_cfg_template_keys <- function() {
     "store",
     "store.dat",
     "store.dat.raw",
-    "store.dat.raw.base_dir",
-    "store.dat.raw.dir_names",
-    "store.dat.raw.dir_names.shapefiles",
-    "store.dat.raw.shapefile_layer_names",
-    "store.dat.raw.shapefile_layer_names.ew_msoa",
-    "store.dat.raw.shapefile_layer_names.uk_full",
+    "store.dat.raw.dirs",
+    "store.dat.raw.dirs.base",
+    "store.dat.raw.dirs.shapefiles",
+    "store.dat.raw.shapefile_layers",
+    "store.dat.raw.shapefile_layers.ew_msoa",
+    "store.dat.raw.shapefile_layers.uk_full",
     "store.dat.wrangled",
-    "store.dat.wrangled.base_dir",
-    "store.dat.wrangled.dir_names",
-    "store.dat.wrangled.dir_names.shapefiles",
-    "store.dat.wrangled.file_names",
-    "store.dat.wrangled.file_names_ref",
-    "store.dat.wrangled.file_names_ref.shapefiles",
-    "store.dat.wrangled.file_names_ref.shapefiles.msoa",
-    "store.dat.wrangled.file_names.shapefiles",
-    "store.dat.wrangled.file_names.shapefiles.ew_msoa",
-    "store.dat.wrangled.file_names.shapefiles.ew_msoa_region",
-    "store.dat.wrangled.file_names.shapefiles.uk_full",
+    "store.dat.wrangled.dirs",
+    "store.dat.wrangled.dirs.base",
+    "store.dat.wrangled.dirs.population",
+    "store.dat.wrangled.dirs.shapefiles",
+    "store.dat.wrangled.dirs.tus",
+    "store.dat.wrangled.files",
+    "store.dat.wrangled.files_ref",
+    "store.dat.wrangled.files_ref.shapefiles",
+    "store.dat.wrangled.files_ref.shapefiles.msoa",
+    "store.dat.wrangled.files.shapefiles",
+    "store.dat.wrangled.files.shapefiles.ew_msoa",
+    "store.dat.wrangled.files.shapefiles.ew_msoa_region",
+    "store.dat.wrangled.files.shapefiles.pop_dat",
+    "store.dat.wrangled.files.shapefiles.tus_dat",
+    "store.dat.wrangled.files.shapefiles.uk_full",
     "store.out",
-    "store.out.base_dir"
+    "store.out.dirs",
+    "store.out.dirs.base"
   ))
 }
 

@@ -62,6 +62,12 @@ test_that("local_sys_env_vars temporarily alters vars", {
   expect_equal(Sys.getenv("DIMEX_STORE_REF"), "yyy")
 })
 
+test_that("get_cfg overrides work", {
+  overrides <- list(top = list(shapes = list(oblong = "square")))
+  cfg <- get_cfg(get_test_cfg(), overrides = overrides)
+  expect_equal(get_cfg_val("top.shapes.oblong", cfg = cfg), "square")
+})
+
 test_that("get_dat_path gives error message for invalid env", {
   expect_snapshot(get_dat_path(env = "nonexistent"), error = TRUE)
 })

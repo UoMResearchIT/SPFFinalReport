@@ -27,30 +27,30 @@ run_data_prep_study_region <- function(env = NULL, cfg_dir = NULL,
   cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
 
   # ------------------------------------ #
-  # Input
-  key1 <- "store.dat.raw.base_dir"
-  key2 <- "store.dat.raw.dir_names.shapefiles"
+  # Input paths/names
+  key1 <- "store.dat.raw.dirs.base"
+  key2 <- "store.dat.raw.dirs.shapefiles"
   raw_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
 
-  key <- "store.dat.raw.shapefile_layer_names.ew_msoa"
+  key <- "store.dat.raw.shapefile_layers.ew_msoa"
   ew_msoa_layer_nm <- get_cfg_val(key, cfg = cfg)
 
-  key <- "store.dat.raw.shapefile_layer_names.uk_full"
+  key <- "store.dat.raw.shapefile_layers.uk_full"
   uk_full_layer_nm <- get_cfg_val(key, cfg = cfg)
 
   # ------------------------------------ #
-  # Output
-  key1 <- "store.dat.wrangled.base_dir"
-  key2 <- "store.dat.wrangled.dir_names.shapefiles"
-  wrangled_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
+  # Output paths/names
+  key1 <- "store.dat.wrangled.dirs.base"
+  key2 <- "store.dat.wrangled.dirs.shapefiles"
+  shape_dat_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
 
-  key <- "store.dat.wrangled.file_names.shapefiles.ew_msoa"
+  key <- "store.dat.wrangled.files.shapefiles.ew_msoa"
   ew_msoa_fname <- get_cfg_val(key, cfg = cfg)
 
-  key <- "store.dat.wrangled.file_names.shapefiles.ew_msoa_region"
+  key <- "store.dat.wrangled.files.shapefiles.ew_msoa_region"
   ew_msoa_region_fname <- get_cfg_val(key, cfg = cfg)
 
-  key <- "store.dat.wrangled.file_names.shapefiles.uk_full"
+  key <- "store.dat.wrangled.files.shapefiles.uk_full"
   uk_full_fname <- get_cfg_val(key, cfg = cfg)
 
   #################################
@@ -130,9 +130,9 @@ run_data_prep_study_region <- function(env = NULL, cfg_dir = NULL,
   # Save shapefiles
   # Note: The objects in the reference shapefiles.RData are S4 objects of type
   # Large SpatialPolygonsDataFrame whilst these are data frames
-  saveRDS(ew_msoa,        file.path(wrangled_root, ew_msoa_fname))
-  saveRDS(ew_msoa_region, file.path(wrangled_root, ew_msoa_region_fname))
-  saveRDS(uk_full,        file.path(wrangled_root, uk_full_fname))
+  saveRDS(ew_msoa,        file.path(shape_dat_root, ew_msoa_fname))
+  saveRDS(ew_msoa_region, file.path(shape_dat_root, ew_msoa_region_fname))
+  saveRDS(uk_full,        file.path(shape_dat_root, uk_full_fname))
 
   invisible()
 }

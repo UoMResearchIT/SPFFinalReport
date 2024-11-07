@@ -47,10 +47,10 @@ config or the given config, if provided.
 Get a path value from the configuration
 }
 \examples{
-get_dat_path("store.dat.wrangled.base_dir", cfg = generate_cfg_template())
+get_dat_path("store.dat.wrangled.dirs.base", cfg = generate_cfg_template())
 
 cfg <- get_cfg_val("store.dat.raw", cfg = generate_cfg_template())
-dat_keys <- c("base_dir", "dir_names.shapefiles")
+dat_keys <- c("dirs.base", "dirs.shapefiles")
 get_dat_path(dat_keys, "ref", cfg = cfg)
 
 }

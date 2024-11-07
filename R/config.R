@@ -222,7 +222,8 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
 #'
 read_user_cfg <- function(cfg_dir = NULL, cfg_name = NULL) {
   # Read the configuration from a YAML file
-  yaml::read_yaml(get_user_cfg_path(cfg_dir, cfg_name))
+  lst <- yaml::read_yaml(get_user_cfg_path(cfg_dir, cfg_name))
+  recurse_nested(lst, parse_string)
 }
 
 #' Get a configuration to use for a run.
@@ -256,6 +257,7 @@ get_cfg <- function(cfg = NULL, overrides = NULL, cfg_dir = NULL,
 
   # Apply supplied overrides
   if (!is.null(overrides)) {
+    # TODO: Check keys/validity of overrides
     cfg <- modifyList(cfg, overrides)
   }
 
@@ -316,8 +318,8 @@ get_cfg_keys <- function(cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
-#' @param key A single character string of hierarchical keys to look up with
-#'   each level of the hierarchy separated by a dot.
+#' @param key A single character string of hierarchical keys to look up which is
+#'   flattened by separating each level of the hierarchy with a dot.
 #'
 #' @return A list of the requested value retrieved from the config. If the key
 #'   specification corresponds to a 'leaf' entry, this will be returned as a
@@ -330,7 +332,7 @@ get_cfg_keys <- function(cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
 #' x <- get_cfg_val("store.dat.raw", cfg = generate_cfg_template())
 #'
 #' # This is a 'leaf' entry so returns a list of length 1 (character)
-#' x <- get_cfg_val("store.dat.raw.base_dir", cfg = generate_cfg_template())
+#' x <- get_cfg_val("store.dat.raw.dirs.base", cfg = generate_cfg_template())
 #'
 get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
 
@@ -366,6 +368,45 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
   }
 
   val
+}
+
+#' Get the msoa value from the config
+#'
+#' @inheritParams get_cfg_val
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
+#' @inheritParams write_cfg_template
+#' @param pop_dat The population data `data.frame`. See [data.frame()].
+#' @param area_id_var_nm A character string with the name of the 'area id'
+#'   variable within `pop_dat`. Default: area_id
+#'
+#' @return An integer: the configured msoa value which is either the number
+#'   specified, or, if this has a value of `NA`, the total number of msoa's in
+#'   the given population data file.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' pop_dat <- get_pop_dat()
+#' get_cfg_val_msoa(pop_dat, cfg = generate_cfg_template())
+#' }
+#'
+get_cfg_val_msoa <- function(pop_dat, key = NULL, cfg_dir = NULL,
+                             cfg_name = NULL, cfg = NULL,
+                             area_id_var_nm = NULL) {
+
+  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
+
+  key <- key %||% "run.msoa_lim"
+  area_id_var_nm <- area_id_var_nm %||% "area_id"
+
+  msoa_lim <- get_cfg_val(key, cfg = cfg)
+
+  if (is.na(msoa_lim)) {
+    length(unique(pop_dat[[area_id_var_nm]]))
+  } else {
+    msoa_lim
+  }
 }
 
 #' Get the root path for an environment
@@ -446,10 +487,10 @@ get_root <- function(env = NULL, sys_env_vars = NULL) {
 #' @export
 #'
 #' @examples
-#' get_dat_path("store.dat.wrangled.base_dir", cfg = generate_cfg_template())
+#' get_dat_path("store.dat.wrangled.dirs.base", cfg = generate_cfg_template())
 #'
 #' cfg <- get_cfg_val("store.dat.raw", cfg = generate_cfg_template())
-#' dat_keys <- c("base_dir", "dir_names.shapefiles")
+#' dat_keys <- c("dirs.base", "dirs.shapefiles")
 #' get_dat_path(dat_keys, "ref", cfg = cfg)
 #'
 get_dat_path <- function(dat_keys, env = NULL, cfg_dir = NULL, cfg_name = NULL,

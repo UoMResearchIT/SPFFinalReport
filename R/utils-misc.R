@@ -96,3 +96,103 @@ is_strict_vec <- function(x, null_ok = NULL) {
   # Check if the resulting object is a vector
   !is.list(stripped_x) && is.vector(stripped_x)
 }
+
+#' Tests if a value is an integer.
+#'
+#' @param x The value to test.
+#'
+#' @return TRUE if the value is a number with no decimal value, FALSE otherwise.
+#' @export
+#'
+#' @examples
+#' is_int_val("5")     # => FALSE
+#' is_int_val(10)      # => TRUE
+#' is_int_val(16.5)    # => FALSE
+#' is_int_val("apple") # => FALSE
+#' is_int_val(-1)      # => TRUE
+#'
+is_int_val <- function(x) {
+  if (is.numeric(x)) {
+    x %% 1 == 0
+  } else {
+    FALSE
+  }
+}
+
+#' Parse a string into a number, NA or to remain as a string
+#'
+#' @param x The character string to parse
+#'
+#' @return One of: a number, NA or the original string
+#' @export
+#'
+#' @examples
+#' parse_string("NA")
+#' parse_string("notanumber")
+#' parse_string("100")
+#' parse_string("0.45")
+#'
+parse_string <- function(x) {
+
+  if (x == "NA") {
+    # Return NA
+    NA
+  } else {
+    y <- tryCatch({
+      readr::parse_double(x)
+    }, warning = function(w) {
+    }, error = function(e) {
+    })
+
+    if (!(is.na(y) || is.null(y)) && is_int_val(y)) {
+      # Return the number converted into an integer
+      as.integer(y)
+    } else if (is.na(y) || is.null(y)) {
+      # Return the original value
+      x
+    } else {
+      # Return the number as a double
+      y
+    }
+  }
+}
+
+#' Recursively apply a function to each element of a nested list
+#'
+#' @param x The element on which to operate, which could be a list or some other
+#'   type of object.
+#' @param func The function to apply to each element of the list.
+#'
+#' @return A list which is the same as the list provided but with the given
+#'   function applied to each element.
+#' @export
+#'
+#' @examples
+#' nested <- list(
+#'   a = "1",
+#'   b = "12.5",
+#'   c = "NA",
+#'   d = "alphabet",
+#'   e = list(
+#'     first = "NA",
+#'     second = "notanumber",
+#'     third = "100",
+#'     fourth = "0.45",
+#'     fifth = list(
+#'       one = "teal",
+#'       two = "NA",
+#'       three = "999"
+#'     )
+#'   )
+#' )
+#' recurse_nested(nested, parse_string)
+#'
+recurse_nested <- function(x, func) {
+  if (is.list(x)) {
+    # If x is a list, recursively apply the function to each element
+    purrr::map(x, ~ recurse_nested(.x, func))
+  } else {
+    # Otherwise, apply f directly to x
+    func(x)
+  }
+}

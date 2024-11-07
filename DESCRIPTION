@@ -28,6 +28,7 @@ Imports:
     openair,
     plyr,
     proxy,
+    purrr,
     rappdirs,
     raster,
     readr,
