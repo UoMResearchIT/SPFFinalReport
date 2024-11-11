@@ -24,9 +24,12 @@ knitr::opts_chunk$set(
 library(dimex)
 ```
 
-## Introduction
+## DIMEX: Data Integration Model for personal EXposures
 
-TODO: TBC
+### Introduction
+
+This package implements the DIMEX model. It is derived from the SPFFinalReport
+code (created for the case study and report for the final SPF reporting period).
 
 See also the [configuration](config.html) and [development](development.html)
 vignettes.
@@ -50,14 +53,15 @@ collectively called 'wrangling').
 
 For each of these data wrangling phases, there are three possible environments:
 
+- `main`: Data produced by the code
+  - data that is produced by running the current version of the code
+  - can be used in automated tests to compare with reference data
+
 - `ref`: Reference data
   - historical data
   - for comparison with data being produced from current code
-  - to ensure the converted code is working as expected
-
-- `act`: Actual data
-  - data currently being produced by the code
-  - can be compared with reference data in automated tests
+  - to ensure the code is working as expected and continues to do so when any
+    changes are made to the code
 
 - `test`: Test data
   - small enough to use for unit/integration tests
@@ -72,18 +76,17 @@ See [configuration](config.html) for configuration information.
 ### Running the pipeline
 
 The main entry point for running the code is the
-<!-- TODO: Make sure this link is working once the doc site is being built -->
-<!-- with pkgdown -->
-[run_workflow()](/reference/run_workflow.html)
+[run_workflow()](../reference/run_workflow.html)
 function.
 If called without any arguments, it will run all workflow steps by default. You
 can also:
 
 - Check which steps will run by providing a `banner_only` argument (in which
-case the steps would not be run but a banner would be printed for each step);
-and
+  case the steps would not be run but a banner would be printed for each step);
+  and
 - Run a subset of steps by supplying a comma-separated string of step IDs, for
-example, "4a, 4b" or "1a".
+  example, <br>
+  "4a, 4b" or "1a".
 
 ```{r, eval=FALSE}
 # Run each step in the workflow with the default config
@@ -92,17 +95,19 @@ run_workflow()
 # Run steps 4a and 4b only
 run_workflow("4a, 4b")
 
-# Don't run any steps but print out the banner to show each step that would be run
+# Don't run any steps but print out the banner to show each step
 run_workflow(banner_only = TRUE)
 
 # Run steps 4a and 4b only, with the specified config
-# See the [configuration](config.html) vignette for information on how to create a
-# non-default config
-# TODO: config = ...
-run_workflow("4a, 4b", config)
+# See the [configuration](config.html) vignette for information on
+# how to create a non-default config
+# TODO: Show example of creating a config:
+# cfg = ...
+# cfg_overrides = ...
+run_workflow("4a, 4b", cfg = cfg, cfg_overrides = cfg_overrides)
 ```
 
 ## Development
 
-For development work on the `dimex` package, see the
+For doing development work on the `dimex` package, see the
 [development](development.html) vignette.
