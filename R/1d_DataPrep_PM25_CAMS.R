@@ -50,9 +50,9 @@ run_data_prep_pm25_cams <- function(cfg = NULL) {
   r[!(r[] %in% a1[[1]])] <- NA
 
   # file names
-  files <- c('Data_ref/Raw/PM25/CAMS-Europe/CAMSEurope_20201201-20210531.nc',
-             'Data_ref/Raw/PM25/CAMS-Europe/CAMSEurope_20210601-20211130.nc',
-             'Data_ref/Raw/PM25/CAMS-Europe/CAMSEurope_20211201-20220430.nc')
+  files <- c('Data/Raw/PM25/CAMS-Europe/CAMSEurope_20201201-20210531.nc',
+             'Data/Raw/PM25/CAMS-Europe/CAMSEurope_20210601-20211130.nc',
+             'Data/Raw/PM25/CAMS-Europe/CAMSEurope_20211201-20220430.nc')
 
   # files start dates
   start_date <- c(as.Date('2020-12-01'),

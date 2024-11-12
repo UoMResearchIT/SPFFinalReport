@@ -27,8 +27,8 @@ run_data_prep_pm25_emep <- function(cfg = NULL) {
   ### NetCDF to tifs for Manchester   ###
   #######################################
   # file names
-  files <- c("Data_ref/Raw/PM25/EMEP/2021/pm25_janfeb2021_regrid.nc",
-             "Data_ref/Raw/PM25/EMEP/2021/pm25_marapr2021_regrid.nc")
+  files <- c("Data/Raw/PM25/EMEP/2021/pm25_janfeb2021_regrid.nc",
+             "Data/Raw/PM25/EMEP/2021/pm25_marapr2021_regrid.nc")
 
   # files start dates
   start_date <- c(as.Date('2021-01-01'),

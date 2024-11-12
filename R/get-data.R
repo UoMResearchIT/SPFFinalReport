@@ -29,6 +29,7 @@ get_pop_dat <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
   key <- "store.dat.wrangled.shapefiles.pop_dat"
   pop_dat_nm <- get_cfg_val(key, cfg = cfg)
 
+  cat_info_sep("Loading population data")
   readRDS(file.path(pop_dat_dir, pop_dat_nm))
 }
 
@@ -60,5 +61,6 @@ get_tus_dat <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
   key <- "store.dat.wrangled.shapefiles.tus_dat"
   tus_dat_nm <- get_cfg_val(key, cfg = cfg)
 
+  cat_info_sep("Loading time use survey data")
   readRDS(file.path(tus_dat_dir, tus_dat_nm))
 }

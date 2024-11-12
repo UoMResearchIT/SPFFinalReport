@@ -38,12 +38,12 @@ run_data_prep_pm25_gm <- function(cfg = NULL, use_cached_openair_data = NULL) {
     sf::st_transform(sp::CRS("+proj=longlat +datum=WGS84 +no_defs"))
 
   # Reading in LTN network data
-  tmp1 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/BroomLane_AQ_hourly.csv')
-  tmp2 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/CromwellAQ_hourly.csv')
-  tmp3 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/DelamereRoad_AQ_hourly.csv')
-  tmp4 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/GrangethorpeAQ_2b_hourly.csv')
-  tmp5 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/ManorRad_AQ_hourly.csv')
-  tmp6 <- read.csv('Data_ref/Raw/PM25/GroundMonitors/SladeLane_AQ_hourly.csv')
+  tmp1 <- read.csv('Data/Raw/PM25/GroundMonitors/BroomLane_AQ_hourly.csv')
+  tmp2 <- read.csv('Data/Raw/PM25/GroundMonitors/CromwellAQ_hourly.csv')
+  tmp3 <- read.csv('Data/Raw/PM25/GroundMonitors/DelamereRoad_AQ_hourly.csv')
+  tmp4 <- read.csv('Data/Raw/PM25/GroundMonitors/GrangethorpeAQ_2b_hourly.csv')
+  tmp5 <- read.csv('Data/Raw/PM25/GroundMonitors/ManorRad_AQ_hourly.csv')
+  tmp6 <- read.csv('Data/Raw/PM25/GroundMonitors/SladeLane_AQ_hourly.csv')
 
   # Adding Longitude
   tmp1$latitude <- 53.441161

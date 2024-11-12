@@ -28,7 +28,7 @@ run_data_prep_tus <- function(cfg = NULL) {
   ### Reading in time  use survey ###
   ###################################
   # Reading in individual data
-  uktus15_individual <- haven::read_dta("Data_ref/Raw/TimeUseSurvey/uktus15_individual.dta")
+  uktus15_individual <- haven::read_dta("Data/Raw/TimeUseSurvey/uktus15_individual.dta")
 
   # Preparing individual dataset
   uktus15_individual <- uktus15_individual %>%
@@ -92,7 +92,7 @@ run_data_prep_tus <- function(cfg = NULL) {
   # Adding on occupation and socioeconomic status information
   uktus15_individual <- uktus15_individual %>%
     # Adding the Standard Occupational Classification (SOC2010 labels and codes)
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/soc2010_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/soc2010_classification.csv") %>%
                        dplyr::select(soc2010, soc2010_label),
                      by = 'soc2010') %>%
     # Tidying SOC2010 labels and setting missings as not applicable
@@ -109,7 +109,7 @@ run_data_prep_tus <- function(cfg = NULL) {
                                                         soc2010group == 9 ~ "Elementary occupations"),
                   soc2010group = as.numeric(soc2010group)) %>%
     # Adding the National Statistics Socio-economic classification (NS-SEC labels and codes)
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/nssec_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/nssec_classification.csv") %>%
                        dplyr::select(nssec, nssec_label, nssec5, nssec5_label),
                      by = 'nssec') %>%
     # Tidying labels and setting missings as non employed
@@ -117,7 +117,7 @@ run_data_prep_tus <- function(cfg = NULL) {
                   nssec5 = dplyr::if_else(nssec == -1, -1, nssec5),
                   nssec5_label = dplyr::if_else(nssec == -1, "Not applicable", nssec5_label))%>%
     # Adding the Standard Industrial Classification (SIC2007 labels and codes)
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/sic2007_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/sic2007_classification.csv") %>%
                        dplyr::select(-c('sic3', 'sic3_label')) %>%
                        unique(),
                      by = 'sic2') %>%
@@ -141,7 +141,7 @@ run_data_prep_tus <- function(cfg = NULL) {
                   sic2, sic2_label, sic1, sic1_label, sicgroup, sicgroup_label)
 
   # Reading in diary data
-  uktus15_diary_wide <- haven::read_dta("Data_ref/Raw/TimeUseSurvey/uktus15_diary_wide.dta")
+  uktus15_diary_wide <- haven::read_dta("Data/Raw/TimeUseSurvey/uktus15_diary_wide.dta")
 
   # Preparing individual dataset
   uktus15_diary_wide <- uktus15_diary_wide %>%
@@ -191,13 +191,13 @@ run_data_prep_tus <- function(cfg = NULL) {
     # Sorting dataset
     dplyr::arrange(act_id, time) %>%
     # Merging on time point labels
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/TimeUseSurvey/uktus_metadata_timepoints.csv"),
+    dplyr::left_join(readr::read_csv("Data/Raw/TimeUseSurvey/uktus_metadata_timepoints.csv"),
                      by = 'time') %>%
     # Merging on activity labels
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/TimeUseSurvey/uktus_metadata_activity.csv"),
+    dplyr::left_join(readr::read_csv("Data/Raw/TimeUseSurvey/uktus_metadata_activity.csv"),
                      by = 'activity')%>%
     # Merging on location labels
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/TimeUseSurvey/uktus_metadata_location.csv"),
+    dplyr::left_join(readr::read_csv("Data/Raw/TimeUseSurvey/uktus_metadata_location.csv"),
                      by = 'location')
 
   # Merging individual information to the diaries

@@ -22,11 +22,11 @@ generate_cfg_template <- function() {
     # ------------------------------------------------------------------------ #
     # Runtime parameters
     run = list(
-      # See for the RNG
+      # Seed for the RNG
       seed_val = 1409L,
 
-      # Limit for the number of msoa's that will be processed; to process all
-      # msoa's, set msoa_lim to NA, i.e. 'msoa_lim = NA'
+      # Limit for the number of MSOAs that will be processed; to process all
+      # MSOAs, set 'msoa_lim = NA'
       msoa_lim = 2L
     ),
 
@@ -105,6 +105,23 @@ generate_cfg_template <- function() {
         nm_patterns = list(
           activities = "activities_"
         )
+      ),
+
+      # ---------------------------------------------------------------------- #
+      # Output paths
+      out_ref = list (
+
+        # -------------------------------------------------------------------- #
+        # Directory names
+        dirs = list(
+          base = file.path("Output"),
+          activities = file.path("CaseStudy2", "Activities")
+        ),
+
+        # Patterns for file names which have an id number appended
+        nm_patterns = list(
+          activities = "activities_"
+        )
       )
     )
   )
@@ -161,7 +178,13 @@ get_cfg_template_keys <- function() {
     "store.out.dirs.base",
     "store.out.dirs.activities",
     "store.out.nm_patterns",
-    "store.out.nm_patterns.activities"
+    "store.out.nm_patterns.activities",
+    "store.out_ref",
+    "store.out_ref.dirs",
+    "store.out_ref.dirs.base",
+    "store.out_ref.dirs.activities",
+    "store.out_ref.nm_patterns",
+    "store.out_ref.nm_patterns.activities"
   ))
 }
 

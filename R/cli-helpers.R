@@ -32,3 +32,39 @@ show_workflow_banner <- function(id, title, pad_width = NULL) {
 
   invisible()
 }
+
+#' Print an informational 'separator' rule with a preceding blank line
+#'
+#' @param title The title to print for the rule, or NULL for none. Default: NULL
+#' @param width The rule width, or NULL for half the console width. Default:
+#'   NULL
+#'
+#' @return The value returned by [cli::cat_rule()]
+#' @export
+#'
+#' @examples
+#' cat_rule_sep()
+#' cat_rule_sep("An informational message")
+#' cat_rule_sep("An informational message", width = cli::console_width())
+#'
+cat_rule_sep <- function(title = NULL, width = NULL) {
+  title <- title %||% ""
+  width <- width %||% floor(cli::console_width() / 2)
+  cli::cat_line("")
+  cli::cat_rule(title, width = width)
+}
+
+#' Print an informational message with a preceding blank line
+#'
+#' @param msg The message to print.
+#'
+#' @return The value returned by [cli::cli_inform()]
+#' @export
+#'
+#' @examples
+#' cat_info_sep("Doing something")
+#'
+cat_info_sep <- function(msg) {
+  cli::cat_line("")
+  cli::cli_inform(msg)
+}

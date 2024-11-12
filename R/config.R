@@ -183,17 +183,21 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
   cfg_path <- get_user_cfg_path(cfg_dir, cfg_name)
 
   if (!dir.exists(cfg_dir)) {
+    cat_info_sep(glue::glue("Creating user config directory '{cfg_dir}'"))
     dir.create(cfg_dir, recursive = TRUE)
   }
 
   if (file.exists(cfg_path) && !overwrite) {
     cli::cli_abort(c(
-      "Config file already exists",
-      "i" = "Config exists at '{cfg_path}'",
-      "i" = "Set {.var overwrite} to TRUE to overwrite the existing config",
-      "i" = "E.g. 'write_user_cfg(config, overwrite = TRUE)'.",
+      "Config file already exists and {.var overwrite} is FALSE",
+      "i" = "Config found at '{cfg_path}'.",
+      "i" = "Set {.var overwrite} to TRUE to overwrite existing config, e.g.",
+      "i" =  " 'write_user_cfg(config, overwrite = TRUE)'",
       # TODO: When a user config conversion func is available, update this:
-      "i" = "*Note* NB: Any local changes will need to be *manually updated*.",
+      "i" = glue::glue("NB: You will need to reapply any local edits to the",
+                       " default config."),
+      "i" = glue::glue("Please make a backup of your config file before",
+                       " overwriting it!"),
       "x" = "Cannot replace config since {.var overwrite} is FALSE."
     ))
   }
@@ -206,8 +210,18 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
     yaml::write_yaml(cfg, cfg_path)
   } else {
     # Copy the template
-    file.copy(get_cfg_template_path(template_dir_name, template_name), cfg_path,
-              overwrite = overwrite)
+    cfg_templ_path <- get_cfg_template_path(template_dir_name, template_name)
+    if (file.exists(cfg_path)) {
+      cli::cli_alert_warning(glue::glue("The existing user config file will be",
+                                        " overwritten."))
+      cli::cli_alert_warning(glue::glue("NB: You will need to reapply any",
+                                        " local edits to the default config."))
+    }
+    cli::cli_alert("Copying config template")
+    cli::cli_inform(" '{cfg_templ_path}'")
+    cli::cli_alert("User-specific config location:")
+    cli::cli_inform(" '{cfg_dir}'")
+    file.copy(cfg_templ_path, cfg_path, overwrite = overwrite)
   }
 
   invisible()
@@ -352,8 +366,8 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
       "{.var key} is invalid",
       "i" = paste0("{.var key} must be a single character string of",
                    " hierarchical keys with components separated by",
-                   " '{key_sep}'."),
-      "x" = "You've supplied a NULL {.var key}."
+                   " '{key_sep}'"),
+      "x" = "You've supplied a NULL key."
     ))
   }
 
@@ -369,51 +383,12 @@ get_cfg_val <- function(key, cfg_dir = NULL, cfg_name = NULL, cfg = NULL) {
     cli::cli_abort(c(
       "Key '{key}' not found in config",
       "i" = paste0("The key must correspond to hierarchical names in the",
-                   " config, separated by '{key_sep}'."),
-      "x" = "You've supplied '{cli::cli_vec(key, style = {lst_style})}'."
+                   " config, separated by '{key_sep}'"),
+      "x" = "You've supplied key '{cli::cli_vec(key, style = {lst_style})}'"
     ))
   }
 
   val
-}
-
-#' Get the msoa value from the config
-#'
-#' @inheritParams get_cfg_val
-#' @inheritParams get_user_cfg_dir
-#' @inheritParams get_user_cfg_name
-#' @inheritParams write_cfg_template
-#' @param pop_dat The population data `data.frame`. See [data.frame()].
-#' @param area_id_var_nm A character string with the name of the 'area id'
-#'   variable within `pop_dat`. Default: area_id
-#'
-#' @return An integer: the configured msoa value which is either the number
-#'   specified, or, if this has a value of `NA`, the total number of msoa's in
-#'   the given population data file.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' pop_dat <- get_pop_dat()
-#' get_cfg_val_msoa(pop_dat, cfg = generate_cfg_template())
-#' }
-#'
-get_cfg_val_msoa <- function(pop_dat, key = NULL, cfg_dir = NULL,
-                             cfg_name = NULL, cfg = NULL,
-                             area_id_var_nm = NULL) {
-
-  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
-
-  key <- key %||% "run.msoa_lim"
-  area_id_var_nm <- area_id_var_nm %||% "area_id"
-
-  msoa_lim <- get_cfg_val(key, cfg = cfg)
-
-  if (is.na(msoa_lim)) {
-    length(unique(pop_dat[[area_id_var_nm]]))
-  } else {
-    msoa_lim
-  }
 }
 
 #' Get the root path for an environment

@@ -33,3 +33,9 @@ store:
       activities: CaseStudy2/Activities
     nm_patterns:
       activities: activities_
+  out_ref:
+    dirs:
+      base: Output
+      activities: CaseStudy2/Activities
+    nm_patterns:
+      activities: activities_

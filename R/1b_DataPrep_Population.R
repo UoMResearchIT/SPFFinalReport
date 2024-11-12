@@ -42,7 +42,7 @@ run_data_prep_population <- function(cfg = NULL) {
   # Loop for each LA
   for (i in 257:266){
     # Read in data
-    test <- read.csv(paste('Data_ref/Raw/Population/lad_TUS_', i, '.txt', sep = ''))
+    test <- read.csv(paste('Data/Raw/Population/lad_TUS_', i, '.txt', sep = ''))
     # Appending pop_dat on
     pop_dat <- rbind(pop_dat, test)
     # Printing index
@@ -110,12 +110,12 @@ run_data_prep_population <- function(cfg = NULL) {
                   soc2010 = as.numeric(dplyr::if_else(soc2010 == "Item not applicable", "-1", soc2010))) %>%
     # Adding the National Statistics Socio-economic classification
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/nssec_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/nssec_classification.csv") %>%
                        dplyr::select(nssec5, nssec5_label) %>%
                        unique(),
                      by = 'nssec5') %>%
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/nssec_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/nssec_classification.csv") %>%
                        dplyr::select(hhnssec5 = nssec5, hhnssec5_label = nssec5_label) %>%
                        unique(),
                      by = 'hhnssec5') %>%
@@ -126,14 +126,14 @@ run_data_prep_population <- function(cfg = NULL) {
                   hhnssec5_label = dplyr::if_else(hhnssec5 == -1, "Not applicable", hhnssec5_label)) %>%
     # Adding the Standard Occupational Classification
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/soc2010_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/soc2010_classification.csv") %>%
                        dplyr::select(soc2010, soc2010_label),
                      by = 'soc2010') %>%
     # Tidying SOC2010 labels and setting missings as not applicable
     dplyr::mutate(soc2010_label = dplyr::if_else(is.na(soc2010_label), 'Not applicable', soc2010_label))  %>%
     # Adding the Standard Industrial Classification (SIC2007 labels and codes)
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data_ref/Raw/Misc/sic2007_classification.csv") %>%
+    dplyr::left_join(readr::read_csv("Data/Raw/Misc/sic2007_classification.csv") %>%
                        dplyr::select(-c('sic3', 'sic3_label')) %>%
                        unique(),
                      by = 'sic2')%>%

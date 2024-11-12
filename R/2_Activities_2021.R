@@ -19,6 +19,8 @@
 process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
                                cfg = NULL) {
 
+  out_file_ext <- "rds"
+
   # ------------------------------------ #
   # Read population data
   pop_dat <- get_pop_dat(env, cfg_dir, cfg_name, cfg)
@@ -38,8 +40,8 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
   key <- "store.out.nm_patterns.activities"
   activities_nm_pattern <- get_cfg_val(key, cfg = cfg)
 
-  # Number of loops to run for msoa areas
-  msoa_lim <- get_cfg_val_msoa(pop_dat, "run.msoa_lim")
+  # Number of msoa areas to process
+  msoa_lim <- get_cfg_val_msoa()
 
   # Suppress summarise info
   op <- options(dplyr.summarise.inform = FALSE)
@@ -183,9 +185,11 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
       dplyr::select(-c(minutes, sample))
 
     # Saving datasets
-    fname <- file.path(activities_out_dir,
-                       glue::glue("{activities_nm_pattern}{k}.rds"))
-    saveRDS(activities_complete, file = fname)
+    # Example activities output path for env 'main':
+    #   "Output/CaseStudy2/Activities/activities_E02000984.rds"
+    fpath <- file.path(activities_out_dir,
+                       glue::glue("{activities_nm_pattern}{k}.{out_file_ext}"))
+    saveRDS(activities_complete, file = fpath)
 
     # Printing index
     print(k)

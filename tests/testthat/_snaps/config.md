@@ -5,8 +5,8 @@
     Condition
       Error in `get_cfg_val()`:
       ! Key 'non.existent' not found in config
-      i The key must correspond to hierarchical names in the config, separated by '.'.
-      x You've supplied 'non.existent'.
+      i The key must correspond to hierarchical names in the config, separated by '.'
+      x You've supplied key 'non.existent'
 
 # get_root gives expected msg if sys env var missing
 
