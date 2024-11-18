@@ -6,6 +6,14 @@
 utils::globalVariables(c(
 
   # ".",
+  ":=",
+
+  # get_merge_locn
+  "max_propn",
+  "first_locn",
+
+  # impute_tus_dat
+  "most_popular_locn",
 
   # calculate_household
   "pop_id",

@@ -302,3 +302,42 @@ local_write_cfg <- function(cfg_name = "tmp_cfg.yml",
   # Return the name of the temp directory (*not* the fs_path object)
   cfg_dir
 }
+
+#' Create a small stratified sample from the given data
+#'
+#' @param .data A data frame or data frame extension (e.g. a tibble).
+#' @param strata A character vector of variables (column names) on which to
+#'   stratify.
+#' @param n_per_stratum Sample size per stratum. Default: 3
+#' @param replace A boolean: whether to sample with replacement or not. Default:
+#'   FALSE
+#' @param seed_val An integer for setting the RNG seed. Default: 123
+#'
+#' @return The stratified sample created from the given data frame.
+#' @export
+#'
+#' @examples
+#' df <- data.frame(
+#'   group = rep(c("A", "B", "C"), each = 4),
+#'   subgroup = rep(c("X", "Y"), times = 6),
+#'   value = 1:24
+#' )
+#' df %>% get_stratified_samp(c("group", "subgroup"), n_per_stratum = 2)
+#'
+#' \dontrun{
+#' get_tus_dat() %>% get_stratified_samp()
+#' }
+#'
+get_stratified_samp <- function(.data, strata, n_per_stratum = NULL,
+                                replace = NULL, seed_val = NULL) {
+
+  n_per_stratum <- n_per_stratum %||% 3
+  replace <- replace %||% FALSE
+  seed_val <- seed_val %||% 123
+
+  # Create stratified sample
+  .data %>%
+    dplyr::group_by(dplyr::across(dplyr::all_of(strata))) %>%
+    dplyr::slice_sample(n = n_per_stratum, replace = replace) %>%
+    dplyr::ungroup()
+}

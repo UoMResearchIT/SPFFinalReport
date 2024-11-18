@@ -1,6 +1,154 @@
 # SPDX-FileCopyrightText: [2024] University of Manchester
 # SPDX-License-Identifier: apache-2.0
 
+#' Drop the name of the 'location' column from a vector of names
+#'
+#' @param str_nms A character vector of names.
+#' @param nm_to_drop A character string: the name to drop from `str_nms`.
+#'
+#' @return The supplied character vector excluding `nm_to_drop`.
+#' @export
+#'
+#' @examples
+#' drop_locn(c("age", "type", "activity", "location"))
+#' # => c("age", "type", "activity")
+#'
+#' drop_locn(c("age", "type", "activity", "locn"), nm_to_drop = "locn")
+#' # => c("age", "type", "activity")
+#'
+drop_locn <- function(str_nms, nm_to_drop = NULL) {
+  nm_to_drop <- nm_to_drop %||% "location"
+  str_nms[-which(str_nms == nm_to_drop)]
+}
+
+
+
+#' Get grouping variables for the time use survey data
+#'
+#' @param strata An optional character vector containing names of stratification
+#'   variables. If supplied, these are added to the activity and location
+#'   variables to be used for grouping. Default: none.
+#'
+#' @return A character vector of names of grouping variables. These will be
+#'   'activity' and 'location' together with any stratification variables (if
+#'   supplied).
+#' @export
+#'
+#' @examples
+#' get_grouping_vars()
+#' get_grouping_vars(c("sex", "agegr4", "nssec5", "daytype"))
+#'
+get_grouping_vars <- function(strata = NULL) {
+  vars <- c("activity", "location")
+
+  if (!is.null(strata)) {
+    vars <- c(strata, vars)
+  }
+  vars
+}
+
+#' Get most popular location for each activity
+#'
+#' Get most popular location for each activity, possibly with stratification.
+#'
+#' @inheritParams get_grouping_vars
+#' @param tus_dat A data frame of the time use survey data. This is expected to
+#'   be in the format saved by [run_data_prep_tus()].
+#' @param col_nm A character string: name of new column to create which will
+#'   hold the most popular location for each activity (possibly by strata).
+#' @param missing_ids An integer vector of the numeric id's which indicate
+#'   missing locations.
+#'
+#' @return The summarised time use survey data with 'most popular' location
+#'   added and rows then filtered to include one line for each combination of
+#'   strata and activity. If there are multiple locations matching the maximum
+#'   proportion of time spent in each location by stratum and activity then the
+#'   first location id will be chosen.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' tus_dat <- get_tus_dat()
+#' missing_ids <- c(-9, 0, 10, 90)
+#' strata <- c("sex", "agegr4", "nssec5", "daytype")
+#' get_most_popular_locn(tus_dat, "most_popular_locn", missing_ids, strata)
+#' }
+get_most_popular_locn <- function(tus_dat, col_nm, missing_ids, strata = NULL) {
+
+  vars <- get_grouping_vars(strata)
+
+  tus_dat <- tus_dat %>%
+
+    # Only keep non-missing locations
+    dplyr::filter(!(location %in% missing_ids)) %>%
+
+    # Summarise by strata and activity
+    dplyr::group_by_at(vars) %>%
+    dplyr::summarise(n = length(location)) %>%
+    dplyr::group_by_at(drop_locn(vars)) %>%
+
+    # Get proportion of time spent in each location by strata and activity
+    dplyr::mutate(p = n/sum(n),
+                  max_propn = max(p)) %>%
+
+    # Keep only most popular activity
+    dplyr::filter(p == max_propn) %>%
+
+    # Keep first location if more than one selected
+    dplyr::mutate(first_locn = min(location)) %>%
+
+    dplyr::filter(location == first_locn) %>%
+
+    # Remove grouping structure
+    dplyr::ungroup() %>%
+
+    # keep only relevant columns
+    dplyr::select_at(vars) %>%
+
+    # Rename columns
+    dplyr::rename({{ col_nm }} := location)
+
+  tus_dat
+}
+
+#' Impute missing location data
+#'
+#' @inheritParams get_grouping_vars
+#' @inheritParams get_most_popular_locn
+#' @param .data A data frame or data frame extension (e.g. a tibble).
+#'
+#' @return The supplied `tus_dat` data frame with imputed data for missing
+#'   locations. Imputed values are computed as the most popular location for
+#'   activity by (optional) strata.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' tus_dat <- get_tus_dat()
+#' strata <- c("sex", "agegr4", "nssec5", "daytype")
+#' impute_missing(tus_dat, tus_dat, "most_popular_locn", missing_ids, strata)
+#' }
+#'
+impute_missing <- function(.data, tus_dat, col_nm, missing_ids, strata = NULL) {
+
+  vars <- get_grouping_vars(strata)
+
+  # Merge most popular location for each activity by strata
+  .data %>%
+    dplyr::left_join(
+      get_most_popular_locn(tus_dat, {{ col_nm }}, missing_ids, vars),
+      by = drop_locn(vars)
+    ) %>%
+
+    # If location_popular is NA, substitute the most popular location
+    dplyr::mutate(location_popular = ifelse(is.na(location_popular),
+                                            .data[[col_nm]],
+                                            location_popular)) %>%
+
+    # Drop the 'most popular location' column
+    dplyr::select(-c({{ col_nm }}))
+}
+
 #' Impute missing tus data
 #'
 #' @inheritParams ensure_valid_env
@@ -34,74 +182,44 @@ impute_tus_dat <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
   tus_meta_nm <- get_cfg_val(key, cfg = cfg)
 
   # --- --- --- #
+  strata <- c("sex", "agegr4", "nssec5", "daytype")
+
+  #  0 Unspecified location
+  # 10 Unspecified location (not travelling)
+  # -9 No answer/refused
+  # 90 Unspecified transport mode
+  missing_ids <- c(-9, 0, 10, 99)
+
+  # ------------------------------------ #
+  # Expected column types for tus metadata
+  tus_meta_col_spec <- readr::cols(
+    location = readr::col_integer(),
+    location_label = readr::col_character()
+  )
+
+  tus_meta <- readr::read_csv(file.path(tus_dat_dir, tus_meta_nm),
+                              col_types = tus_meta_col_spec) %>%
+    dplyr::select(location_popular = location,
+                  location_popular_label = location_label)
+
+  # ------------------------------------ #
   # Fill in missing data using most popular activities
   tus_dat <- tus_dat %>%
-    # Setting missings to NA
-    dplyr::mutate(location_popular = ifelse(location %in% c(-9, 0, 10, 99), NA, location)) %>%
-    # Merging on most popular location for each activity by strata
-    dplyr::left_join(tus_dat %>%
-                       # Only keeping non-missing locations
-                       dplyr::filter(!(location %in% c(-9, 0, 10, 99))) %>%
-                       # Summarising by stratum and activity
-                       dplyr::group_by_at(c('sex', 'agegr4', 'nssec5', 'daytype', 'activity', 'location')) %>%
-                       dplyr::summarise(n = length(location))  %>%
-                       dplyr::group_by_at(c('sex', 'agegr4', 'nssec5', 'daytype', 'activity')) %>%
-                       # Getting proportion of time spent in each location by activity
-                       dplyr::mutate(p = n/sum(n),
-                                     tmp = max(p)) %>%
-                       # Only keeping most popular activity
-                       dplyr::filter(p == tmp) %>%
-                       # Keeping first if more than one selected
-                       dplyr::mutate(tmp = min(location)) %>%
-                       dplyr::filter(location == tmp) %>%
-                       # Ungrouping
-                       dplyr::ungroup() %>%
-                       # Only keeping relevant columns
-                       dplyr::select_at(c('sex', 'agegr4', 'nssec5', 'daytype', 'activity', 'location')) %>%
-                       # Renaming columns
-                       dplyr::rename(tmp = location),
-                     by = c('sex', 'agegr4', 'nssec5', 'daytype', 'activity'))  %>%
-    # Filling in the missings
-    dplyr::mutate(location_popular = ifelse(is.na(location_popular),
-                                            tmp,
-                                            location_popular)) %>%
-    # Removing uncessary columns
-    dplyr::select(-c(tmp))  %>%
-    # Merging on most popular location for each activity by strata
-    dplyr::left_join(tus_dat %>%
-                       # Only keeping non-missing locations
-                       dplyr::filter(!(location %in% c(-9, 0, 10, 99))) %>%
-                       # Summarising by stratum and activity
-                       dplyr::group_by_at(c('activity', 'location')) %>%
-                       dplyr::summarise(n = length(location))  %>%
-                       dplyr::group_by_at(c('activity')) %>%
-                       # Getting proportion of time spent in each location by activity
-                       dplyr::mutate(p = n/sum(n),
-                                     tmp = max(p)) %>%
-                       # Only keeping most popular activity
-                       dplyr::filter(p == tmp) %>%
-                       # Keeping first if more than one selected
-                       dplyr::mutate(tmp = min(location)) %>%
-                       dplyr::filter(location == tmp) %>%
-                       # Ungrouping
-                       dplyr::ungroup() %>%
-                       # Only keeping relevant columns
-                       dplyr::select_at(c('activity', 'location')) %>%
-                       # Renaming columns
-                       dplyr::rename(tmp = location),
-                     by = c('activity'))  %>%
-    # Filling in the missings
-    dplyr::mutate(location_popular = ifelse(is.na(location_popular),
-                                            tmp,
-                                            location_popular)) %>%
-    # Removing uncessary columns
-    dplyr::select(-c(tmp))%>%
-    # Merging on location labels
-    dplyr::left_join(readr::read_csv(file.path(tus_dat_dir, tus_meta_nm)) %>%
-                       dplyr::select(location_popular = location,
-                                     location_popular_label = location_label),
-                     by = 'location_popular')
 
+    # Set missing location data to NA (where 'missing' is determined according
+    # to the values in missing_ids)
+    dplyr::mutate(
+      location_popular = ifelse(location %in% missing_ids, NA, location)
+    ) %>%
+
+    impute_missing(tus_dat, "most_popular_locn", missing_ids, strata) %>%
+
+    impute_missing(tus_dat, "most_popular_locn", missing_ids) %>%
+
+    # Merge on location labels
+    dplyr::left_join(tus_meta, by = "location_popular")
+
+  # ------------------------------------ #
   if (save_imputed) {
     key <- "store.dat.interim.dirs.base"
     imp_tus_dat_root <- get_dat_path(key, "main", cfg = cfg)
@@ -149,11 +267,11 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
   # Number of msoa areas to process
   msoa_lim <- get_cfg_val_msoa()
 
-  # Suppress summarise info
+  # Suppress summarise info without changing global options
   op <- options(dplyr.summarise.inform = FALSE)
   on.exit(options(op), add = TRUE, after = FALSE)
 
-  # Setting seed
+  # Set seed
   seed_val <- get_cfg_val("run.seed_val")
   set.seed(seed_val)
 

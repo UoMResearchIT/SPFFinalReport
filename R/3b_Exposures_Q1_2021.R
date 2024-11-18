@@ -27,7 +27,7 @@ process_exposures_q1_2021 <- function(cfg = NULL, msoa_lim = NULL) {
   # msoa_lim <- msoa_lim %||% 7
   # msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
 
-  # Suppress summarise info
+  # Suppress summarise info without changing global options
   op <- options(dplyr.summarise.inform = FALSE)
   on.exit(options(op), add = TRUE, after = FALSE)
 
