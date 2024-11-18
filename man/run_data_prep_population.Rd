@@ -4,9 +4,24 @@
 \alias{run_data_prep_population}
 \title{Process the Population data}
 \usage{
-run_data_prep_population(cfg = NULL)
+run_data_prep_population(
+  env = NULL,
+  cfg_dir = NULL,
+  cfg_name = NULL,
+  cfg = NULL
+)
 }
 \arguments{
+\item{env}{A character string specifying the environment for which to get the
+path. This should be one of 'main', 'ref' or 'test'.}
+
+\item{cfg_dir}{A character string specifying the config directory, or NULL
+for the default. Default: An OS-specific path for user configuration files
+in the user's home directory.}
+
+\item{cfg_name}{A character string specifying the config file name, or NULL
+for the default. Default: 'config.yml'}
+
 \item{cfg}{A list of nested lists, with 'leaf' nodes specifying configuration
 values. Default: The template config returned by \code{\link[=generate_cfg_template]{generate_cfg_template()}}}
 }

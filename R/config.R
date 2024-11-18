@@ -212,10 +212,11 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
     # Copy the template
     cfg_templ_path <- get_cfg_template_path(template_dir_name, template_name)
     if (file.exists(cfg_path)) {
-      cli::cli_alert_warning(glue::glue("The existing user config file will be",
-                                        " overwritten."))
-      cli::cli_alert_warning(glue::glue("NB: You will need to reapply any",
-                                        " local edits to the default config."))
+      cli::cli_alert_warning(glue::glue("The existing user config file will",
+                                        " now be overwritten."))
+      cli::cli_alert_warning(glue::glue("NB: If there were any local edits to",
+                                        " the default config, you need to"))
+      cli::cli_alert_warning(glue::glue("reapply them now."))
     }
     cli::cli_alert("Copying config template")
     cli::cli_inform("   '{cfg_templ_path}'")

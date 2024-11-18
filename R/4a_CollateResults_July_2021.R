@@ -21,10 +21,10 @@ collate_results_jul_2021 <- function(cfg = NULL, msoa_lim = NULL) {
   load("Data_ref/Processed/Population/pop_dat.RData")
 
   # TEMP: Number of loops whilst getting the code working
-  msoa_lim <- msoa_lim %||% 2
+  # msoa_lim <- msoa_lim %||% 2
   # msoa_lim <- msoa_lim %||% 7
   # msoa_lim <- msoa_lim %||% 173
-  # msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
+  msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
 
   ############################
   ### Estimating exposures ###

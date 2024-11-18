@@ -21,10 +21,10 @@ collate_results_q1_2021 <- function(cfg = NULL, msoa_lim = NULL) {
   pop_dat <- readRDS("Data/Processed/Population/pop_dat.rds")
 
   # TEMP: Number of loops whilst getting the code working
-  msoa_lim <- msoa_lim %||% 2
+  # msoa_lim <- msoa_lim %||% 2
   # msoa_lim <- msoa_lim %||% 7
   # msoa_lim <- msoa_lim %||% 173
-  # msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
+  msoa_lim <- msoa_lim %||% length(unique(pop_dat$area_id))
 
   ############################
   ### Estimating exposures ###

@@ -7,12 +7,20 @@ store:
       dirs:
         base: Data/Raw
         shapefiles: Shapefiles
+        population: Population
         tus: TimeUseSurvey
+        misc: Misc
       shapefile_layers:
         ew_msoa: Middle_Layer_Super_Output_Areas_(December_2011)_Boundaries
         uk_full: gadm36_GBR_0
       tus:
         uk_metadata_location: uktus_metadata_location.csv
+      misc:
+        nssec_class: nssec_classification.csv
+        soc2010_class: soc2010_classification.csv
+        sic2007_class: sic2007_classification.csv
+      nm_patterns:
+        pop_lad_tus: lad_TUS_
     wrangled:
       dirs:
         base: Data/Processed

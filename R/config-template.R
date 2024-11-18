@@ -47,7 +47,9 @@ generate_cfg_template <- function() {
           dirs = list(
             base = file.path("Data", "Raw"),
             shapefiles = file.path("Shapefiles"),
-            tus = file.path("TimeUseSurvey")
+            population = file.path("Population"),
+            tus = file.path("TimeUseSurvey"),
+            misc = file.path("Misc")
           ),
 
           shapefile_layers = list(
@@ -58,6 +60,20 @@ generate_cfg_template <- function() {
 
           tus = list(
             uk_metadata_location = "uktus_metadata_location.csv"
+          ),
+
+          misc = list(
+            # National Statistics Socio-economic classification
+            nssec_class = "nssec_classification.csv",
+            # Standard Occupational Classification
+            soc2010_class ="soc2010_classification.csv",
+            # Standard Industrial Classification (SIC2007 labels and codes)
+            sic2007_class = "sic2007_classification.csv"
+          ),
+
+          # Patterns for file names which have a number appended
+          nm_patterns = list(
+            pop_lad_tus = "lad_TUS_"
           )
         ),
 
@@ -115,7 +131,7 @@ generate_cfg_template <- function() {
           activities = file.path("CaseStudy2", "Activities")
         ),
 
-        # Patterns for file names which have an id number appended
+        # Patterns for file names which have a number appended
         nm_patterns = list(
           activities = "activities_"
         )
@@ -132,7 +148,7 @@ generate_cfg_template <- function() {
           activities = file.path("CaseStudy2", "Activities")
         ),
 
-        # Patterns for file names which have an id number appended
+        # Patterns for file names which have an number appended
         nm_patterns = list(
           activities = "activities_"
         )
@@ -166,8 +182,16 @@ get_cfg_template_keys <- function() {
     "store.dat.raw",
     "store.dat.raw.dirs",
     "store.dat.raw.dirs.base",
+    "store.dat.raw.dirs.misc",
+    "store.dat.raw.dirs.population",
     "store.dat.raw.dirs.shapefiles",
     "store.dat.raw.dirs.tus",
+    "store.dat.raw.misc",
+    "store.dat.raw.misc.nssec_class",
+    "store.dat.raw.misc.sic2007_class",
+    "store.dat.raw.misc.soc2010_class",
+    "store.dat.raw.nm_patterns",
+    "store.dat.raw.nm_patterns.pop_lad_tus",
     "store.dat.raw.shapefile_layers",
     "store.dat.raw.shapefile_layers.ew_msoa",
     "store.dat.raw.shapefile_layers.uk_full",
@@ -179,26 +203,32 @@ get_cfg_template_keys <- function() {
     "store.dat.wrangled.dirs.population",
     "store.dat.wrangled.dirs.shapefiles",
     "store.dat.wrangled.dirs.tus",
+    "store.dat.wrangled.population",
+    "store.dat.wrangled.population_ref",
+    "store.dat.wrangled.population_ref.pop_dat",
+    "store.dat.wrangled.population.pop_dat",
     "store.dat.wrangled.shapefiles",
     "store.dat.wrangled.shapefiles_ref",
     "store.dat.wrangled.shapefiles_ref.msoa",
     "store.dat.wrangled.shapefiles.ew_msoa",
     "store.dat.wrangled.shapefiles.ew_msoa_region",
-    "store.dat.wrangled.shapefiles.pop_dat",
-    "store.dat.wrangled.shapefiles.tus_dat",
     "store.dat.wrangled.shapefiles.uk_full",
+    "store.dat.wrangled.time_use_survey",
+    "store.dat.wrangled.time_use_survey_ref",
+    "store.dat.wrangled.time_use_survey_ref.tus_dat",
+    "store.dat.wrangled.time_use_survey.tus_dat",
     "store.out",
-    "store.out.dirs",
-    "store.out.dirs.base",
-    "store.out.dirs.activities",
-    "store.out.nm_patterns",
-    "store.out.nm_patterns.activities",
     "store.out_ref",
     "store.out_ref.dirs",
-    "store.out_ref.dirs.base",
     "store.out_ref.dirs.activities",
+    "store.out_ref.dirs.base",
     "store.out_ref.nm_patterns",
-    "store.out_ref.nm_patterns.activities"
+    "store.out_ref.nm_patterns.activities",
+    "store.out.dirs",
+    "store.out.dirs.activities",
+    "store.out.dirs.base",
+    "store.out.nm_patterns",
+    "store.out.nm_patterns.activities"
   ))
 }
 

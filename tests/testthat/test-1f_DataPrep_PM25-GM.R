@@ -14,8 +14,7 @@ test_that("pm25 ground monitoring data matches reference data", {
   # data frame
   load(here::here("Data_ref/Processed/PM25/pm25_gm.RData"))
 
-  # This will load the pm25 gm data which is produced by running the package
-  # code
+  # This will load the pm25 gm data produced by running the package code
   act_pm25_gm_dat <- readRDS(
     here::here("Data/Processed/PM25/pm25_gm.rds")
   )

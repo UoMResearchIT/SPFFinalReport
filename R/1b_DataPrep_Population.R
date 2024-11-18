@@ -7,6 +7,9 @@
 #' data. It is useful only for its side effects, i.e. for saving the processed
 #' data.
 #'
+#' @inheritParams ensure_valid_env
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
 #'
 #' @return NULL (invisibly).
@@ -17,10 +20,51 @@
 #' run_data_prep_population()
 #' }
 #'
-run_data_prep_population <- function(cfg = NULL) {
+run_data_prep_population <- function(env = NULL, cfg_dir = NULL,
+                                     cfg_name = NULL, cfg = NULL) {
+
+  env <- env %||% "main"
+  cfg <- cfg %||% read_user_cfg(cfg_dir, cfg_name)
 
   # Setting seed
-  set.seed(1409)
+  seed_val <- get_cfg_val("run.seed_val")
+  set.seed(seed_val)
+
+  lad_tus_file_ext <- "txt"
+
+  # ------------------------------------ #
+
+  # --- --- --- #
+  key1 <- "store.dat.raw.dirs.base"
+  key2 <- "store.dat.raw.dirs.population"
+  pop_raw_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.dat.raw.nm_patterns.pop_lad_tus"
+  pop_lad_tus_nm_pattern <- get_cfg_val(key, cfg = cfg)
+
+  # --- --- --- #
+  key1 <- "store.dat.raw.dirs.base"
+  key2 <- "store.dat.raw.dirs.misc"
+  misc_raw_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.dat.raw.misc.nssec_class"
+  nssec_class_fname <- get_cfg_val(key, cfg = cfg)
+
+  key <- "store.dat.raw.misc.soc2010_class"
+  soc2010_class_fname <- get_cfg_val(key, cfg = cfg)
+
+  key <- "store.dat.raw.misc.sic2007_class"
+  sic2007_class_fname <- get_cfg_val(key, cfg = cfg)
+
+  # --- --- --- #
+  key1 <- "store.dat.wrangled.dirs.base"
+  key2 <- "store.dat.wrangled.dirs.population"
+  pop_dat_root <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.dat.wrangled.population.pop_dat"
+  pop_dat_fname <- get_cfg_val(key, cfg = cfg)
+
+  # ------------------------------------ #
 
   #################################
   ### Preparing population data ###
@@ -42,7 +86,10 @@ run_data_prep_population <- function(cfg = NULL) {
   # Loop for each LA
   for (i in 257:266){
     # Read in data
-    test <- read.csv(paste('Data/Raw/Population/lad_TUS_', i, '.txt', sep = ''))
+    # Example sub-path: "Data/Raw/Population/lad_TUS_257.txt"
+    fpath <- file.path(pop_raw_dir,
+                       glue::glue("{pop_lad_tus_nm_pattern}{i}.{lad_tus_file_ext}"))
+    test <- read.csv(fpath)
     # Appending pop_dat on
     pop_dat <- rbind(pop_dat, test)
     # Printing index
@@ -110,12 +157,14 @@ run_data_prep_population <- function(cfg = NULL) {
                   soc2010 = as.numeric(dplyr::if_else(soc2010 == "Item not applicable", "-1", soc2010))) %>%
     # Adding the National Statistics Socio-economic classification
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data/Raw/Misc/nssec_classification.csv") %>%
+    # Example sub-path: "Data/Raw/Misc/nssec_classification.csv"
+    dplyr::left_join(readr::read_csv(file.path(misc_raw_dir, nssec_class_fname)) %>%
                        dplyr::select(nssec5, nssec5_label) %>%
                        unique(),
                      by = 'nssec5') %>%
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data/Raw/Misc/nssec_classification.csv") %>%
+    # Example sub-path: "Data/Raw/Misc/nssec_classification.csv"
+    dplyr::left_join(readr::read_csv(file.path(misc_raw_dir, nssec_class_fname)) %>%
                        dplyr::select(hhnssec5 = nssec5, hhnssec5_label = nssec5_label) %>%
                        unique(),
                      by = 'hhnssec5') %>%
@@ -126,14 +175,16 @@ run_data_prep_population <- function(cfg = NULL) {
                   hhnssec5_label = dplyr::if_else(hhnssec5 == -1, "Not applicable", hhnssec5_label)) %>%
     # Adding the Standard Occupational Classification
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data/Raw/Misc/soc2010_classification.csv") %>%
+    # Example sub-path: "Data/Raw/Misc/soc2010_classification.csv"
+    dplyr::left_join(readr::read_csv(file.path(misc_raw_dir, soc2010_class_fname)) %>%
                        dplyr::select(soc2010, soc2010_label),
                      by = 'soc2010') %>%
     # Tidying SOC2010 labels and setting missings as not applicable
     dplyr::mutate(soc2010_label = dplyr::if_else(is.na(soc2010_label), 'Not applicable', soc2010_label))  %>%
     # Adding the Standard Industrial Classification (SIC2007 labels and codes)
     # Reading and merging information on
-    dplyr::left_join(readr::read_csv("Data/Raw/Misc/sic2007_classification.csv") %>%
+    # Example sub-path: "Data/Raw/Misc/sic2007_classification.csv"
+    dplyr::left_join(readr::read_csv(file.path(misc_raw_dir, sic2007_class_fname)) %>%
                        dplyr::select(-c('sic3', 'sic3_label')) %>%
                        unique(),
                      by = 'sic2')%>%
@@ -157,7 +208,8 @@ run_data_prep_population <- function(cfg = NULL) {
   ### Saving outputs ###
   ######################
   # Save population data
-  saveRDS(pop_dat, "Data/Processed/Population/pop_dat.rds")
+  # E.g. sub-path: "Data/Processed/Population/pop_dat.rds"
+  saveRDS(pop_dat, file.path(pop_dat_root, pop_dat_fname))
 
   invisible()
 }

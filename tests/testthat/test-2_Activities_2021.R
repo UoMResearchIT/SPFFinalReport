@@ -13,7 +13,7 @@ test_that("activities 2021 data matches reference data", {
   pop_dat <- get_pop_dat(env = "main", cfg = NULL)
 
   # Read config and set number of MSOAs to test
-  cfg <- get_cfg(overrides = list(run = list(msoa_lim = 3L)))
+  cfg <- get_cfg(overrides = list(run = list(msoa_lim = 4L)))
 
   # Note: There are 346 areas (hence 346 tests to run if msoa_lim is NA)
   msoa_lim <- get_cfg_val_msoa(cfg = cfg)

@@ -14,8 +14,7 @@ test_that("pm25 cams data matches reference data", {
   # data frame
   load(here::here("Data_ref/Processed/PM25/pm25_cams.RData"))
 
-  # This will load the pm25 cams data which is produced by running the package
-  # code
+  # This will load the pm25 cams data produced by running the package code
   act_pm25_cams_dat <- readRDS(
     here::here("Data/Processed/PM25/pm25_cams.rds")
   )
