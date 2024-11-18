@@ -218,9 +218,9 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
                                         " local edits to the default config."))
     }
     cli::cli_alert("Copying config template")
-    cli::cli_inform(" '{cfg_templ_path}'")
-    cli::cli_alert("User-specific config location:")
-    cli::cli_inform(" '{cfg_dir}'")
+    cli::cli_inform("   '{cfg_templ_path}'")
+    cli::cli_inform("to user-specific config location:")
+    cli::cli_inform("   '{cfg_dir}'")
     file.copy(cfg_templ_path, cfg_path, overwrite = overwrite)
   }
 

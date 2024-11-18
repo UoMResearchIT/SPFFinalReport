@@ -23,10 +23,16 @@ store:
         ew_msoa: ew_msoa.rds
         ew_msoa_region: ew_msoa_region.rds
         uk_full: uk_full.rds
-        pop_dat: pop_dat.rds
-        tus_dat: tus_dat.rds
       shapefiles_ref:
         msoa: shapefiles.RData
+      population:
+        pop_dat: pop_dat.rds
+      population_ref:
+        pop_dat: pop_dat.RData
+      time_use_survey:
+        tus_dat: tus_dat.rds
+      time_use_survey_ref:
+        tus_dat: tus_dat.RData
   out:
     dirs:
       base: Output

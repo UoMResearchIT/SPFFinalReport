@@ -79,13 +79,27 @@ generate_cfg_template <- function() {
           shapefiles = list(
             ew_msoa        = "ew_msoa.rds",
             ew_msoa_region = "ew_msoa_region.rds",
-            uk_full        = "uk_full.rds",
-            pop_dat        = "pop_dat.rds",
-            tus_dat        = "tus_dat.rds"
+            uk_full        = "uk_full.rds"
           ),
 
           shapefiles_ref = list(
             msoa = "shapefiles.RData"
+          ),
+
+          population = list(
+            pop_dat = "pop_dat.rds"
+          ),
+
+          population_ref = list(
+            pop_dat = "pop_dat.RData"
+          ),
+
+          time_use_survey = list(
+            tus_dat = "tus_dat.rds"
+          ),
+
+          time_use_survey_ref = list(
+            tus_dat = "tus_dat.RData"
           )
         )
       ),
