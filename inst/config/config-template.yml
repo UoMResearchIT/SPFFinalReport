@@ -2,6 +2,8 @@ run:
   seed_val: 1409
   msoa_lim: 2
 store:
+  save:
+    imputed_tus_dat: 'false'
   dat:
     raw:
       dirs:
@@ -21,6 +23,11 @@ store:
         sic2007_class: sic2007_classification.csv
       nm_patterns:
         pop_lad_tus: lad_TUS_
+    interim:
+      dirs:
+        base: Data/Interim
+      fnames:
+        imputed_tus_dat: imputed_tus_dat.rds
     wrangled:
       dirs:
         base: Data/Processed
@@ -42,12 +49,6 @@ store:
       time_use_survey_ref:
         tus_dat: tus_dat.RData
   out:
-    dirs:
-      base: Output
-      activities: CaseStudy2/Activities
-    nm_patterns:
-      activities: activities_
-  out_ref:
     dirs:
       base: Output
       activities: CaseStudy2/Activities

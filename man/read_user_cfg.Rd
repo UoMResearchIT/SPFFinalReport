@@ -16,9 +16,14 @@ for the default. Default: 'config.yml'}
 }
 \value{
 A named list of lists which corresponds to the loaded YAML config.
+See \emph{Details} section for more info.
 }
 \description{
 Read the YAML config file into a named list
+}
+\details{
+String values are parsed to create appropriate types, for example, 'NA' would
+be converted into \code{NA}, 'true' into \code{TRUE}, '10' into \code{10L}, etc.
 }
 \examples{
 read_user_cfg()

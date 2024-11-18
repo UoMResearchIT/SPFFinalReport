@@ -234,7 +234,12 @@ write_user_cfg <- function(cfg = NULL, cfg_dir = NULL, cfg_name = NULL,
 #' @inheritParams get_user_cfg_name
 #'
 #' @return A named list of lists which corresponds to the loaded YAML config.
+#'   See *Details* section for more info.
 #' @export
+#'
+#' @details
+#' String values are parsed to create appropriate types, for example, 'NA' would
+#'   be converted into `NA`, 'true' into `TRUE`, '10' into `10L`, etc.
 #'
 #' @examples
 #' read_user_cfg()

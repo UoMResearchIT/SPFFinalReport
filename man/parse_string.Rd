@@ -20,5 +20,6 @@ parse_string("NA")
 parse_string("notanumber")
 parse_string("100")
 parse_string("0.45")
+parse_string("false")
 
 }

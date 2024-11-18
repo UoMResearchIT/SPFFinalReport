@@ -7,6 +7,16 @@ test_that("activities 2021 data matches reference data", {
   skip_on_bioc()
   skip_on_ci()
 
+  # To run this test, set either of these env vars as follows:
+  #   > Sys.setenv(DIMEX_RUN_HLDT_2 = "true")
+  #   > Sys.setenv(DIMEX_RUN_ALL_HLDT = "true")
+  # Check these vars with:
+  #   > Sys.getenv("DIMEX_RUN_HLDT_2")
+  #   > Sys.getenv("DIMEX_RUN_ALL_HLDT")
+  # Unset these vars with:
+  #   > Sys.unsetenv("DIMEX_RUN_HLDT_2")
+  #   > Sys.unsetenv("DIMEX_RUN_ALL_HLDT")
+
   # Check system env vars to determine whether to run this high level data test
   skip_if_r_cmd_check_or_not_configured("DIMEX_RUN_HLDT_2")
 
@@ -31,16 +41,15 @@ test_that("activities 2021 data matches reference data", {
   out_file_ext <- "rds"
   out_ref_file_ext <- "RData"
 
-  key1 <- "store.out_ref.dirs.base"
-  key2 <- "store.out_ref.dirs.activities"
-  activities_out_ref_dir <- get_dat_path(c(key1, key2), env = "ref",
-                                         cfg = cfg)
+  key1 <- "store.out.dirs.base"
+  key2 <- "store.out.dirs.activities"
+  activities_out_ref_dir <- get_dat_path(c(key1, key2), "ref", cfg = cfg)
 
   key1 <- "store.out.dirs.base"
   key2 <- "store.out.dirs.activities"
-  activities_out_dir <- get_dat_path(c(key1, key2), env = "main", cfg = cfg)
+  activities_out_dir <- get_dat_path(c(key1, key2), "main", cfg = cfg)
 
-  key <- "store.out_ref.nm_patterns.activities"
+  key <- "store.out.nm_patterns.activities"
   activities_nm_pattern_ref <- get_cfg_val(key, cfg = cfg)
 
   key <- "store.out.nm_patterns.activities"

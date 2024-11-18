@@ -35,6 +35,12 @@ generate_cfg_template <- function() {
     store = list(
 
       # ---------------------------------------------------------------------- #
+      # What to save
+      save = list(
+        imputed_tus_dat = "false"
+      ),
+
+      # ---------------------------------------------------------------------- #
       # Data paths
       dat = list(
 
@@ -78,6 +84,18 @@ generate_cfg_template <- function() {
         ),
 
         # -------------------------------------------------------------------- #
+        # Interim data (semi-processed)
+        interim = list (
+          dirs = list(
+            base = file.path("Data", "Interim")
+          ),
+
+          fnames = list (
+            imputed_tus_dat = "imputed_tus_dat.rds"
+          )
+        ),
+
+        # -------------------------------------------------------------------- #
         # Wrangled (processed) data, i.e. transformed/merged
         wrangled = list (
 
@@ -92,6 +110,7 @@ generate_cfg_template <- function() {
 
           # ---------------------------------------------------------------- #
           # File names
+
           shapefiles = list(
             ew_msoa        = "ew_msoa.rds",
             ew_msoa_region = "ew_msoa_region.rds",
@@ -135,23 +154,6 @@ generate_cfg_template <- function() {
         nm_patterns = list(
           activities = "activities_"
         )
-      ),
-
-      # ---------------------------------------------------------------------- #
-      # Output paths
-      out_ref = list (
-
-        # -------------------------------------------------------------------- #
-        # Directory names
-        dirs = list(
-          base = file.path("Output"),
-          activities = file.path("CaseStudy2", "Activities")
-        ),
-
-        # Patterns for file names which have an number appended
-        nm_patterns = list(
-          activities = "activities_"
-        )
       )
     )
   )
@@ -179,6 +181,11 @@ get_cfg_template_keys <- function() {
     "run.seed_val",
     "store",
     "store.dat",
+    "store.dat.interim",
+    "store.dat.interim.dirs",
+    "store.dat.interim.dirs.base",
+    "store.dat.interim.fnames",
+    "store.dat.interim.fnames.imputed_tus_dat",
     "store.dat.raw",
     "store.dat.raw.dirs",
     "store.dat.raw.dirs.base",
@@ -218,17 +225,13 @@ get_cfg_template_keys <- function() {
     "store.dat.wrangled.time_use_survey_ref.tus_dat",
     "store.dat.wrangled.time_use_survey.tus_dat",
     "store.out",
-    "store.out_ref",
-    "store.out_ref.dirs",
-    "store.out_ref.dirs.activities",
-    "store.out_ref.dirs.base",
-    "store.out_ref.nm_patterns",
-    "store.out_ref.nm_patterns.activities",
     "store.out.dirs",
     "store.out.dirs.activities",
     "store.out.dirs.base",
     "store.out.nm_patterns",
-    "store.out.nm_patterns.activities"
+    "store.out.nm_patterns.activities",
+    "store.save",
+    "store.save.imputed_tus_dat"
   ))
 }
 

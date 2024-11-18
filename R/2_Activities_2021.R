@@ -1,31 +1,31 @@
 # SPDX-FileCopyrightText: [2024] University of Manchester
 # SPDX-License-Identifier: apache-2.0
 
-#' Process Activities data
+#' Impute missing tus data
 #'
 #' @inheritParams ensure_valid_env
 #' @inheritParams get_user_cfg_dir
 #' @inheritParams get_user_cfg_name
 #' @inheritParams write_cfg_template
 #'
-#' @return NULL (invisibly).
+#' @return A data frame with the imputed tus data.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' process_activities()
+#' # To override the config to save the imputed tus data:
+#' overrides = list(store = list(save = list(imputed_tus_dat = TRUE)))
+#' impute_tus_dat(cfg = get_cfg(overrides = overrides))
 #' }
-#'
-process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
-                               cfg = NULL) {
+impute_tus_dat <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
+                           cfg = NULL) {
 
-  out_file_ext <- "rds"
-
-  # ------------------------------------ #
-  # Read population data
-  pop_dat <- get_pop_dat(env, cfg_dir, cfg_name, cfg)
+  # --- --- --- #
   tus_dat <- get_tus_dat(env, cfg_dir, cfg_name, cfg)
 
+  save_imputed <- get_cfg_val("store.save.imputed_tus_dat", cfg = cfg)
+
+  # --- --- --- #
   key1 <- "store.dat.raw.dirs.base"
   key2 <- "store.dat.raw.dirs.tus"
   tus_dat_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
@@ -33,28 +33,8 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
   key <- "store.dat.raw.tus.uk_metadata_location"
   tus_meta_nm <- get_cfg_val(key, cfg = cfg)
 
-  key1 <- "store.out.dirs.base"
-  key2 <- "store.out.dirs.activities"
-  activities_out_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
-
-  key <- "store.out.nm_patterns.activities"
-  activities_nm_pattern <- get_cfg_val(key, cfg = cfg)
-
-  # Number of msoa areas to process
-  msoa_lim <- get_cfg_val_msoa()
-
-  # Suppress summarise info
-  op <- options(dplyr.summarise.inform = FALSE)
-  on.exit(options(op), add = TRUE, after = FALSE)
-
-  # Setting seed
-  seed_val <- get_cfg_val("run.seed_val")
-  set.seed(seed_val)
-
-  ##############################################
-  ### Filling in missings in the TUS dataset ###
-  ##############################################
-  # Filling in missings using most popular activities
+  # --- --- --- #
+  # Fill in missing data using most popular activities
   tus_dat <- tus_dat %>%
     # Setting missings to NA
     dplyr::mutate(location_popular = ifelse(location %in% c(-9, 0, 10, 99), NA, location)) %>%
@@ -122,12 +102,69 @@ process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
                                      location_popular_label = location_label),
                      by = 'location_popular')
 
-  ########################################################################
-  ### Sampling activity sequences (Method 1) - Complete sequences only ###
-  ########################################################################
+  if (save_imputed) {
+    key <- "store.dat.interim.dirs.base"
+    imp_tus_dat_root <- get_dat_path(key, "main", cfg = cfg)
+
+    key <- "store.dat.interim.fnames.imputed_tus_dat"
+    imp_tus_dat_fname <- get_cfg_val(key, cfg = cfg)
+
+    saveRDS(tus_dat, file.path(imp_tus_dat_root, imp_tus_dat_fname))
+  }
+
+  tus_dat
+}
+
+#' Process Activities data
+#'
+#' @inheritParams ensure_valid_env
+#' @inheritParams get_user_cfg_dir
+#' @inheritParams get_user_cfg_name
+#' @inheritParams write_cfg_template
+#'
+#' @return NULL (invisibly).
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' process_activities()
+#' }
+#'
+process_activities <- function(env = NULL, cfg_dir = NULL, cfg_name = NULL,
+                               cfg = NULL) {
+
+  out_file_ext <- "rds"
+
+  # ------------------------------------ #
+  # Read population data
+  pop_dat <- get_pop_dat(env, cfg_dir, cfg_name, cfg)
+
+  key1 <- "store.out.dirs.base"
+  key2 <- "store.out.dirs.activities"
+  activities_out_dir <- get_dat_path(c(key1, key2), env, cfg = cfg)
+
+  key <- "store.out.nm_patterns.activities"
+  activities_nm_pattern <- get_cfg_val(key, cfg = cfg)
+
+  # Number of msoa areas to process
+  msoa_lim <- get_cfg_val_msoa()
+
+  # Suppress summarise info
+  op <- options(dplyr.summarise.inform = FALSE)
+  on.exit(options(op), add = TRUE, after = FALSE)
+
+  # Setting seed
+  seed_val <- get_cfg_val("run.seed_val")
+  set.seed(seed_val)
+
+  tus_dat <- impute_tus_dat(env, cfg_dir, cfg_name, cfg)
+
+  # ------------------------------------ #
+  # Sample activity sequences (Method 1) - Complete sequences only
+
   # Loop for each MSOA
   for (k in unique(pop_dat$area_id)[1:msoa_lim]) {
-    # Sampling activities
+    # Sample activities
     activities_complete <- sample_population(subset(pop_dat, area_id == k),
                                              subset(tus_dat, percmissing == 0),
                                              nsample = 1,

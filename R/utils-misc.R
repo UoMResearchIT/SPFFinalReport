@@ -131,12 +131,15 @@ is_int_val <- function(x) {
 #' parse_string("notanumber")
 #' parse_string("100")
 #' parse_string("0.45")
+#' parse_string("false")
 #'
 parse_string <- function(x) {
 
   if (x == "NA") {
     # Return NA
     NA
+  } else if (x %in% c("true", "false")) {
+    ifelse(x == "true", TRUE, FALSE)
   } else {
     y <- tryCatch({
       readr::parse_double(x)

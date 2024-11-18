@@ -10,7 +10,10 @@ test_that("population data matches reference data", {
   # To run this test, set either of these env vars as follows:
   #   > Sys.setenv(DIMEX_RUN_HLDT_1B = "true")
   #   > Sys.setenv(DIMEX_RUN_ALL_HLDT = "true")
-  # Reverse this with:
+  # Check these vars with:
+  #   > Sys.getenv("DIMEX_RUN_HLDT_1B")
+  #   > Sys.getenv("DIMEX_RUN_ALL_HLDT")
+  # Unset these vars with:
   #   > Sys.unsetenv("DIMEX_RUN_HLDT_1B")
   #   > Sys.unsetenv("DIMEX_RUN_ALL_HLDT")
 
