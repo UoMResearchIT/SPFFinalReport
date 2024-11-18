@@ -10,11 +10,10 @@ test_that("activities 2021 data matches reference data", {
   # Check system env vars to determine whether to run this high level data test
   skip_if_r_cmd_check_or_not_configured("DIMEX_RUN_HLDT_2")
 
-  pop_dat <- get_pop_dat(env = "main", cfg = NULL)
-
   # Read config and set number of MSOAs to test
   cfg <- get_cfg(overrides = list(run = list(msoa_lim = 4L)))
 
+  # pop_dat will be loaded in setup.R
   # Note: There are 346 areas (hence 346 tests to run if msoa_lim is NA)
   msoa_lim <- get_cfg_val_msoa(cfg = cfg)
   areas <- get_area_id_list(pop_dat$area_id, msoa_lim = NA)

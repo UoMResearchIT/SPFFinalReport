@@ -74,6 +74,38 @@ env_should_run_hl_data_test <- function(env_var_id = NULL) {
   run_all || (Sys.getenv(env_var_id, unset = "false") == "true")
 }
 
+get_hldt_env_vars <- function() {
+  c(
+    "DIMEX_RUN_HLDT_1A",
+    "DIMEX_RUN_HLDT_1B",
+    "DIMEX_RUN_HLDT_1C",
+    "DIMEX_RUN_HLDT_1D",
+    "DIMEX_RUN_HLDT_1E",
+    "DIMEX_RUN_HLDT_1F",
+
+    "DIMEX_RUN_HLDT_2",
+
+    "DIMEX_RUN_HLDT_3A",
+    "DIMEX_RUN_HLDT_3B",
+
+    "DIMEX_RUN_HLDT_4A",
+    "DIMEX_RUN_HLDT_4B",
+
+    "DIMEX_RUN_ALL_HLDT"
+  )
+}
+
+env_should_run_any_hl_data_tests <- function() {
+  should_run <- FALSE
+  for (env_var in get_hldt_env_vars()) {
+    if (should_run) {
+      return(TRUE)
+    }
+    should_run <- should_run || (Sys.getenv(env_var, unset = "false") == "true")
+  }
+  should_run
+}
+
 #' Test helper to create a test config
 #'
 #' @return A list which conforms to the package config structure

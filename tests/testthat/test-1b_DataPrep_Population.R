@@ -34,12 +34,15 @@ test_that("population data matches reference data", {
   pop_dat_fname_ref <- get_cfg_val(key, cfg = cfg)
 
   # ------------------------------------ #
+  # pop_dat will be loaded in setup.R
+  # Save the actual pop_dat as it will be overwritten
+  act_pop_dat <- pop_dat
+
+  # This will load the population data produced by running the package code
+  # *NB* Load this /after/ setting pop_dat as it will be overwritten here
   # This should load 1 object 'pop_dat' into the current environment; it is a
   # data frame
   load(file.path(pop_dat_root_ref, pop_dat_fname_ref))
-
-  # This will load the population data produced by running the package code
-  act_pop_dat <- get_pop_dat(cfg = cfg)
 
   expect_equal(act_pop_dat, pop_dat)
 })

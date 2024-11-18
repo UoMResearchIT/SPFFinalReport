@@ -6,6 +6,7 @@ test_that("get_pkg_cfg_dir fails with msg if supplied dir not found", {
 })
 
 test_that("write_user_cfg writes expected config to file", {
+
   tst_cfg <- get_test_cfg()
 
   exp_keys <- get_test_cfg_exp_keys()
