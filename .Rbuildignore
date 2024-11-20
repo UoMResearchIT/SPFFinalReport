@@ -2,16 +2,19 @@
 ^\.Rproj\.user$
 ^\.Renviron$
 
+^README\.Rmd$
 ^LICENSE\.md$
 
 ^doc$
 ^Meta$
 
 ^_pkgdown\.yml$
-^docs$
 ^pkgdown$
+^docs$
 
 ^vignettes/\.quarto$
+
+^utils$
 
 ^Data$
 ^Data_ref$

@@ -1,0 +1,29 @@
+---
+output:
+  github_document
+---
+
+<!-- README.md is generated from README.Rmd -->
+<!-- Please edit that file, not this one! -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# DIMEX
+
+[Data Integration Model for personal EXposures]{.subtitle}
+
+`dimex` is an R package that implements the DIMEX model. It is derived from the
+SPFFinalReport code (created for the case study and report for the final SPF
+reporting period).
+
+<!-- ======================================================================= -->
+<!-- Doc update timestamp: `r format(Sys.time(), "%a %d %b %Y %H:%M %Z")` -->
+
+See the [getting started](articles/dimex.html) vignette for more information.

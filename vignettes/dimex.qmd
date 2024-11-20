@@ -3,8 +3,9 @@ title: "dimex"
 author: "Toni Price"
 date: last-modified
 date-format: "[Last updated:] DD MMMM, YYYY"
-format: 
+format:
   html:
+    css: styles.css
     mermaid: 
       theme: default
 vignette: >
@@ -24,7 +25,9 @@ knitr::opts_chunk$set(
 library(dimex)
 ```
 
-## DIMEX: Data Integration Model for personal EXposures
+## DIMEX
+
+[Data Integration Model for personal EXposures]{.subtitle}
 
 ### Introduction
 
@@ -33,6 +36,17 @@ code (created for the case study and report for the final SPF reporting period).
 
 See also the [configuration](config.html) and [development](development.html)
 vignettes.
+
+### Installation
+
+[TODO: TBC]
+
+```{=comment}
+<!-- You can install the development version of `dimex` from GitHub with: -->
+
+<!-- # install.packages("remotes") -->
+<!-- remotes::install_github("path/dimex") -->
+```
 
 ## Data workflow
 
@@ -101,9 +115,9 @@ run_workflow(banner_only = TRUE)
 # Run steps 4a and 4b only, with the specified config
 # See the [configuration](config.html) vignette for information on
 # how to create a non-default config
-# TODO: Show example of creating a config:
-# cfg = ...
-# cfg_overrides = ...
+# # [TODO: Show example of creating a config]
+# # cfg = ...
+# # cfg_overrides = ...
 run_workflow("4a, 4b", cfg = cfg, cfg_overrides = cfg_overrides)
 ```
 

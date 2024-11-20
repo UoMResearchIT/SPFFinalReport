@@ -3,8 +3,9 @@ title: "Development"
 author: "Toni Price"
 date: last-modified
 date-format: "[Last updated:] DD MMMM, YYYY"
-format: 
-  html
+format:
+  html:
+    css: styles.css
 vignette: >
   %\VignetteIndexEntry{Development}
   %\VignetteEngine{quarto::html}
@@ -43,8 +44,8 @@ For a development environment:
     > install.packages("devtools")
     ```
 
-2.  Ensure required packages are installed.
-    - TODO: Implement renv and add setup instructions
+2.  Ensure required packages are installed. <br>
+    [TODO: Implement `renv` and add setup instructions]
 
 3.  See the [configuration](config.html) vignette for configuration information.
 
@@ -187,7 +188,7 @@ Note NB: <br>
 Changing the template will necessitate updating user config files that have
 already been created.
 
-TODO: When there is a conversion utility, update the following: <br>
+<!-- [TODO: When a conversion utility has been implemented, update the following] -->
 **There is currently no mechanism to convert the format of a user config file**
 *so until such time as this can be implemented, any local changes to a user
 config will need to be* **manually updated**.

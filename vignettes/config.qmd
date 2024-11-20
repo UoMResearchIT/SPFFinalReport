@@ -3,8 +3,9 @@ title: "Config"
 author: "Toni Price"
 date: last-modified
 date-format: "[Last updated:] DD MMMM, YYYY"
-format: 
-  html
+format:
+  html:
+    css: styles.css
 vignette: >
   %\VignetteIndexEntry{Config}
   %\VignetteEngine{quarto::html}
@@ -119,7 +120,7 @@ effect. This can be achieved by doing one of the following:
 
 System environment variables for the `dimex` package start with 'DIMEX_'.
 
-TODO: Add info about the act, ref and test root paths
+[TODO: Add info about the act, ref and test root paths]
 
 | Environment | Variable name   | Description                                      |
 |:------------|:----------------|:-------------------------------------------------|
@@ -167,10 +168,10 @@ so any custom changes would then need to be *manually re-applied*.
 
 Defaults:
 
-TODO: Describe defaults
+[TODO: Describe defaults]
 
 In general, defaults can be overridden by manually editing the config.
 
-TODO: Show examples of overriding the defaults
+[TODO: Show examples of overriding the defaults]
 
 --------------------------------------------------------------------------------
