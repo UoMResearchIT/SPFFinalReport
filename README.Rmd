@@ -19,11 +19,13 @@ knitr::opts_chunk$set(
 
 [Data Integration Model for personal EXposures]{.subtitle}
 
-`dimex` is an R package that implements the DIMEX model. It is derived from the
-SPFFinalReport code (created for the case study and report for the final SPF
-reporting period).
+`dimex` is an R package that implements the DIMEX model. The package is derived
+from the SPFFinalReport code (created for the case study and report for the
+final SPF reporting period).
 
 <!-- ======================================================================= -->
 <!-- Doc update timestamp: `r format(Sys.time(), "%a %d %b %Y %H:%M %Z")` -->
 
-See the [getting started](articles/dimex.html) vignette for more information.
+[Browse the source code](https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/)
+
+See [Get started](articles/dimex.html) for more information.

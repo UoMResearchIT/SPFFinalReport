@@ -11,8 +11,8 @@ Models personal exposure to pollution. Package derived from the SPFFinalReport r
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://UoMResearchIT.github.io/SPFFinalReport}
-  \item \url{https://github.com/UoMResearchIT/SPFFinalReport}
+  \item \url{https://UoMResearchIT.github.io/SPFFinalReport/}
+  \item \url{https://github.com/UoMResearchIT/SPFFinalReport/}
 }
 
 }

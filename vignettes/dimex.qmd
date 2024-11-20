@@ -31,8 +31,9 @@ library(dimex)
 
 ### Introduction
 
-This package implements the DIMEX model. It is derived from the SPFFinalReport
-code (created for the case study and report for the final SPF reporting period).
+This package implements the DIMEX model. The package derived from the
+SPFFinalReport code (created for the case study and report for the final SPF
+reporting period).
 
 See also the [configuration](config.html) and [development](development.html)
 vignettes.

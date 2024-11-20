@@ -7,11 +7,14 @@
 <span class="subtitle">Data Integration Model for personal
 EXposures</span>
 
-`dimex` is an R package that implements the DIMEX model. It is derived
-from the SPFFinalReport code (created for the case study and report for
-the final SPF reporting period).
+`dimex` is an R package that implements the DIMEX model. The package is
+derived from the SPFFinalReport code (created for the case study and
+report for the final SPF reporting period).
 
 <!-- ======================================================================= -->
-<!-- Doc update timestamp: Wed 20 Nov 2024 15:06 GMT -->
+<!-- Doc update timestamp: Wed 20 Nov 2024 19:10 GMT -->
+
+[Browse the source
+code](https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/)
 
 See [Get started](articles/dimex.html) for more information.
