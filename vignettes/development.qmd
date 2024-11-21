@@ -28,8 +28,15 @@ library(dimex)
 ## About this vignette
 
 This vignette deals with how to use the `dimex` package as a developer. See also
-the [introduction to dimex](dimex.html) and [configuration](config.html)
-vignettes.
+the [Get started](dimex.html) and [Configuration](config.html) vignettes.
+
+## Installation {#install-dev}
+
+Clone the GitHub repository:
+
+```
+$ git clone https://github.com/UoMResearchIT/SPFFinalReport.git
+```
 
 ## Setup
 
@@ -37,17 +44,27 @@ For a development environment:
 
 ### devtools
 
-1.  Ensure `devtools` is installed. <br>
-    From the `R` console:
+1.  Ensure `devtools` is installed:
 
+    ```{r eval=FALSE}
+    install.packages("devtools")
     ```
-    > install.packages("devtools")
+
+2.  Ensure required packages are installed:
+
+    ```{r eval=FALSE}
+    install.packages(c("cli", "DescTools", "dplyr", "ggplot2", "gridExtra",
+                       "haven", "lubridate", "magrittr", "openair", "plyr",
+                       "proxy", "purrr", "rappdirs", "raster", "readr",
+                       "reshape2", "scales", "sf", "sp", "stringr",
+                       "truncnorm", "yaml"))
     ```
 
-2.  Ensure required packages are installed. <br>
-    [TODO: Implement `renv` and add setup instructions]
+```{=comment}
+[TODO: Implement `renv` and add setup instructions]
+```
 
-3.  See the [configuration](config.html) vignette for configuration information.
+3.  See the [Configuration](config.html) vignette for configuration information.
 
 ### Some useful dev commands
 
@@ -55,41 +72,41 @@ These commands should be executed from the `R` console.
 
 (Note that when `devtools` is installed, the following commands are usually
 bound to keyboard shortcuts in RStudio; these are shown in the comments where
-applicable)
+applicable.)
 
--  Load the development version of the package:
+- Load the development version of the package:
 
-    ```
-    # Ctrl/Cmd + Shift + L
-    > devtools::load_all(".")
-    ```
+```{r eval=FALSE}
+# Ctrl/Cmd + Shift + L
+devtools::load_all(".")
+```
 
 -  Run the automated test suite:
 
-    ```
-    # Ctrl/Cmd + Shift + T
-    > devtools::test(".")
-    ```
+```{r eval=FALSE}
+# Ctrl/Cmd + Shift + T
+devtools::test(".")
+```
 
 -  Create package documentation:
 
-    ```
-    # Ctrl/Cmd + Shift + D
-    > devtools::document(roclets = c('rd', 'collate', 'namespace'))
-    ```
+```{r eval=FALSE}
+# Ctrl/Cmd + Shift + D
+devtools::document(roclets = c('rd', 'collate', 'namespace'))
+```
 
 -  Build the package vignettes:
 
-    ```
-    > devtools::build_vignettes()
-    ```
+```{r eval=FALSE}
+devtools::build_vignettes()
+```
 
 -  Run a package check:
 
-    ```
-    # Ctrl/Cmd + Shift + E
-    > devtools::check()
-    ```
+```{r eval=FALSE}
+# Ctrl/Cmd + Shift + E
+devtools::check()
+```
     
 - Test the current file:
 
@@ -145,14 +162,14 @@ applicable)
 - To temporarily set a specific high-level data test to run in the current R
   session, run (for e.g.):
 
-  ```
+  ```{r eval=FALSE}
   # Set the high-level data test for step "1a" to run
   Sys.setenv(DIMEX_RUN_HLDT_1A = "true")
   ```
   
   To reverse this, do one of the following:
   
-  ```
+  ```{r eval=FALSE}
   Sys.setenv(DIMEX_RUN_HLDT_1A = "false")
   # Or:
   Sys.unsetenv("DIMEX_RUN_HLDT_1A")
@@ -161,19 +178,19 @@ applicable)
 - To temporarily set all the high-level data tests to run in the current R
   session, use:
 
-  ```
+  ```{r eval=FALSE}
   Sys.setenv(DIMEX_RUN_ALL_HLDT = "true")
   ```
   
   To reverse this, do one of the following:
   
-  ```
+  ```{r eval=FALSE}
   Sys.setenv(DIMEX_RUN_ALL_HLDT = "false")
   # Or:
   Sys.unsetenv("DIMEX_RUN_ALL_HLDT")
   ```
-  
-### The config template
+
+### The config template {#config-template}
 
 To update the config template, edit the functions [generate_cfg_template()] and
 [get_cfg_template_keys()].
@@ -188,10 +205,13 @@ Note NB: <br>
 Changing the template will necessitate updating user config files that have
 already been created.
 
-<!-- [TODO: When a conversion utility has been implemented, update the following] -->
+```{=comment}
+[TODO: When a conversion utility has been implemented, update the following]
+```
 **There is currently no mechanism to convert the format of a user config file**
 *so until such time as this can be implemented, any local changes to a user
-config will need to be* **manually updated**.
+config will need to be* **manually applied**.
+
 To update the user config, run:
 ```{r, eval=FALSE}
 # NB: The following will *overwrite* any local changes to the user config!

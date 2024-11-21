@@ -53,23 +53,23 @@ A user-specific `.Renviron` would typically be stored at:
 
 - Windows:
 
-    ````
-    C:\Users\YourUsername\.Renviron
-    ````
+```
+C:\Users\YourUsername\.Renviron
+```
     
     Ensure the file name is exactly ".Renviron" (without any file extension like
     .txt)
 
 - Linux/macOS:
 
-    ````
-    ~/.Renviron
-    ````
+```
+~/.Renviron
+```
 
 Create this file if necessary. From within R, the `usethis` package can do this
 for you:
 
-```
+```{r, eval=FALSE}
 # Create a new user-level .Renviron file, or open an existing one for editing
 usethis::edit_r_environ("user")
 # Or, as this is the default:
@@ -86,7 +86,7 @@ contain such entries by default.)
 The `usethis` package supports creation/editing of a project-level `.Renviron`
 file too:
 
-```
+```{r, eval=FALSE}
 # Create a new project-level .Renviron file, or open an existing one for editing
 usethis::edit_r_environ("project")
 ```
@@ -99,9 +99,9 @@ effect. This can be achieved by doing one of the following:
 
 - Reload `.Renviron` in a running R session with, e.g.
 
-    ````
-    readRenviron("~/.Renviron")
-    ````
+```{r, eval=FALSE}
+readRenviron("~/.Renviron")
+```
     
     (where you shoul replace "~/.Renviron" with the appropriate path to your
     `.Renviron` file if it's not in your home directory)
@@ -109,9 +109,9 @@ effect. This can be achieved by doing one of the following:
 - A temporary alternative to reloading `.Renviron` is to manually override
   specific environment variables within the current R session:
   
-    ```
-    Sys.setenv(VAR_NAME = "value")
-    ```
+```{r, eval=FALSE}
+Sys.setenv(VAR_NAME = "value")
+```
 
     This can be helpful for testing specific changes without modifying the
     environment file.
@@ -120,11 +120,13 @@ effect. This can be achieved by doing one of the following:
 
 System environment variables for the `dimex` package start with 'DIMEX_'.
 
-[TODO: Add info about the act, ref and test root paths]
+```{=comment}
+[TODO: Add info about the main, ref and test root paths]
+```
 
-| Environment | Variable name   | Description                                      |
-|:------------|:----------------|:-------------------------------------------------|
-| act         | DIMEX_STORE     | Root path of the dimex Data and Output           |
+| Environment | Variable name   | Description                                        |
+|:------------|:----------------|:---------------------------------------------------|
+| main         | DIMEX_STORE     | Root path of the dimex Data and Output            |
 | ref         | DIMEX_STORE_REF | Root path of the dimex 'reference' Data and Output |
 
 ## The `config` object for package-level configuration {#pkg-config}
@@ -137,6 +139,8 @@ If required, the configuration can be customised as it is stored on a per-user
 basis.
 
 ## The `config` template {#config-template}
+
+See also [development](#config-template).
 
 To create a default configuration for the first time and save it to your
 personal system, run:
@@ -166,7 +170,7 @@ so any custom changes would then need to be *manually re-applied*.
 
 ## Default `config` values and overriding them {#default-config-values}
 
-Defaults:
+### Defaults
 
 [TODO: Describe defaults]
 

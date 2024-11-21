@@ -35,19 +35,19 @@ This package implements the DIMEX model. The package derived from the
 SPFFinalReport code (created for the case study and report for the final SPF
 reporting period).
 
-See also the [configuration](config.html) and [development](development.html)
+See also the [Configuration](config.html) and [Development](development.html)
 vignettes.
 
-### Installation
+### Installation {#install}
 
-[TODO: TBC]
+To install the development version of `dimex` from GitHub:
 
-```{=comment}
-<!-- You can install the development version of `dimex` from GitHub with: -->
-
-<!-- # install.packages("remotes") -->
-<!-- remotes::install_github("path/dimex") -->
+```{r, eval = FALSE}
+# install.packages("remotes")
+remotes::install_github("https://github.com/UoMResearchIT/SPFFinalReport")
 ```
+
+See [dimex](#install-dev) for doing development on the `dimex` package.
 
 ## Data workflow
 
@@ -82,13 +82,11 @@ For each of these data wrangling phases, there are three possible environments:
   - small enough to use for unit/integration tests
   - can be reliably reproduced
 
-## Getting started
-
-### Configuration
+## Configuration
 
 See [configuration](config.html) for configuration information.
 
-### Running the pipeline
+## Workflow: Running the pipeline
 
 The main entry point for running the code is the
 [run_workflow()](../reference/run_workflow.html)
@@ -114,15 +112,18 @@ run_workflow("4a, 4b")
 run_workflow(banner_only = TRUE)
 
 # Run steps 4a and 4b only, with the specified config
-# See the [configuration](config.html) vignette for information on
+# See the [Configuration](config.html) vignette for information on
 # how to create a non-default config
-# # [TODO: Show example of creating a config]
-# # cfg = ...
-# # cfg_overrides = ...
 run_workflow("4a, 4b", cfg = cfg, cfg_overrides = cfg_overrides)
+```
+
+```{=comment}
+# [TODO: Show example of creating a config in the code chunk above]
+# cfg = ...
+# cfg_overrides = ...
 ```
 
 ## Development
 
 For doing development work on the `dimex` package, see the
-[development](development.html) vignette.
+[Development](development.html) vignette.

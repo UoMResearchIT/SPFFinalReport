@@ -5,3 +5,4 @@ repo:
     branch: 38-convert-to-r-pkg
 template:
   bootstrap: 5
+  bootswatch: yeti
