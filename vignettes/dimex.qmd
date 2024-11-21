@@ -1,5 +1,5 @@
 ---
-title: "dimex"
+title: "dimex R package"
 author: "Toni Price"
 date: last-modified
 date-format: "[Last updated:] DD MMMM, YYYY"
@@ -21,13 +21,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, echo = FALSE}
 library(dimex)
 ```
 
-## DIMEX
-
-[Data Integration Model for personal EXposures]{.subtitle}
+[[D]{.dimex-acronym}ata [I]{.dimex-acronym}ntegration [M]{.dimex-acronym}odel
+for personal [EX]{.dimex-acronym}posures]{.subtitle}
 
 ### Introduction
 
@@ -47,7 +46,8 @@ To install the development version of `dimex` from GitHub:
 remotes::install_github("https://github.com/UoMResearchIT/SPFFinalReport")
 ```
 
-See [dimex](#install-dev) for doing development on the `dimex` package.
+See [development installation](development.hml#install-dev) for development work
+on the `dimex` package.
 
 ## Data workflow
 
@@ -84,13 +84,14 @@ For each of these data wrangling phases, there are three possible environments:
 
 ## Configuration
 
-See [configuration](config.html) for configuration information.
+See the [Configuration](config.html) vignette for configuration information.
 
 ## Workflow: Running the pipeline
 
 The main entry point for running the code is the
 [run_workflow()](../reference/run_workflow.html)
 function.
+
 If called without any arguments, it will run all workflow steps by default. You
 can also:
 

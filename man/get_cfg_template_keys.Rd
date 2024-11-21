@@ -13,8 +13,8 @@ A character vector of expected config keys.
 Retrieve a character vector of expected config keys
 }
 \details{
-The returned keys should be the same as those returned by
-\code{get_cfg_keys(cfg = generate_cfg_template())}.
+The returned keys should be the same as keys in the config that would be
+created with \code{generate_cfg_template()}.
 }
 \examples{
 get_cfg_template_keys()

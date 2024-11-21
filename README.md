@@ -12,7 +12,7 @@ derived from the SPFFinalReport code (created for the case study and
 report for the final SPF reporting period).
 
 <!-- ======================================================================= -->
-<!-- Doc update timestamp: Wed 20 Nov 2024 19:10 GMT -->
+<!-- Doc update timestamp: Thu 21 Nov 2024 13:49 GMT -->
 
 [Browse the source
 code](https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/)

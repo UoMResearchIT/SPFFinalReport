@@ -2,7 +2,7 @@
 % Please edit documentation in R/config-validation.R
 \name{validate_cfg}
 \alias{validate_cfg}
-\title{Validate the config}
+\title{Validate a config}
 \usage{
 validate_cfg(exp_keys = NULL, cfg_dir = NULL, cfg_name = NULL, cfg = NULL)
 }
@@ -24,7 +24,7 @@ values. Default: The template config returned by \code{\link[=generate_cfg_templ
 TRUE if the config is valid, FALSE otherwise.
 }
 \description{
-Check that all entries in the config are valid.
+Check that all entries in a config are valid.
 }
 \examples{
 # Validate the default config:

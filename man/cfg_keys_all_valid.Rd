@@ -2,7 +2,7 @@
 % Please edit documentation in R/config-validation.R
 \name{cfg_keys_all_valid}
 \alias{cfg_keys_all_valid}
-\title{Check if a config has any invalid keys}
+\title{Check if config has any invalid keys}
 \usage{
 cfg_keys_all_valid(
   exp_keys = NULL,
@@ -33,9 +33,12 @@ values. Default: The template config returned by \code{\link[=generate_cfg_templ
 TRUE if the keys are all valid, FALSE otherwise.
 }
 \description{
-Check if a config has any invalid keys
+Check if config has any invalid keys
 }
 \examples{
+\dontrun{
+# Check keys in the default config:
 cfg_keys_all_valid()
+}
 
 }

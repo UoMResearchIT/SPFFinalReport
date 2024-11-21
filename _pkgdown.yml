@@ -2,7 +2,8 @@ url: https://UoMResearchIT.github.io/SPFFinalReport/
 repo:
   url:
     source: https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/
-    branch: 38-convert-to-r-pkg
 template:
   bootstrap: 5
   bootswatch: yeti
+deploy:
+  install_metadata: true

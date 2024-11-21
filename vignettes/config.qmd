@@ -28,20 +28,20 @@ library(dimex)
 ## Background
 
 This vignette describes how to configure the `dimex` package. See
-[introduction to dimex](dimex.html) for context.
+[Get started](dimex.html) for context.
 
 For information about configuration that is relevant within a development
-environment, see [development](development.html).
+environment, see [Development](development.html).
 
 There are two categories of configuration: localised (environment-dependent) and
 default package-level configuration which can be customised to a user's
 circumstances if required.
 
 Environment-dependent configuration values are specified via
-[system environment variables](#sys-env-vars), whilst package-level
-configuration values are specified via the [config](#pkg-config) object.
+[system environment variables](config.html#sys-env-vars), whilst package-level
+configuration values are specified via the [config](config.html#pkg-config) object.
 
-## System Environment Variables for localised configuration {#sys-env-vars}
+## System Environment Variables {#sys-env-vars}
 
 ### `.Renviron` file
 
@@ -103,7 +103,7 @@ effect. This can be achieved by doing one of the following:
 readRenviron("~/.Renviron")
 ```
     
-    (where you shoul replace "~/.Renviron" with the appropriate path to your
+    (where you should replace "~/.Renviron" with the appropriate path to your
     `.Renviron` file if it's not in your home directory)
 
 - A temporary alternative to reloading `.Renviron` is to manually override
@@ -116,7 +116,7 @@ Sys.setenv(VAR_NAME = "value")
     This can be helpful for testing specific changes without modifying the
     environment file.
 
-### Valid system environment variables
+### Valid sys env variables
 
 System environment variables for the `dimex` package start with 'DIMEX_'.
 
@@ -126,10 +126,10 @@ System environment variables for the `dimex` package start with 'DIMEX_'.
 
 | Environment | Variable name   | Description                                        |
 |:------------|:----------------|:---------------------------------------------------|
-| main         | DIMEX_STORE     | Root path of the dimex Data and Output            |
+| main        | DIMEX_STORE     | Root path of the dimex Data and Output             |
 | ref         | DIMEX_STORE_REF | Root path of the dimex 'reference' Data and Output |
 
-## The `config` object for package-level configuration {#pkg-config}
+## The `config` object {#pkg-config}
 
 This configuration relates to package-level values which do not necessarily need
 customising, as long as a user's data and output on their personal filesystem
@@ -139,8 +139,6 @@ If required, the configuration can be customised as it is stored on a per-user
 basis.
 
 ## The `config` template {#config-template}
-
-See also [development](#config-template).
 
 To create a default configuration for the first time and save it to your
 personal system, run:
@@ -165,14 +163,17 @@ To update or recreate this config file, run:
 write_user_cfg(overwrite = TRUE)
 ```
 
-Though note that there is currently no conversion path for existing config files
-so any custom changes would then need to be *manually re-applied*.
+Though note that *there is currently no conversion utility for existing config
+files* so any custom changes would then need to be **manually re-applied**.
+Please make sure to back up your config file.
 
-## Default `config` values and overriding them {#default-config-values}
+## Default and custom `config` values {#config-values}
 
 ### Defaults
 
 [TODO: Describe defaults]
+
+### Custom
 
 In general, defaults can be overridden by manually editing the config.
 

@@ -24,7 +24,7 @@ is_r_cmd_check <- function() {
   nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))
 }
 
-#' Skip a test on certain conditions
+#' Skip a test under certain conditions
 #'
 #' Skip a test if not running within the context of 'R CMD CHECK'  or not
 #' configured to run, as determined by the value of the supplied system
@@ -163,20 +163,20 @@ get_test_cfg <- function() {
 get_test_cfg_exp_keys <- function() {
   c(
     "top",
-    "top.fruit",
-    "top.fruit.yellow",
-    "top.fruit.red",
-    "top.fruit.green",
     "top.colours",
     "top.colours.main",
     "top.colours.sub",
     "top.colours.sub.sub1",
     "top.colours.sub.sub2",
-    "top.shapes",
-    "top.shapes.oblong",
+    "top.fruit",
+    "top.fruit.green",
+    "top.fruit.red",
+    "top.fruit.yellow",
     "top.locations",
     "top.locations.base_path",
-    "top.locations.other_path"
+    "top.locations.other_path",
+    "top.shapes",
+    "top.shapes.oblong"
   )
 }
 

@@ -193,7 +193,7 @@ get_invalid_cfg_keys <- function(exp_keys = NULL, cfg_dir = NULL,
   invalid
 }
 
-#' Check if a config has any invalid keys
+#' Check if config has any invalid keys
 #'
 #' @inheritParams ensure_cfg_param_types
 #' @inheritParams get_user_cfg_dir
@@ -204,7 +204,10 @@ get_invalid_cfg_keys <- function(exp_keys = NULL, cfg_dir = NULL,
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # Check keys in the default config:
 #' cfg_keys_all_valid()
+#' }
 #'
 cfg_keys_all_valid <- function(exp_keys = NULL, cfg_dir = NULL,
                                cfg_name = NULL, invalid_keys = NULL,
@@ -224,9 +227,9 @@ cfg_keys_all_valid <- function(exp_keys = NULL, cfg_dir = NULL,
   length(invalid_keys) == 0
 }
 
-#' Validate the config
+#' Validate a config
 #'
-#' Check that all entries in the config are valid.
+#' Check that all entries in a config are valid.
 #'
 #' @inheritParams ensure_cfg_param_types
 #' @inheritParams get_user_cfg_dir

@@ -64,7 +64,7 @@ For a development environment:
 [TODO: Implement `renv` and add setup instructions]
 ```
 
-3.  See the [Configuration](config.html) vignette for configuration information.
+3. See the [Configuration](config.html) vignette for configuration information.
 
 ### Some useful dev commands
 
@@ -190,32 +190,38 @@ devtools::check()
   Sys.unsetenv("DIMEX_RUN_ALL_HLDT")
   ```
 
-### The config template {#config-template}
+```{=comment}
+[TODO: Add example .Renviron file]
+### Example `.Renviron` file
+```
 
-To update the config template, edit the functions [generate_cfg_template()] and
-[get_cfg_template_keys()].
+### Updating the config template {#update-config-template}
 
-Note NB: After updating the config template, save an updated copy to the package
-config location by running:
+To update the config template, edit the function
+[generate_cfg_template()](../reference/generate_cfg_template.html).
+
+**Note NB**: After updating the config template, save an updated copy to the
+package config location by running:
 ```{r, eval=FALSE}
 write_cfg_template()
 ```
 
-Note NB: <br>
-Changing the template will necessitate updating user config files that have
-already been created.
+If you change the template, you will need to *update user config files that have
+already been created*.
 
 ```{=comment}
 [TODO: When a conversion utility has been implemented, update the following]
 ```
-**There is currently no mechanism to convert the format of a user config file**
-*so until such time as this can be implemented, any local changes to a user
-config will need to be* **manually applied**.
+There is currently no mechanism to convert the format of a user config file so
+until such time as this can be implemented, any local changes to a user config
+will need to be **manually re-applied**.
+
+See also [config template information](#config-template).
 
 To update the user config, run:
 ```{r, eval=FALSE}
 # NB: The following will *overwrite* any local changes to the user config!
 # Until there is a conversion utility available, local changes will need to be
-# *manually updated*.
+# manually updated.
 write_user_cfg(overwrite = TRUE)
 ```

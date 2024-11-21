@@ -168,71 +168,14 @@ generate_cfg_template <- function() {
 #' @export
 #'
 #' @details
-#' The returned keys should be the same as those returned by
-#'   `get_cfg_keys(cfg = generate_cfg_template())`.
+#' The returned keys should be the same as keys in the config that would be
+#'   created with `generate_cfg_template()`.
 #'
 #' @examples
 #' get_cfg_template_keys()
 #'
 get_cfg_template_keys <- function() {
-  sort(c(
-    "run",
-    "run.msoa_lim",
-    "run.seed_val",
-    "store",
-    "store.dat",
-    "store.dat.interim",
-    "store.dat.interim.dirs",
-    "store.dat.interim.dirs.base",
-    "store.dat.interim.fnames",
-    "store.dat.interim.fnames.imputed_tus_dat",
-    "store.dat.raw",
-    "store.dat.raw.dirs",
-    "store.dat.raw.dirs.base",
-    "store.dat.raw.dirs.misc",
-    "store.dat.raw.dirs.population",
-    "store.dat.raw.dirs.shapefiles",
-    "store.dat.raw.dirs.tus",
-    "store.dat.raw.misc",
-    "store.dat.raw.misc.nssec_class",
-    "store.dat.raw.misc.sic2007_class",
-    "store.dat.raw.misc.soc2010_class",
-    "store.dat.raw.nm_patterns",
-    "store.dat.raw.nm_patterns.pop_lad_tus",
-    "store.dat.raw.shapefile_layers",
-    "store.dat.raw.shapefile_layers.ew_msoa",
-    "store.dat.raw.shapefile_layers.uk_full",
-    "store.dat.raw.tus",
-    "store.dat.raw.tus.uk_metadata_location",
-    "store.dat.wrangled",
-    "store.dat.wrangled.dirs",
-    "store.dat.wrangled.dirs.base",
-    "store.dat.wrangled.dirs.population",
-    "store.dat.wrangled.dirs.shapefiles",
-    "store.dat.wrangled.dirs.tus",
-    "store.dat.wrangled.population",
-    "store.dat.wrangled.population_ref",
-    "store.dat.wrangled.population_ref.pop_dat",
-    "store.dat.wrangled.population.pop_dat",
-    "store.dat.wrangled.shapefiles",
-    "store.dat.wrangled.shapefiles_ref",
-    "store.dat.wrangled.shapefiles_ref.msoa",
-    "store.dat.wrangled.shapefiles.ew_msoa",
-    "store.dat.wrangled.shapefiles.ew_msoa_region",
-    "store.dat.wrangled.shapefiles.uk_full",
-    "store.dat.wrangled.time_use_survey",
-    "store.dat.wrangled.time_use_survey_ref",
-    "store.dat.wrangled.time_use_survey_ref.tus_dat",
-    "store.dat.wrangled.time_use_survey.tus_dat",
-    "store.out",
-    "store.out.dirs",
-    "store.out.dirs.activities",
-    "store.out.dirs.base",
-    "store.out.nm_patterns",
-    "store.out.nm_patterns.activities",
-    "store.save",
-    "store.save.imputed_tus_dat"
-  ))
+  get_cfg_keys(cfg = generate_cfg_template())
 }
 
 #' Retrieve the config template file name

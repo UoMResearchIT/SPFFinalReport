@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-helpers.R
 \name{skip_if_r_cmd_check_or_not_configured}
 \alias{skip_if_r_cmd_check_or_not_configured}
-\title{Skip a test on certain conditions}
+\title{Skip a test under certain conditions}
 \usage{
 skip_if_r_cmd_check_or_not_configured(env_var_id = NULL)
 }

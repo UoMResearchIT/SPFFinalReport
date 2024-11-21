@@ -24,8 +24,8 @@ test_that("write_user_cfg writes expected config to file", {
 })
 
 test_that("get_cfg_keys works", {
-  exp_keys <- get_cfg_template_keys()
-  expect_equal(get_cfg_keys(cfg = generate_cfg_template()), exp_keys)
+  exp_keys <- get_test_cfg_exp_keys()
+  expect_equal(get_cfg_keys(cfg = get_test_cfg()), exp_keys)
 })
 
 test_that("get_cfg_val fails if keys not found", {
