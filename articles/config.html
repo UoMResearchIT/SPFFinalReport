@@ -72,11 +72,11 @@
 
     <section class="level2"><h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
 </h2>
-<p>This vignette describes how to configure the <code>dimex</code> package. See <a href="dimex.html">introduction to dimex</a> for context.</p>
-<p>For information about configuration that is relevant within a development environment, see <a href="development.html">development</a>.</p>
+<p>This vignette describes how to configure the <code>dimex</code> package. See <a href="dimex.html">Get started</a> for context.</p>
+<p>For information about configuration that is relevant within a development environment, see <a href="development.html">Development</a>.</p>
 <p>There are two categories of configuration: localised (environment-dependent) and default package-level configuration which can be customised to a user’s circumstances if required.</p>
-<p>Environment-dependent configuration values are specified via <a href="#sys-env-vars">system environment variables</a>, whilst package-level configuration values are specified via the <a href="#pkg-config">config</a> object.</p>
-</section><section class="level2"><h2 id="sys-env-vars">System Environment Variables for localised configuration<a class="anchor" aria-label="anchor" href="#sys-env-vars"></a>
+<p>Environment-dependent configuration values are specified via <a href="config.html#sys-env-vars">system environment variables</a>, whilst package-level configuration values are specified via the <a href="config.html#pkg-config">config</a> object.</p>
+</section><section class="level2"><h2 id="sys-env-vars">System Environment Variables<a class="anchor" aria-label="anchor" href="#sys-env-vars"></a>
 </h2>
 <section class="level3"><h3 id="renviron-file">
 <code>.Renviron</code> file<a class="anchor" aria-label="anchor" href="#renviron-file"></a>
@@ -117,7 +117,7 @@
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readRenviron.html" class="external-link">readRenviron</a></span><span class="op">(</span><span class="st">"~/.Renviron"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<pre><code>(where you shoul replace "~/.Renviron" with the appropriate path to your
+<pre><code>(where you should replace "~/.Renviron" with the appropriate path to your
 `.Renviron` file if it's not in your home directory)</code></pre>
 <ul>
 <li>A temporary alternative to reloading <code>.Renviron</code> is to manually override specific environment variables within the current R session:</li>
@@ -128,7 +128,7 @@
 </div>
 <pre><code>This can be helpful for testing specific changes without modifying the
 environment file.</code></pre>
-</section><section class="level3"><h3 id="valid-system-environment-variables">Valid system environment variables<a class="anchor" aria-label="anchor" href="#valid-system-environment-variables"></a>
+</section><section class="level3"><h3 id="valid-sys-env-variables">Valid sys env variables<a class="anchor" aria-label="anchor" href="#valid-sys-env-variables"></a>
 </h3>
 <p>System environment variables for the <code>dimex</code> package start with ‘DIMEX_’.</p>
 <table class="table caption-top">
@@ -154,13 +154,12 @@ environment file.</code></pre>
 <td style="text-align: left;">Root path of the dimex ‘reference’ Data and Output</td>
 </tr>
 </tbody>
-</table></section></section><section class="level2"><h2 id="pkg-config">The <code>config</code> object for package-level configuration<a class="anchor" aria-label="anchor" href="#pkg-config"></a>
+</table></section></section><section class="level2"><h2 id="pkg-config">The <code>config</code> object<a class="anchor" aria-label="anchor" href="#pkg-config"></a>
 </h2>
 <p>This configuration relates to package-level values which do not necessarily need customising, as long as a user’s data and output on their personal filesystem conforms to the expected structure.</p>
 <p>If required, the configuration can be customised as it is stored on a per-user basis.</p>
 </section><section class="level2"><h2 id="config-template">The <code>config</code> template<a class="anchor" aria-label="anchor" href="#config-template"></a>
 </h2>
-<p>See also <a href="#config-template">development</a>.</p>
 <p>To create a default configuration for the first time and save it to your personal system, run:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
@@ -193,12 +192,14 @@ environment file.</code></pre>
 <div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/write_user_cfg.html">write_user_cfg</a></span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Though note that there is currently no conversion path for existing config files so any custom changes would then need to be <em>manually re-applied</em>.</p>
-</section><section class="level2"><h2 id="default-config-values">Default <code>config</code> values and overriding them<a class="anchor" aria-label="anchor" href="#default-config-values"></a>
+<p>Though note that <em>there is currently no conversion utility for existing config files</em> so any custom changes would then need to be <strong>manually re-applied</strong>. Please make sure to back up your config file.</p>
+</section><section class="level2"><h2 id="config-values">Default and custom <code>config</code> values<a class="anchor" aria-label="anchor" href="#config-values"></a>
 </h2>
 <section class="level3"><h3 id="defaults">Defaults<a class="anchor" aria-label="anchor" href="#defaults"></a>
 </h3>
 <p>[TODO: Describe defaults]</p>
+</section><section class="level3"><h3 id="custom">Custom<a class="anchor" aria-label="anchor" href="#custom"></a>
+</h3>
 <p>In general, defaults can be overridden by manually editing the config.</p>
 <p>[TODO: Show examples of overriding the defaults]</p>
 <hr></section></section><script id="quarto-html-after-body" type="application/javascript">

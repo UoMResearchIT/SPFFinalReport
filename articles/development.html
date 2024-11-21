@@ -207,22 +207,23 @@ DIMEX_RUN_HLDT_1*=true   # Set to 'true' or 'false' (or do not specify)</code></
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"DIMEX_RUN_ALL_HLDT"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </li>
-</ul></section><section class="level3"><h3 id="config-template">The config template<a class="anchor" aria-label="anchor" href="#config-template"></a>
+</ul></section><section class="level3"><h3 id="update-config-template">Updating the config template<a class="anchor" aria-label="anchor" href="#update-config-template"></a>
 </h3>
-<p>To update the config template, edit the functions [generate_cfg_template()] and [get_cfg_template_keys()].</p>
-<p>Note NB: After updating the config template, save an updated copy to the package config location by running:</p>
+<p>To update the config template, edit the function <a href="../reference/generate_cfg_template.html">generate_cfg_template()</a>.</p>
+<p><strong>Note NB</strong>: After updating the config template, save an updated copy to the package config location by running:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/write_cfg_template.html">write_cfg_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Note NB: <br> Changing the template will necessitate updating user config files that have already been created.</p>
-<p><strong>There is currently no mechanism to convert the format of a user config file</strong> <em>so until such time as this can be implemented, any local changes to a user config will need to be</em> <strong>manually applied</strong>.</p>
+<p>If you change the template, you will need to <em>update user config files that have already been created</em>.</p>
+<p>There is currently no mechanism to convert the format of a user config file so until such time as this can be implemented, any local changes to a user config will need to be <strong>manually re-applied</strong>.</p>
+<p>See also <a href="#config-template">config template information</a>.</p>
 <p>To update the user config, run:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># NB: The following will *overwrite* any local changes to the user config!</span></span>
 <span><span class="co"># Until there is a conversion utility available, local changes will need to be</span></span>
-<span><span class="co"># *manually updated*.</span></span>
+<span><span class="co"># manually updated.</span></span>
 <span><span class="fu"><a href="../reference/write_user_cfg.html">write_user_cfg</a></span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 </section></section><script id="quarto-html-after-body" type="application/javascript">
