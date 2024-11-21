@@ -20,7 +20,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dimex</a>
 
@@ -59,7 +59,7 @@
       <h1>Config</h1>
 
       <p class="author">Toni Price</p>
-      <p class="date">Last updated: 20 November, 2024</p>
+      <p class="date">Last updated: 21 November, 2024</p>
 
       <small class="dont-index">Source: <a href="https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/vignettes/config.qmd" class="external-link"><code>vignettes/config.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -84,47 +84,58 @@
 <p>For localised configuration, system environment variables are specified in a file called <code>.Renviron</code> which, if in the default location, will be loaded automatically when you start an R session.</p>
 <p>A user-specific <code>.Renviron</code> would typically be stored at:</p>
 <ul>
-<li>
-<p>Windows:</p>
-<pre><code>C:\Users\YourUsername\.Renviron</code></pre>
-<p>Ensure the file name is exactly “.Renviron” (without any file extension like .txt)</p>
-</li>
-<li>
-<p>Linux/macOS:</p>
-<pre><code>~/.Renviron</code></pre>
-</li>
+<li>Windows:</li>
 </ul>
+<pre><code>C:\Users\YourUsername\.Renviron</code></pre>
+<pre><code>Ensure the file name is exactly ".Renviron" (without any file extension like
+.txt)</code></pre>
+<ul>
+<li>Linux/macOS:</li>
+</ul>
+<pre><code>~/.Renviron</code></pre>
 <p>Create this file if necessary. From within R, the <code>usethis</code> package can do this for you:</p>
-<pre><code><span><span class="co"># Create a new user-level .Renviron file, or open an existing one for editing</span></span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a new user-level .Renviron file, or open an existing one for editing</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="st">"user"</span><span class="op">)</span></span>
 <span><span class="co"># Or, as this is the default:</span></span>
-<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>Entries in a project-level <code>.Renviron</code> file, located in the working directory or project root, would take precedence over a user-specific file. Note that if such project-level file exists then it should be added to <code>.gitignore</code> and <code>.Rbuildignore</code> as it should <em>not</em> be committed to the source code repository or included with the package code. (The project <code>.gitignore</code> and <code>.Rbuildignore</code> contain such entries by default.)</p>
 <p>The <code>usethis</code> package supports creation/editing of a project-level <code>.Renviron</code> file too:</p>
-<pre><code><span><span class="co"># Create a new project-level .Renviron file, or open an existing one for editing</span></span>
-<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="st">"project"</span><span class="op">)</span></span></code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a new project-level .Renviron file, or open an existing one for editing</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="st">"project"</span><span class="op">)</span></span></code></pre></div>
+</div>
 <p><strong>NB</strong> Note that you will need to reload your <code>.Renviron</code> file for any changes to take effect. This can be achieved by doing one of the following:</p>
 <ul>
 <li><p>Restart your R session</p></li>
-<li>
-<p>Reload <code>.Renviron</code> in a running R session with, e.g.</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/readRenviron.html" class="external-link">readRenviron</a></span><span class="op">(</span><span class="st">"~/.Renviron"</span><span class="op">)</span></span></code></pre>
-<p>(where you shoul replace “~/.Renviron” with the appropriate path to your <code>.Renviron</code> file if it’s not in your home directory)</p>
-</li>
-<li>
-<p>A temporary alternative to reloading <code>.Renviron</code> is to manually override specific environment variables within the current R session:</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>VAR_NAME <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span></span></code></pre>
-<p>This can be helpful for testing specific changes without modifying the environment file.</p>
-</li>
-</ul></section><section class="level3"><h3 id="valid-system-environment-variables">Valid system environment variables<a class="anchor" aria-label="anchor" href="#valid-system-environment-variables"></a>
+<li><p>Reload <code>.Renviron</code> in a running R session with, e.g.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readRenviron.html" class="external-link">readRenviron</a></span><span class="op">(</span><span class="st">"~/.Renviron"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<pre><code>(where you shoul replace "~/.Renviron" with the appropriate path to your
+`.Renviron` file if it's not in your home directory)</code></pre>
+<ul>
+<li>A temporary alternative to reloading <code>.Renviron</code> is to manually override specific environment variables within the current R session:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>VAR_NAME <span class="op">=</span> <span class="st">"value"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<pre><code>This can be helpful for testing specific changes without modifying the
+environment file.</code></pre>
+</section><section class="level3"><h3 id="valid-system-environment-variables">Valid system environment variables<a class="anchor" aria-label="anchor" href="#valid-system-environment-variables"></a>
 </h3>
 <p>System environment variables for the <code>dimex</code> package start with ‘DIMEX_’.</p>
-<p>[TODO: Add info about the act, ref and test root paths]</p>
 <table class="table caption-top">
 <colgroup>
-<col style="width: 16%">
-<col style="width: 21%">
-<col style="width: 62%">
+<col style="width: 15%">
+<col style="width: 20%">
+<col style="width: 63%">
 </colgroup>
 <thead><tr class="header">
 <th style="text-align: left;">Environment</th>
@@ -133,7 +144,7 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">act</td>
+<td style="text-align: left;">main</td>
 <td style="text-align: left;">DIMEX_STORE</td>
 <td style="text-align: left;">Root path of the dimex Data and Output</td>
 </tr>
@@ -149,9 +160,10 @@
 <p>If required, the configuration can be customised as it is stored on a per-user basis.</p>
 </section><section class="level2"><h2 id="config-template">The <code>config</code> template<a class="anchor" aria-label="anchor" href="#config-template"></a>
 </h2>
+<p>See also <a href="#config-template">development</a>.</p>
 <p>To create a default configuration for the first time and save it to your personal system, run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/write_user_cfg.html">write_user_cfg</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>The location of the saved configuration file is OS-specific. By default its directory is set according to your OS convention:</p>
@@ -178,17 +190,18 @@
 <p>The <code>dimex</code> package expects to find a configuration file within this directory.</p>
 <p>To update or recreate this config file, run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/write_user_cfg.html">write_user_cfg</a></span><span class="op">(</span>overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>Though note that there is currently no conversion path for existing config files so any custom changes would then need to be <em>manually re-applied</em>.</p>
 </section><section class="level2"><h2 id="default-config-values">Default <code>config</code> values and overriding them<a class="anchor" aria-label="anchor" href="#default-config-values"></a>
 </h2>
-<p>Defaults:</p>
+<section class="level3"><h3 id="defaults">Defaults<a class="anchor" aria-label="anchor" href="#defaults"></a>
+</h3>
 <p>[TODO: Describe defaults]</p>
 <p>In general, defaults can be overridden by manually editing the config.</p>
 <p>[TODO: Show examples of overriding the defaults]</p>
-<hr></section><script id="quarto-html-after-body" type="application/javascript">
+<hr></section></section><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

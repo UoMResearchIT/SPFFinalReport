@@ -21,7 +21,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dimex</a>
 
@@ -60,7 +60,7 @@
       <h1>dimex</h1>
 
       <p class="author">Toni Price</p>
-      <p class="date">Last updated: 20 November, 2024</p>
+      <p class="date">Last updated: 21 November, 2024</p>
 
       <small class="dont-index">Source: <a href="https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/vignettes/dimex.qmd" class="external-link"><code>vignettes/dimex.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -81,10 +81,16 @@
 <section class="level3"><h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h3>
 <p>This package implements the DIMEX model. The package derived from the SPFFinalReport code (created for the case study and report for the final SPF reporting period).</p>
-<p>See also the <a href="config.html">configuration</a> and <a href="development.html">development</a> vignettes.</p>
-</section><section class="level3"><h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<p>See also the <a href="config.html">Configuration</a> and <a href="development.html">Development</a> vignettes.</p>
+</section><section class="level3"><h3 id="install">Installation<a class="anchor" aria-label="anchor" href="#install"></a>
 </h3>
-<p>[TODO: TBC]</p>
+<p>To install the development version of <code>dimex</code> from GitHub:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/UoMResearchIT/SPFFinalReport"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>See <a href="#install-dev">dimex</a> for doing development on the <code>dimex</code> package.</p>
 </section></section><section class="level2"><h2 id="data-workflow">Data workflow<a class="anchor" aria-label="anchor" href="#data-workflow"></a>
 </h2>
 <section class="level3"><h3 id="data-phases">Data phases<a class="anchor" aria-label="anchor" href="#data-phases"></a>
@@ -134,20 +140,18 @@
 <li>can be reliably reproduced</li>
 </ul>
 </li>
-</ul></section></section><section class="level2"><h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+</ul></section></section><section class="level2"><h2 id="configuration">Configuration<a class="anchor" aria-label="anchor" href="#configuration"></a>
 </h2>
-<section class="level3"><h3 id="configuration">Configuration<a class="anchor" aria-label="anchor" href="#configuration"></a>
-</h3>
 <p>See <a href="config.html">configuration</a> for configuration information.</p>
-</section><section class="level3"><h3 id="running-the-pipeline">Running the pipeline<a class="anchor" aria-label="anchor" href="#running-the-pipeline"></a>
-</h3>
+</section><section class="level2"><h2 id="workflow-running-the-pipeline">Workflow: Running the pipeline<a class="anchor" aria-label="anchor" href="#workflow-running-the-pipeline"></a>
+</h2>
 <p>The main entry point for running the code is the <a href="../reference/run_workflow.html">run_workflow()</a> function. If called without any arguments, it will run all workflow steps by default. You can also:</p>
 <ul>
 <li>Check which steps will run by providing a <code>banner_only</code> argument (in which case the steps would not be run but a banner would be printed for each step); and</li>
 <li>Run a subset of steps by supplying a comma-separated string of step IDs, for example, <br> “4a, 4b” or “1a”.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run each step in the workflow with the default config</span></span>
 <span><span class="fu"><a href="../reference/run_workflow.html">run_workflow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -158,16 +162,13 @@
 <span><span class="fu"><a href="../reference/run_workflow.html">run_workflow</a></span><span class="op">(</span>banner_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run steps 4a and 4b only, with the specified config</span></span>
-<span><span class="co"># See the [configuration](config.html) vignette for information on</span></span>
+<span><span class="co"># See the [Configuration](config.html) vignette for information on</span></span>
 <span><span class="co"># how to create a non-default config</span></span>
-<span><span class="co"># # [TODO: Show example of creating a config]</span></span>
-<span><span class="co"># # cfg = ...</span></span>
-<span><span class="co"># # cfg_overrides = ...</span></span>
 <span><span class="fu"><a href="../reference/run_workflow.html">run_workflow</a></span><span class="op">(</span><span class="st">"4a, 4b"</span>, cfg <span class="op">=</span> <span class="va">cfg</span>, cfg_overrides <span class="op">=</span> <span class="va">cfg_overrides</span><span class="op">)</span></span></code></pre></div>
 </div>
-</section></section><section class="level2"><h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
+</section><section class="level2"><h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
 </h2>
-<p>For doing development work on the <code>dimex</code> package, see the <a href="development.html">development</a> vignette.</p>
+<p>For doing development work on the <code>dimex</code> package, see the <a href="development.html">Development</a> vignette.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -20,7 +20,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">dimex</a>
 
@@ -59,7 +59,7 @@
       <h1>Development</h1>
 
       <p class="author">Toni Price</p>
-      <p class="date">Last updated: 20 November, 2024</p>
+      <p class="date">Last updated: 21 November, 2024</p>
 
       <small class="dont-index">Source: <a href="https://github.com/UoMResearchIT/SPFFinalReport/tree/38-convert-to-r-pkg/vignettes/development.qmd" class="external-link"><code>vignettes/development.qmd</code></a></small>
       <div class="d-none name"><code></code></div>
@@ -72,7 +72,11 @@
 
     <section class="level2"><h2 id="about-this-vignette">About this vignette<a class="anchor" aria-label="anchor" href="#about-this-vignette"></a>
 </h2>
-<p>This vignette deals with how to use the <code>dimex</code> package as a developer. See also the <a href="dimex.html">introduction to dimex</a> and <a href="config.html">configuration</a> vignettes.</p>
+<p>This vignette deals with how to use the <code>dimex</code> package as a developer. See also the <a href="dimex.html">Get started</a> and <a href="config.html">Configuration</a> vignettes.</p>
+</section><section class="level2"><h2 id="install-dev">Installation<a class="anchor" aria-label="anchor" href="#install-dev"></a>
+</h2>
+<p>Clone the GitHub repository:</p>
+<pre><code>$ git clone https://github.com/UoMResearchIT/SPFFinalReport.git</code></pre>
 </section><section class="level2"><h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
 <p>For a development environment:</p>
@@ -80,40 +84,70 @@
 </h3>
 <ol type="1">
 <li>
-<p>Ensure <code>devtools</code> is installed. <br> From the <code>R</code> console:</p>
-<pre><code>&gt; install.packages("devtools")</code></pre>
+<p>Ensure <code>devtools</code> is installed:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </li>
-<li><p>Ensure required packages are installed. <br> [TODO: Implement <code>renv</code> and add setup instructions]</p></li>
-<li><p>See the <a href="config.html">configuration</a> vignette for configuration information.</p></li>
+<li>
+<p>Ensure required packages are installed:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cli"</span>, <span class="st">"DescTools"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"gridExtra"</span>,</span>
+<span>                   <span class="st">"haven"</span>, <span class="st">"lubridate"</span>, <span class="st">"magrittr"</span>, <span class="st">"openair"</span>, <span class="st">"plyr"</span>,</span>
+<span>                   <span class="st">"proxy"</span>, <span class="st">"purrr"</span>, <span class="st">"rappdirs"</span>, <span class="st">"raster"</span>, <span class="st">"readr"</span>,</span>
+<span>                   <span class="st">"reshape2"</span>, <span class="st">"scales"</span>, <span class="st">"sf"</span>, <span class="st">"sp"</span>, <span class="st">"stringr"</span>,</span>
+<span>                   <span class="st">"truncnorm"</span>, <span class="st">"yaml"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</li>
+</ol>
+<ol start="3" type="1">
+<li>See the <a href="config.html">Configuration</a> vignette for configuration information.</li>
 </ol></section><section class="level3"><h3 id="some-useful-dev-commands">Some useful dev commands<a class="anchor" aria-label="anchor" href="#some-useful-dev-commands"></a>
 </h3>
 <p>These commands should be executed from the <code>R</code> console.</p>
-<p>(Note that when <code>devtools</code> is installed, the following commands are usually bound to keyboard shortcuts in RStudio; these are shown in the comments where applicable)</p>
+<p>(Note that when <code>devtools</code> is installed, the following commands are usually bound to keyboard shortcuts in RStudio; these are shown in the comments where applicable.)</p>
 <ul>
-<li>
-<p>Load the development version of the package:</p>
-<pre><code># Ctrl/Cmd + Shift + L
-&gt; devtools::load_all(".")</code></pre>
-</li>
-<li>
-<p>Run the automated test suite:</p>
-<pre><code># Ctrl/Cmd + Shift + T
-&gt; devtools::test(".")</code></pre>
-</li>
-<li>
-<p>Create package documentation:</p>
-<pre><code># Ctrl/Cmd + Shift + D
-&gt; devtools::document(roclets = c('rd', 'collate', 'namespace'))</code></pre>
-</li>
-<li>
-<p>Build the package vignettes:</p>
-<pre><code>&gt; devtools::build_vignettes()</code></pre>
-</li>
-<li>
-<p>Run a package check:</p>
-<pre><code># Ctrl/Cmd + Shift + E
-&gt; devtools::check()</code></pre>
-</li>
+<li>Load the development version of the package:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Ctrl/Cmd + Shift + L</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="st">"."</span><span class="op">)</span></span></code></pre></div>
+</div>
+<ul>
+<li>Run the automated test suite:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Ctrl/Cmd + Shift + T</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="st">"."</span><span class="op">)</span></span></code></pre></div>
+</div>
+<ul>
+<li>Create package documentation:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Ctrl/Cmd + Shift + D</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span>roclets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'rd'</span>, <span class="st">'collate'</span>, <span class="st">'namespace'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<ul>
+<li>Build the package vignettes:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">build_vignettes</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<ul>
+<li>Run a package check:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Ctrl/Cmd + Shift + E</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<ul>
 <li>
 <p>Test the current file:</p>
 <p>If you are using RStudio, this can be most easily achieved by setting a keyboard shortcut.</p>
@@ -146,34 +180,46 @@ DIMEX_RUN_HLDT_1*=true   # Set to 'true' or 'false' (or do not specify)</code></
 </li>
 <li>
 <p>To temporarily set a specific high-level data test to run in the current R session, run (for e.g.):</p>
-<pre><code><span><span class="co"># Set the high-level data test for step "1a" to run</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_HLDT_1A <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></span></code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set the high-level data test for step "1a" to run</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_HLDT_1A <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>To reverse this, do one of the following:</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_HLDT_1A <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span></span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_HLDT_1A <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span></span>
 <span><span class="co"># Or:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"DIMEX_RUN_HLDT_1A"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"DIMEX_RUN_HLDT_1A"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </li>
 <li>
 <p>To temporarily set all the high-level data tests to run in the current R session, use:</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_ALL_HLDT <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></span></code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_ALL_HLDT <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>To reverse this, do one of the following:</p>
-<pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_ALL_HLDT <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span></span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DIMEX_RUN_ALL_HLDT <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span></span>
 <span><span class="co"># Or:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"DIMEX_RUN_ALL_HLDT"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"DIMEX_RUN_ALL_HLDT"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </li>
-</ul></section><section class="level3"><h3 id="the-config-template">The config template<a class="anchor" aria-label="anchor" href="#the-config-template"></a>
+</ul></section><section class="level3"><h3 id="config-template">The config template<a class="anchor" aria-label="anchor" href="#config-template"></a>
 </h3>
 <p>To update the config template, edit the functions [generate_cfg_template()] and [get_cfg_template_keys()].</p>
 <p>Note NB: After updating the config template, save an updated copy to the package config location by running:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/write_cfg_template.html">write_cfg_template</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>Note NB: <br> Changing the template will necessitate updating user config files that have already been created.</p>
-<!-- [TODO: When a conversion utility has been implemented, update the following] -->
-<p><strong>There is currently no mechanism to convert the format of a user config file</strong> <em>so until such time as this can be implemented, any local changes to a user config will need to be</em> <strong>manually updated</strong>. To update the user config, run:</p>
+<p><strong>There is currently no mechanism to convert the format of a user config file</strong> <em>so until such time as this can be implemented, any local changes to a user config will need to be</em> <strong>manually applied</strong>.</p>
+<p>To update the user config, run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># NB: The following will *overwrite* any local changes to the user config!</span></span>
 <span><span class="co"># Until there is a conversion utility available, local changes will need to be</span></span>
 <span><span class="co"># *manually updated*.</span></span>
