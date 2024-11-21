@@ -30,7 +30,7 @@ for personal [EX]{.dimex-acronym}posures]{.subtitle}
 
 ### Introduction
 
-This package implements the DIMEX model. The package derived from the
+This package implements the DIMEX model. The package is derived from the
 SPFFinalReport code (created for the case study and report for the final SPF
 reporting period).
 
